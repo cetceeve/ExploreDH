@@ -1,11 +1,18 @@
 /** 
- * MapViewController.
+ * Model for the map.
  * 
- * At the moment used to create a basic map.
- * TODO: convert to nice module structure.
+ * At the moment used to create/visualize a basic map.
  */
 
-var map = new ol.Map({
+ class Map {
+   constructor() {
+     //super(); -- throws error: "SyntaxError: super() is only valid in derived class constructors"
+     this.initMap();
+   }
+ 
+
+initMap() {
+  var map = new ol.Map({
     target: 'map',
     layers: [
       new ol.layer.Tile({
@@ -19,6 +26,13 @@ var map = new ol.Map({
       zoom: 4
     })
   });
+}
+ }
+
+ export default new Map();
+
+
+
 
 
 
