@@ -9,7 +9,9 @@ var map = new ol.Map({
     target: 'map',
     layers: [
       new ol.layer.Tile({
-        source: new ol.source.OSM()
+        source: new ol.source.Stamen({
+            layer: "toner"
+        })
       })
     ],
     view: new ol.View({
@@ -17,5 +19,9 @@ var map = new ol.Map({
       zoom: 4
     })
   });
+
+
+
+   
 
  
