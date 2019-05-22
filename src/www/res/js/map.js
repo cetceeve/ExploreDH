@@ -6,7 +6,6 @@
 
 class Map {
   constructor() {
-    //super(); -- throws error: "SyntaxError: super() is only valid in derived class constructors"
     this.initMap();
   }
 
