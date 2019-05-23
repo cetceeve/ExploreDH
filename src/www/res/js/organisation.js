@@ -4,4 +4,6 @@ let Organisation = funktion(name, id) {
 
   this.locations = [];
   this.authors = [];
-}
+};
+
+export { Organisation };

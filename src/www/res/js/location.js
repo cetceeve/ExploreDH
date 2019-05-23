@@ -5,4 +5,6 @@ let Location = funktion(id, name, xCcoordinate, yCcoordinate) {
   this.Ycoordinate = yCoordinate;
 
   this.authors = [];
-}
+};
+
+export { Location };

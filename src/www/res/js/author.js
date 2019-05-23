@@ -6,4 +6,6 @@ let Author = funktion(firstName, lastName, eMail, id) {
 
   this.articles = [];
   this.organisations = [];
-}
+};
+
+export { Author };
