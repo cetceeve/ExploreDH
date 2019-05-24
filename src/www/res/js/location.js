@@ -1,10 +1,11 @@
-let Location = funktion(id, name, xCcoordinate, yCcoordinate) {
+let Location = funktion(id, name, lat, lon) {
   this.id = id;
   this.name = name;
-  this.Xcoordinate = xCoordinate;
-  this.Ycoordinate = yCoordinate;
+  this.lat = lat;
+  this.lon = lon;
 
   this.authors = [];
+  this.keywords = [];
 };
 
 export { Location };

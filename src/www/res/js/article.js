@@ -4,6 +4,7 @@ let Article = funktion(title, abstract, id) {
   this.id = id;
 
   this.authors = [];
+  this.keywords = [];
 };
 
 export { Article };

@@ -1,9 +1,8 @@
-let Keyword = funktion(id) {
+let Keyword = funktion(id, name) {
   this.id = id;
+  this.name = name;
 
   this.articles = [];
-  //weiß ich noch nicht ob das notwendig ist bzw. ob das nich zu umständlich ist
-  this.locations = [];
 };
 
 export { Keyword };
