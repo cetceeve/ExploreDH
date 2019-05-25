@@ -21,7 +21,8 @@ class Map {
         })
       ],
       view: new ol.View({
-        center: ol.proj.fromLonLat([37.41, 8.82]),
+        // set center to Berlin
+        center: ol.proj.transform([13.41, 52.52], 'EPSG:4326', 'EPSG:3857'),
         zoom: 4
       })
     });
