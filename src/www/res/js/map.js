@@ -36,14 +36,19 @@ class Map {
       geometry: new ol.geom.Point([13.41, 52.52])
     });
 
+    var circleFeature = new ol.Feature({
+      geometry: new ol.geom.Circle([8.27, 49.98], 3)
+    });
+
     var vector_layer = new ol.layer.Vector({
       source: new ol.source.Vector({
-        features: [point_feature]
+        features: [point_feature, circleFeature]
       })
     })
     map.addLayer(vector_layer);
 
     point_feature.getGeometry().transform(new ol.proj.Projection({ code: "EPSG:4326" }), layer.getSource().getProjection());
+    circleFeature.getGeometry().transform(new ol.proj.Projection({ code: "EPSG:4326" }), layer.getSource().getProjection());
 
     var fill = new ol.style.Fill({
       color: [180, 0, 0, 0.3]
