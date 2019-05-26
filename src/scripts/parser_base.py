@@ -1,13 +1,19 @@
 import os
+import parser_listperson as parserListPerson
 
-dir = "../../data/TEI"
+dirTEI = "../../data/TEI"
+pathListPerson = "../../data/preprocessed/listperson.xml"
 
-def readFiles():
-    with os.scandir(dir) as it:
+def readTEI():    
+    with os.scandir(dirTEI) as it:
         for entry in it:
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():
                 print(entry.name)
                 # parse xml file here
 
+def getListPerson():
+    parserListPerson.readListPerson(pathListPerson)
+
 if __name__ == "__main__":
-    readFiles()
+    readTEI()
+    getListPerson()
