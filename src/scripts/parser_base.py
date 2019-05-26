@@ -1,6 +1,6 @@
 import os
 
-dir = "../../TEI"
+dir = "../../data/TEI"
 
 def readFiles():
     with os.scandir(dir) as it:
