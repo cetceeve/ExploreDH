@@ -19,14 +19,17 @@ def parse(path):
 def parsePerson(nodePerson):
     id = nodePerson.attrib["{%s}id" % namespace["xml"]]
 
-    orga = None
-    nodeOrga = nodePerson.find("./dhd:affiliation[@ref]", namespace)
-    if nodeOrga is not None:
-        orga = nodeOrga.attrib["ref"][1:] # remove hashtag on ref string
-        
-    return {
+    person =  {
         "id": id,
         "firstName": nodePerson.find("./dhd:persName/dhd:forename", namespace).text,
         "lastName": nodePerson.find("./dhd:persName/dhd:surname", namespace).text,
-        "orga": orga
     }
+
+    nodeOrga = nodePerson.find("./dhd:affiliation[@ref]", namespace)
+    if nodeOrga is not None:
+        person["orga"] = nodeOrga.attrib["ref"][1:] # remove hashtag on ref string
+    else:
+        person["__temp__affil"] = nodePerson.find("./dhd:affiliation", namespace).text
+
+    return person
+        

@@ -16,4 +16,11 @@ def getDictPerson():
 
 if __name__ == "__main__":
     # readTEI()
+
     getDictPerson()
+
+    # get people with no associated organisation
+    # testdict = getDictPerson()
+    # for person in testdict.values():
+    #     if "__temp__affil" in person:
+    #         print(person)
