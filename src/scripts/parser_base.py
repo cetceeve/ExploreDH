@@ -11,9 +11,9 @@ def readTEI():
                 print(entry.name)
                 # parse xml file here
 
-def getListPerson():
-    parserListPerson.readListPerson(pathListPerson)
+def getDictPerson():
+    return parserListPerson.parse(pathListPerson)
 
 if __name__ == "__main__":
-    readTEI()
-    getListPerson()
+    # readTEI()
+    getDictPerson()
