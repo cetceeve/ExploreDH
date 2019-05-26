@@ -1,8 +1,10 @@
 import os
-import parser_listperson as parserListPerson
+import parser_listperson as parserListPerson  
+import parser_listorg as parserListOrga  
 
 dirTEI = "../../data/TEI"
 pathListPerson = "../../data/preprocessed/listperson.xml"
+pathListOrga = "../../data/preprocessed/listorg.xml"
 
 def readTEI():    
     with os.scandir(dirTEI) as it:
@@ -11,13 +13,11 @@ def readTEI():
                 print(entry.name)
                 # parse xml file here
 
-def getDictPerson():
-    return parserListPerson.parse(pathListPerson)
-
 if __name__ == "__main__":
-    # readTEI()
+    # readTEI()#
 
-    getDictPerson()
+    parserListPerson.parse(pathListPerson) # distPerson
+    parserListOrga.parse(pathListOrga) # (dictOrga, dictLocation)
 
     # get people with no associated organisation
     # testdict = getDictPerson()

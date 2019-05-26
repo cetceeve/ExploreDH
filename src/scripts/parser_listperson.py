@@ -8,7 +8,7 @@ def parse(path):
     tree = ET.parse(path)
     nodeListPerson = tree.find(".//dhd:listPerson", namespace)
 
-    people = nodeListPerson.findall("dhd:person", namespace)
+    people = nodeListPerson.findall("./dhd:person", namespace)
     
     for nodePerson in people:
         person = parsePerson(nodePerson)
@@ -17,10 +17,8 @@ def parse(path):
     return dictPerson
 
 def parsePerson(nodePerson):
-    id = nodePerson.attrib["{%s}id" % namespace["xml"]]
-
     person =  {
-        "id": id,
+        "id": nodePerson.attrib["{%s}id" % namespace["xml"]],
         "firstName": nodePerson.find("./dhd:persName/dhd:forename", namespace).text,
         "lastName": nodePerson.find("./dhd:persName/dhd:surname", namespace).text,
     }
