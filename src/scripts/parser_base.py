@@ -1,4 +1,5 @@
 import os
+import json
 import parser_listperson as parserListPerson  
 import parser_listorg as parserListOrga
 
@@ -17,7 +18,7 @@ def readTEI():
                 # parse xml file here
 
 if __name__ == "__main__":
-    # readTEI()#
+    # readTEI()
 
     dictPerson = parserListPerson.parse(pathListPerson)
     dictOrga, dictLocation = parserListOrga.parse(pathListOrga)
@@ -25,12 +26,22 @@ if __name__ == "__main__":
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
     # geocoder.getLocation("Universität Rostock")
 
-    # get people with no associated organisation
-    # for person in dictPerson.values():
-    #     if "__temp__affil" in person:
-    #         print(person)
+    # writeMissingEntityInfoFile(dictPerson, dictOrga)
+    
 
+def writeMissingEntityInfoFile(dictPerson, dictOrga):
+    file = open("dhd2019_missing_info.txt", mode="w", encoding="utf-8")
+
+    file.write("Personen ohne Organisation:")
+    # get people with no associated organisation
+    for person in dictPerson.values():
+        if "__temp__affil" in person:
+            file.write("\n" + json.dumps(person, indent=4, ensure_ascii=False))
+    
+    file.write("\n\nLocations ohne Koordinaten:")
     # get orgas with no location
-    # for orga in dictOrga.values():
-    #     if "location" not in orga:
-    #         print(orga)
+    for orga in dictOrga.values():
+        if "location" not in orga:
+            file.write("\n" + json.dumps(orga, indent=4, ensure_ascii=False))
+
+    file.close()

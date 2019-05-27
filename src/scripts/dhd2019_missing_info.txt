@@ -1,0 +1,107 @@
+Personen ohne Organisation:
+{
+    "id": "person__cmil-hashtable-de",
+    "firstName": "Milling",
+    "lastName": "Carsten",
+    "__temp__affil": "Berlin"
+}
+{
+    "id": "person__p-grosse-gnm-de",
+    "firstName": "Peggy",
+    "lastName": "Grosse",
+    "__temp__affil": "Germanisches Nationalmuseum"
+}
+{
+    "id": "person__info-opensemanticsearch-org",
+    "firstName": "Markus",
+    "lastName": "Mandalka",
+    "__temp__affil": "Freier Journalist und Informatiker, Berlin"
+}
+{
+    "id": "person__walkowski-nowalkowski-de",
+    "firstName": "Niels-Oliver",
+    "lastName": "Walkowski",
+    "__temp__affil": "unabhängiger Wissenschaftler"
+}
+
+Locations ohne Koordinaten:
+{
+    "id": "org__2",
+    "name": "Akademie der Wissenschaften Mainz - Digitale Akademie, Deutschland"
+}
+{
+    "id": "org__17",
+    "name": "Chair of Literary Computing, Universität Würzburg, Deutschland"
+}
+{
+    "id": "org__18",
+    "name": "Citlab, Universität Rostock, Deutschland"
+}
+{
+    "id": "org__20",
+    "name": "Cologne Center for eHumanities, Theaterwissenschaftliche Sammlung der Universität zu Köln"
+}
+{
+    "id": "org__21",
+    "name": "Computer Vision Lab, Technische Universität Wien, Österreich"
+}
+{
+    "id": "org__24",
+    "name": "Data Center for the Humanities, Universität zu Köln, Deutschland"
+}
+{
+    "id": "org__27",
+    "name": "Deutsches Museum, Deutschland"
+}
+{
+    "id": "org__28",
+    "name": "Digital Humanities Lab, EPF Lausanne, Schweiz"
+}
+{
+    "id": "org__30",
+    "name": "Electronic Textual Cultures Lab, University of Victoria, Canada"
+}
+{
+    "id": "org__33",
+    "name": "Forschungsverbund Marbach Weimar Wolfenbüttel | Herzog August Bibliothek Wolfenbüttel, Deutschland"
+}
+{
+    "id": "org__43",
+    "name": "GCDH, Universität Göttingen, Deutschland"
+}
+{
+    "id": "org__54",
+    "name": "Higher School of Economics, Moskau, Russland"
+}
+{
+    "id": "org__78",
+    "name": "Language Technology Group, Universität Hamburg, Deutschland"
+}
+{
+    "id": "org__84",
+    "name": "Max Weber Stiftung, Bonn, Deutschland"
+}
+{
+    "id": "org__92",
+    "name": "La Trobe University, Department of Archaeology and History, Australien"
+}
+{
+    "id": "org__95",
+    "name": "Sprache und Raum Laboratorium, Universität Zürich, Schweiz"
+}
+{
+    "id": "org__119",
+    "name": "Universität Hildesheim, Deutschland"
+}
+{
+    "id": "org__129",
+    "name": "CITLab Universität Rostock, Deutschland"
+}
+{
+    "id": "org__140",
+    "name": "Urban Complexity Lab, Fachhochschule Potsdam, Deutschland"
+}
+{
+    "id": "org__141",
+    "name": "Computer Vision Lab, Vienna University of Technology, Österreich"
+}

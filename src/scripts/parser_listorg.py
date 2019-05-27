@@ -8,16 +8,14 @@ def parse(path):
     dictLocation = {}
 
     tree = ET.parse(path)
-    nodeListPerson = tree.find(".//dhd:listOrg", namespace)
 
+    nodeListPerson = tree.find(".//dhd:listOrg", namespace)
     orgas = nodeListPerson.findall("./dhd:org", namespace)
     
     for nodeOrga in orgas:
         orga = parseOrga(nodeOrga, dictLocation)
         dictOrg[orga["id"]] = orga
 
-    # print(dictOrg)
-    # print(dictLocation)
     return (dictOrg, dictLocation)
 
 def parseOrga(nodeOrga, dictLocation):

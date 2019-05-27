@@ -6,8 +6,8 @@ def parse(path):
     dictPerson = {}
 
     tree = ET.parse(path)
+    
     nodeListPerson = tree.find(".//dhd:listPerson", namespace)
-
     people = nodeListPerson.findall("./dhd:person", namespace)
     
     for nodePerson in people:

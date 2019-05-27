@@ -12,7 +12,8 @@ def getLocation(query):
     # pylint: disable=no-member
     if r.status_code == requests.codes.ok:
         # prettyprint json
-        # print(json.dumps(r.json(), indent=4, sort_keys=True))
+        # print(json.dumps(r.json(), indent=4, ensure_ascii=False))
+
         data = r.json()
         return {
             "lat": data[0]["lat"],
