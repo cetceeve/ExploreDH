@@ -33,124 +33,124 @@
         {
             "id": "org__148",
             "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "locationame": "{{enter city name here (will be processed by novatim) z.B. Nürnberg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
         },
         {
             "id": "org__149",
             "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "locationame": "{{enter city name here (will be processed by novatim) z.B. Nürnberg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
         },
         {
             "id": "org__150",
             "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "locationame": "{{enter city name here (will be processed by novatim) z.B. Nürnberg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
         },
         {
             "id": "org__151",
             "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "locationame": "{{enter city name here (will be processed by novatim) z.B. Nürnberg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
         }
     ],
     "orgasMissingLocations": [
         {
             "id": "org__2",
             "name": "Akademie der Wissenschaften Mainz - Digitale Akademie, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__17",
             "name": "Chair of Literary Computing, Universität Würzburg, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__18",
             "name": "Citlab, Universität Rostock, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__20",
             "name": "Cologne Center for eHumanities, Theaterwissenschaftliche Sammlung der Universität zu Köln",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__21",
             "name": "Computer Vision Lab, Technische Universität Wien, Österreich",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__24",
             "name": "Data Center for the Humanities, Universität zu Köln, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__27",
             "name": "Deutsches Museum, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__28",
             "name": "Digital Humanities Lab, EPF Lausanne, Schweiz",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__30",
             "name": "Electronic Textual Cultures Lab, University of Victoria, Canada",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__33",
             "name": "Forschungsverbund Marbach Weimar Wolfenbüttel | Herzog August Bibliothek Wolfenbüttel, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__43",
             "name": "GCDH, Universität Göttingen, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__54",
             "name": "Higher School of Economics, Moskau, Russland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__78",
             "name": "Language Technology Group, Universität Hamburg, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__84",
             "name": "Max Weber Stiftung, Bonn, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__92",
             "name": "La Trobe University, Department of Archaeology and History, Australien",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__95",
             "name": "Sprache und Raum Laboratorium, Universität Zürich, Schweiz",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__119",
             "name": "Universität Hildesheim, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__129",
             "name": "CITLab Universität Rostock, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__140",
             "name": "Urban Complexity Lab, Fachhochschule Potsdam, Deutschland",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         },
         {
             "id": "org__141",
             "name": "Computer Vision Lab, Vienna University of Technology, Österreich",
-            "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
         }
     ]
 }
