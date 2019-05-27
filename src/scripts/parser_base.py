@@ -1,6 +1,7 @@
 import os
 import parser_listperson as parserListPerson  
-import parser_listorg as parserListOrga  
+import parser_listorg as parserListOrga
+import novatim_adapter as geocoder 
 
 dirTEI = "../../data/TEI"
 pathListPerson = "../../data/preprocessed/listperson.xml"
@@ -16,11 +17,18 @@ def readTEI():
 if __name__ == "__main__":
     # readTEI()#
 
-    parserListPerson.parse(pathListPerson) # distPerson
-    parserListOrga.parse(pathListOrga) # (dictOrga, dictLocation)
+    dictPerson = parserListPerson.parse(pathListPerson)
+    dictOrga, dictLocation = parserListOrga.parse(pathListOrga)
+
+
+    # geocoder.getLocation("Deutsches Museum, Deutschland")
 
     # get people with no associated organisation
-    # testdict = getDictPerson()
-    # for person in testdict.values():
+    # for person in dictPerson.values():
     #     if "__temp__affil" in person:
     #         print(person)
+
+    # get orgas with no location
+    # for orga in dictOrga.values():
+    #     if "location" not in orga:
+    #         print(orga)
