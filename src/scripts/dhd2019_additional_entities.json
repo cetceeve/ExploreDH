@@ -32,125 +32,125 @@
     "additionalOrgas": [
         {
             "id": "org__148",
-            "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
+            "name": "hashtable.de",
+            "loc_query": "Berlin, Deutschland"
         },
         {
             "id": "org__149",
-            "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
+            "name": "Germanisches Nationalmuseum, Nürnberg",
+            "loc_query": "Nürnberg, Deutschland"
         },
         {
             "id": "org__150",
-            "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
+            "name": "Freier Journalist und Informatiker",
+            "loc_query": "Berlin, Deutschland"
         },
         {
             "id": "org__151",
-            "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-            "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
+            "name": "Berlin-Brandenburgische Akademie der Wissenschaften, Berlin",
+            "loc_query": "Berlin, Deutschland"
         }
     ],
     "orgasMissingLocations": [
         {
             "id": "org__2",
             "name": "Akademie der Wissenschaften Mainz - Digitale Akademie, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Mainz, Deutschland"
         },
         {
             "id": "org__17",
             "name": "Chair of Literary Computing, Universität Würzburg, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Würzburg, Deutschland"
         },
         {
             "id": "org__18",
             "name": "Citlab, Universität Rostock, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Rostock, Deutschland"
         },
         {
             "id": "org__20",
             "name": "Cologne Center for eHumanities, Theaterwissenschaftliche Sammlung der Universität zu Köln",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Köln, Deutschland"
         },
         {
             "id": "org__21",
             "name": "Computer Vision Lab, Technische Universität Wien, Österreich",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Wien, Österreich"
         },
         {
             "id": "org__24",
             "name": "Data Center for the Humanities, Universität zu Köln, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Köln, Deutschland"
         },
         {
             "id": "org__27",
             "name": "Deutsches Museum, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "München, Deutschland"
         },
         {
             "id": "org__28",
             "name": "Digital Humanities Lab, EPF Lausanne, Schweiz",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Lausanne, Schweiz"
         },
         {
             "id": "org__30",
             "name": "Electronic Textual Cultures Lab, University of Victoria, Canada",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Victoria, Canada"
         },
         {
             "id": "org__33",
             "name": "Forschungsverbund Marbach Weimar Wolfenbüttel | Herzog August Bibliothek Wolfenbüttel, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Wolfenbüttel, Deutschland"
         },
         {
             "id": "org__43",
             "name": "GCDH, Universität Göttingen, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Göttingen, Deutschland"
         },
         {
             "id": "org__54",
             "name": "Higher School of Economics, Moskau, Russland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Moskau, Russland"
         },
         {
             "id": "org__78",
             "name": "Language Technology Group, Universität Hamburg, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Hamburg, Deutschland"
         },
         {
             "id": "org__84",
             "name": "Max Weber Stiftung, Bonn, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Bonn, Deutschland"
         },
         {
             "id": "org__92",
             "name": "La Trobe University, Department of Archaeology and History, Australien",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Melbourne, Australien"
         },
         {
             "id": "org__95",
             "name": "Sprache und Raum Laboratorium, Universität Zürich, Schweiz",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Zürich, Schweiz"
         },
         {
             "id": "org__119",
             "name": "Universität Hildesheim, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Hildesheim, Deutschland"
         },
         {
             "id": "org__129",
             "name": "CITLab Universität Rostock, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Rostock, Deutschland"
         },
         {
             "id": "org__140",
             "name": "Urban Complexity Lab, Fachhochschule Potsdam, Deutschland",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Potsdam, Deutschland"
         },
         {
             "id": "org__141",
             "name": "Computer Vision Lab, Vienna University of Technology, Österreich",
-            "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
+            "loc_query": "Wien, Österreich"
         }
     ]
 }

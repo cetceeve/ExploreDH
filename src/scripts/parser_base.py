@@ -25,10 +25,13 @@ if __name__ == "__main__":
     dictPerson = parserListPerson.parse(pathListPerson)
     dictOrga, dictLocation = parserListOrga.parse(pathListOrga)
 
-
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
-    # geocoder.getLocation("Universität Rostock")
+    # geocoder.getLocation("Nürnberg, Deutschland")
 
-    # print(json.dumps(dictPerson, indent=4, ensure_ascii=False))
     # MEC.writeMissingEntityInfoFile(dictPerson, dictOrga)
     # MEC.writeAdditionalEntityJSONFile(dictPerson, dictOrga)
+    # MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
+
+    # print(json.dumps(dictPerson, indent=4, ensure_ascii=False))
+    # print(json.dumps(dictOrga, indent=4, ensure_ascii=False))
+    # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))

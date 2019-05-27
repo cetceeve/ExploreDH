@@ -15,11 +15,12 @@ def getLocation(query):
         # print(json.dumps(r.json(), indent=4, ensure_ascii=False))
 
         data = r.json()
-        return {
-            "lat": data[0]["lat"],
-            "lon": data[0]["lon"],
-            "type": data[0]["type"],
-            "raw": data[0]
-        }
+        if data:
+            return {
+                "lat": data[0]["lat"],
+                "lon": data[0]["lon"],
+                "type": data[0]["type"],
+                "raw": data[0]
+            }
     else:
         return None
