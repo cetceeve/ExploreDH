@@ -1,7 +1,9 @@
 import os
 import parser_listperson as parserListPerson  
 import parser_listorg as parserListOrga
-import novatim_adapter as geocoder 
+
+import novatim_adapter as geocoder
+import spacy_adapter as ner
 
 dirTEI = "../../data/TEI"
 pathListPerson = "../../data/preprocessed/listperson.xml"
@@ -20,8 +22,8 @@ if __name__ == "__main__":
     dictPerson = parserListPerson.parse(pathListPerson)
     dictOrga, dictLocation = parserListOrga.parse(pathListOrga)
 
-
-    # geocoder.getLocation("Deutsches Museum, Deutschland")
+    # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
+    # geocoder.getLocation("Universität Rostock")
 
     # get people with no associated organisation
     # for person in dictPerson.values():
