@@ -38,8 +38,8 @@ def parseLocation(nodeLocation):
     location = {
         "id": nodeLocation.find("./dhd:placeName", namespace).attrib["key"][21:], # remove link
         "name": re.sub("\n\s*", " " , nodeLocation.find("./dhd:placeName", namespace).text),
-        "lat": nodeLocation.find("./dhd:geo", namespace).text.split(" ")[0],
-        "lon": nodeLocation.find("./dhd:geo", namespace).text.split(" ")[1]
+        "lat": nodeLocation.find("./dhd:geo", namespace).text.split(" ")[1],
+        "lon": nodeLocation.find("./dhd:geo", namespace).text.split(" ")[0]
     }
 
     return location

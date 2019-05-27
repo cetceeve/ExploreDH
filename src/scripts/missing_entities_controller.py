@@ -1,4 +1,5 @@
 import json
+import novatim_adapter as geocoder
 
 def writeMissingEntityInfoFile(dictPerson, dictOrga):
     file = open("dhd2019_missing_info.txt", mode="w", encoding="utf-8")
@@ -43,7 +44,7 @@ def writeAdditionalEntityJSONFile(dictPerson, dictOrga):
             additionalOrgas.append({
                 "id": "org__" + str(148 + i),
                 "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-                "locationame": "{{enter city name here (will be processed by novatim) z.B. Nürnberg}}"
+                "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
             })
 
         # get orgas with no location
@@ -52,7 +53,51 @@ def writeAdditionalEntityJSONFile(dictPerson, dictOrga):
                 orgasMissingLocations.append({
                     "id": orga["id"],
                     "name": orga["name"],
-                    "city": "{{enter city name here (will be processed by novatim)  z.B. Würzburg}}"
+                    "loc_query": "{{enter city name here (will be processed by novatim)  z.B. Würzburg, Deutschland}}"
                 })
         
         file.write(json.dumps(res, indent=4, ensure_ascii=False))
+
+def getAdditionalEntities(dictPerson, dictOrga, dictLocation):
+    with open("dhd2019_additional_entities.json", mode="r", encoding="utf-8") as file:
+        data = json.load(file)
+
+        peopleMissingOrgas = data["peopleMissingOrgas"]
+        additionalOrgas = data["additionalOrgas"]
+        orgasMissingLocations = data["orgasMissingLocations"]
+
+        for person in peopleMissingOrgas:
+            del person["__temp__affil"]
+            dictPerson[person["id"]] = person
+
+        for orga in additionalOrgas:
+            dictOrga[orga["id"]] = _resolveLocationQuery(orga, dictLocation)
+
+        for orga in orgasMissingLocations:
+            dictOrga[orga["id"]] = _resolveLocationQuery(orga, dictLocation)
+
+def _resolveLocationQuery(orga, dictLocation):
+    geoData = geocoder.getLocation(orga["loc_query"])
+    locId = _getLocationId(orga["loc_query"], geoData , dictLocation)
+
+    orga["location"] = locId
+    del orga["loc_query"]
+    return orga
+
+def _getLocationId(query, geoData, dictLocation):
+    cityName = query.split(",")[0]
+
+    for loc in dictLocation.values():
+        if loc["name"] == cityName:
+            if loc["lat"][:2] == geoData["lat"][:2]:
+                if loc["lon"][:2] == geoData["lon"][:2]:
+                    return loc["id"]
+
+    id = str(geoData["raw"]["place_id"])
+    dictLocation[id] = {
+        "id": id,
+        "name": cityName,
+        "lat": geoData["lat"],
+        "lon": geoData["lon"]
+    }
+    return id
