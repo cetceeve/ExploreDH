@@ -5,28 +5,28 @@
             "firstName": "Milling",
             "lastName": "Carsten",
             "__temp__affil": "Berlin",
-            "organisation": "org__148"
+            "orga": "org__148"
         },
         {
             "id": "person__p-grosse-gnm-de",
             "firstName": "Peggy",
             "lastName": "Grosse",
             "__temp__affil": "Germanisches Nationalmuseum",
-            "organisation": "org__149"
+            "orga": "org__149"
         },
         {
             "id": "person__info-opensemanticsearch-org",
             "firstName": "Markus",
             "lastName": "Mandalka",
             "__temp__affil": "Freier Journalist und Informatiker, Berlin",
-            "organisation": "org__150"
+            "orga": "org__150"
         },
         {
             "id": "person__walkowski-nowalkowski-de",
             "firstName": "Niels-Oliver",
             "lastName": "Walkowski",
             "__temp__affil": "unabhängiger Wissenschaftler",
-            "organisation": "org__151"
+            "orga": "org__151"
         }
     ],
     "additionalOrgas": [

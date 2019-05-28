@@ -35,7 +35,7 @@ def __writeAdditionalEntityJSONFile(dictPerson, dictOrga):
         counter = NEW_ORGAS_ID_BASE # start org ids high to not conflict with existing ones
         for person in dictPerson.values():
             if "__temp__affil" in person:
-                person["organisation"] = "org__" + str(counter)
+                person["orga"] = "org__" + str(counter)
                 peopleMissingOrgas.append(person)
                 counter += 1
 
