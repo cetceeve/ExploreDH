@@ -7,6 +7,8 @@ import novatim_adapter as geocoder
 import spacy_adapter as ner
 import parsercache as cache
 
+import parser_print_people_at_location as pppal
+
 dirTEI = "../../data/TEI"
 pathListPerson = "../../data/preprocessed/listperson.xml"
 pathListOrga = "../../data/preprocessed/listorg.xml"
@@ -25,16 +27,23 @@ if __name__ == "__main__":
         dictOrga = cache.read("dictOrga")
         dictLocation = cache.read("dictLocation")
     else:
+        print("parsing listPerson.xml")
         dictPerson = parserListPerson.parse(pathListPerson)
+        print("parsing listOrga.xml")
         dictOrga, dictLocation = parserListOrga.parse(pathListOrga)
+        print("fixing stuff")
         MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
+        MEC.fixTimGeelhaar(dictPerson)
 
+        print("writing to cache")
         cache.write(dictPerson, "dictPerson")
         cache.write(dictOrga, "dictOrga")
         cache.write(dictLocation, "dictLocation")
 
+
+    # pppal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
     # readTEI()
-    
+
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
     # geocoder.getLocation("Nürnberg, Deutschland")
 
