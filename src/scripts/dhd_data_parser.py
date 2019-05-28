@@ -5,9 +5,9 @@ import parser_listorg as parserListOrga
 import dhd2019_missing_entities_controller as MEC
 import novatim_adapter as geocoder
 import spacy_adapter as ner
-import parsercache as cache
+import parser_cache as cache
 
-import parser_print_people_at_location as pppal
+import parser_peopleAtLocation as p_pal
 
 dirTEI = "../../data/TEI"
 pathListPerson = "../../data/preprocessed/listperson.xml"
@@ -41,7 +41,7 @@ if __name__ == "__main__":
         cache.write(dictLocation, "dictLocation")
 
 
-    # pppal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
+    # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
     # readTEI()
 
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
