@@ -28,6 +28,7 @@ def read(title):
             return None
     return None
 
+
 def hasFile(title):
     return os.path.isfile(filename.format(title))
 

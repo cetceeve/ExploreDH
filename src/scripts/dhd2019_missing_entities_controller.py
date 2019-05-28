@@ -105,3 +105,15 @@ def _getLocationId(query, geoData, dictLocation):
         "lon": geoData["lon"]
     }
     return id
+
+
+def fixTimGeelhaar(dictPerson):
+    dictPerson["person__geelhaar-em-uni-frankfurt-de"]["orga"] = "org__47"
+
+    # original:
+    # { "person__geelhaar-em-uni-frankfurt-de": {
+    #     "id": "person__geelhaar-em-uni-frankfurt-de", 
+    #     "firstName": "Tim", 
+    #     "lastName": "Geelhaar", 
+    #     "orga": "org_47"}
+    # }
