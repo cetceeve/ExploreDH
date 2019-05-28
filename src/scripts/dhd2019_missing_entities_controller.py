@@ -1,7 +1,7 @@
 import json
 import novatim_adapter as geocoder
 
-def writeMissingEntityInfoFile(dictPerson, dictOrga):
+def __writeMissingEntityInfoFile(dictPerson, dictOrga):
     file = open("dhd2019_missing_info.txt", mode="w", encoding="utf-8")
 
     file.write("Personen ohne Organisation:")
@@ -19,8 +19,8 @@ def writeMissingEntityInfoFile(dictPerson, dictOrga):
     file.close()
 
 
-def writeAdditionalEntityJSONFile(dictPerson, dictOrga):
-    with open("dhd2019_additional_entities.json", mode="w", encoding="utf-8") as file:
+def __writeAdditionalEntityJSONFile(dictPerson, dictOrga):
+    with open("dhd2019_missing_entities.json", mode="w", encoding="utf-8") as file:
         NEW_ORGAS_ID_BASE = 1000
         peopleMissingOrgas = []
         additionalOrgas = []
@@ -60,7 +60,7 @@ def writeAdditionalEntityJSONFile(dictPerson, dictOrga):
 
 
 def getAdditionalEntities(dictPerson, dictOrga, dictLocation):
-    with open("dhd2019_additional_entities.json", mode="r", encoding="utf-8") as file:
+    with open("dhd2019_missing_entities.json", mode="r", encoding="utf-8") as file:
         data = json.load(file)
 
         peopleMissingOrgas = data["peopleMissingOrgas"]

@@ -2,7 +2,7 @@ import os
 import json
 import parser_listperson as parserListPerson  
 import parser_listorg as parserListOrga
-import missing_entities_controller as MEC
+import dhd2019_missing_entities_controller as MEC
 import novatim_adapter as geocoder
 import spacy_adapter as ner
 
