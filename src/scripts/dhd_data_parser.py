@@ -20,9 +20,7 @@ def readTEI():
 
 
 if __name__ == "__main__":
-    # readTEI()
-
-    if cache.isFile("dictPerson") and cache.isFile("dictOrga") and cache.isFile("dictLocation"):
+    if cache.hasFile("dictPerson") and cache.hasFile("dictOrga") and cache.hasFile("dictLocation"):
         dictPerson = cache.read("dictPerson")
         dictOrga = cache.read("dictOrga")
         dictLocation = cache.read("dictLocation")
@@ -35,6 +33,8 @@ if __name__ == "__main__":
         cache.write(dictOrga, "dictOrga")
         cache.write(dictLocation, "dictLocation")
 
+    # readTEI()
+    
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
     # geocoder.getLocation("Nürnberg, Deutschland")
 

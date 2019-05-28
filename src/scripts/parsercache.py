@@ -18,7 +18,7 @@ def write(data, title):
 
 
 def read(title):
-    if isFile(title):
+    if hasFile(title):
         try:
             with open(filename.format(title), mode="r", encoding="utf-8") as file:
                 data = json.load(file)
@@ -28,7 +28,7 @@ def read(title):
             return None
     return None
 
-def isFile(title):
+def hasFile(title):
     return os.path.isfile(filename.format(title))
 
 
