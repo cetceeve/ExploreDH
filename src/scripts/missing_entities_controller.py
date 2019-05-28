@@ -21,6 +21,7 @@ def writeMissingEntityInfoFile(dictPerson, dictOrga):
 
 def writeAdditionalEntityJSONFile(dictPerson, dictOrga):
     with open("dhd2019_additional_entities.json", mode="w", encoding="utf-8") as file:
+        NEW_ORGAS_ID_BASE = 1000
         peopleMissingOrgas = []
         additionalOrgas = []
         orgasMissingLocations = []
@@ -31,20 +32,19 @@ def writeAdditionalEntityJSONFile(dictPerson, dictOrga):
         }
 
         # get people with no associated organisation
-        counter = 148
+        counter = NEW_ORGAS_ID_BASE # start org ids high to not conflict with existing ones
         for person in dictPerson.values():
             if "__temp__affil" in person:
                 person["organisation"] = "org__" + str(counter)
+                peopleMissingOrgas.append(person)
                 counter += 1
 
-                peopleMissingOrgas.append(person)
-
-        # create new organisations
-        for i in range(4):
+        # create new organisations for the people missing it
+        for i in range(counter - NEW_ORGAS_ID_BASE):
             additionalOrgas.append({
-                "id": "org__" + str(148 + i),
+                "id": "org__" + str(NEW_ORGAS_ID_BASE + i),
                 "name": "{{enter useful organisation name e.g. Germanisches Nationalmuseum, Nürnberg }}",
-                "loc_query": "{{enter city name here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
+                "loc_query": "{{enter city, country here (will be processed by novatim) z.B. Nürnberg, Deutschland}}"
             })
 
         # get orgas with no location
@@ -57,6 +57,7 @@ def writeAdditionalEntityJSONFile(dictPerson, dictOrga):
                 })
         
         file.write(json.dumps(res, indent=4, ensure_ascii=False))
+
 
 def getAdditionalEntities(dictPerson, dictOrga, dictLocation):
     with open("dhd2019_additional_entities.json", mode="r", encoding="utf-8") as file:
@@ -76,6 +77,7 @@ def getAdditionalEntities(dictPerson, dictOrga, dictLocation):
         for orga in orgasMissingLocations:
             dictOrga[orga["id"]] = _resolveLocationQuery(orga, dictLocation)
 
+
 def _resolveLocationQuery(orga, dictLocation):
     geoData = geocoder.getLocation(orga["loc_query"])
     locId = _getLocationId(orga["loc_query"], geoData , dictLocation)
@@ -84,9 +86,11 @@ def _resolveLocationQuery(orga, dictLocation):
     del orga["loc_query"]
     return orga
 
-def _getLocationId(query, geoData, dictLocation):
-    cityName = query.split(",")[0]
 
+def _getLocationId(query, geoData, dictLocation):
+    cityName = query.split(",")[0] # loc_query was "city, country"
+
+    # check for already existing locations
     for loc in dictLocation.values():
         if loc["name"] == cityName:
             if loc["lat"][:2] == geoData["lat"][:2]:

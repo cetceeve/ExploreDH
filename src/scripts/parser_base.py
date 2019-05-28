@@ -29,9 +29,6 @@ if __name__ == "__main__":
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
     # geocoder.getLocation("Nürnberg, Deutschland")
 
-    # MEC.writeMissingEntityInfoFile(dictPerson, dictOrga)
-    # MEC.writeAdditionalEntityJSONFile(dictPerson, dictOrga)
-
     # print(json.dumps(dictPerson, indent=4, ensure_ascii=False))
     # print(json.dumps(dictOrga, indent=4, ensure_ascii=False))
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
