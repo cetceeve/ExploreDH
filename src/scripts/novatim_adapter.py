@@ -7,6 +7,7 @@ payload = {"q": "Eden, Loonaverse", "format": "json", "addressdetails": "1", "li
 def getLocation(query):
     payload["q"] = query
     r = requests.get(queryBaseString, params=payload)
+    print("Geocoder, searching for: " + query)
 
     # pylint: disable=no-member
     if r.status_code == requests.codes.ok:

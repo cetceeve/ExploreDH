@@ -23,15 +23,15 @@ def readTEI():
 
 if __name__ == "__main__":
     if cache.hasFile("dictPerson") and cache.hasFile("dictOrga") and cache.hasFile("dictLocation"):
+        print("reading from cache")
         dictPerson = cache.read("dictPerson")
         dictOrga = cache.read("dictOrga")
         dictLocation = cache.read("dictLocation")
     else:
-        print("parsing listPerson.xml")
+        print("parsing xml")
         dictPerson = parserListPerson.parse(pathListPerson)
-        print("parsing listOrga.xml")
         dictOrga, dictLocation = parserListOrga.parse(pathListOrga)
-        print("fixing stuff")
+        print("fixing entities")
         MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
         MEC.fixTimGeelhaar(dictPerson)
 
