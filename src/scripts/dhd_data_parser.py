@@ -1,5 +1,6 @@
 import os
 import json
+import parser_tei as parserTei
 import parser_listperson as parserListPerson  
 import parser_listorg as parserListOrga
 import dhd2019_missing_entities_controller as MEC
@@ -17,8 +18,7 @@ def readTEI():
     with os.scandir(dirTEI) as it:
         for entry in it:
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():
-                print(entry.name)
-                # parse xml file here
+                parserTei.parse(entry.path)
 
 
 if __name__ == "__main__":
@@ -41,8 +41,8 @@ if __name__ == "__main__":
         cache.write(dictLocation, "dictLocation")
 
 
+    readTEI()
     # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
-    # readTEI()
 
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
     # geocoder.getLocation("Nürnberg, Deutschland")
