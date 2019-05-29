@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 
 namespace = {"dhd": "http://www.tei-c.org/ns/1.0", "xml": "http://www.w3.org/XML/1998/namespace"}
-dictPerson = {}
+_dictPerson = {}
 
 def parse(path):
     tree = ET.parse(path)
@@ -11,9 +11,9 @@ def parse(path):
     
     for nodePerson in people:
         person = _parsePerson(nodePerson)
-        dictPerson[person["id"]] = person
+        _dictPerson[person["id"]] = person
 
-    return dictPerson
+    return _dictPerson
 
 def _parsePerson(nodePerson):
     person =  {

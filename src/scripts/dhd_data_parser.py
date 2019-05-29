@@ -13,7 +13,7 @@ dirTEI = "../../data/TEI"
 pathListPerson = "../../data/preprocessed/listperson.xml"
 pathListOrga = "../../data/preprocessed/listorg.xml"
 
-def readTEI():    
+def readTEI():
     with os.scandir(dirTEI) as it:
         for entry in it:
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():

@@ -1,14 +1,14 @@
 import json
 import os
 
-directory = "./__parsercache__/"
-filename = directory + "cache_{}.json"
+_directory = "./__parsercache__/"
+_filename = _directory + "cache_{}.json"
 
 def write(data, title):
     if data is not None:
         createDirectory()
         try:
-            with open(filename.format(title), mode="w", encoding="utf-8") as file:
+            with open(_filename.format(title), mode="w", encoding="utf-8") as file:
                 file.write(json.dumps(data, ensure_ascii=False))
             return True
         except OSError as e:
@@ -20,7 +20,7 @@ def write(data, title):
 def read(title):
     if hasFile(title):
         try:
-            with open(filename.format(title), mode="r", encoding="utf-8") as file:
+            with open(_filename.format(title), mode="r", encoding="utf-8") as file:
                 data = json.load(file)
             return data
         except OSError as e:
@@ -30,9 +30,9 @@ def read(title):
 
 
 def hasFile(title):
-    return os.path.isfile(filename.format(title))
+    return os.path.isfile(_filename.format(title))
 
 
 def createDirectory():
-    if not os.path.exists(directory):
-       os.makedirs(directory, exist_ok=True)
+    if not os.path.exists(_directory):
+       os.makedirs(_directory, exist_ok=True)

@@ -2,8 +2,8 @@ import xml.etree.ElementTree as ET
 import re
 
 namespace = {"dhd": "http://www.tei-c.org/ns/1.0", "xml": "http://www.w3.org/XML/1998/namespace"}
-dictOrg = {}
-dictLocation = {}
+_dictOrg = {}
+_dictLocation = {}
 
 def parse(path):
     tree = ET.parse(path)
@@ -13,9 +13,9 @@ def parse(path):
     
     for nodeOrga in orgas:
         orga = _parseOrga(nodeOrga)
-        dictOrg[orga["id"]] = orga
+        _dictOrg[orga["id"]] = orga
 
-    return (dictOrg, dictLocation)
+    return (_dictOrg, _dictLocation)
 
 
 def _parseOrga(nodeOrga):
@@ -35,8 +35,8 @@ def _parseOrga(nodeOrga):
 
 
 def _addToDictLocation(location):
-    if location["id"] not in dictLocation:
-            dictLocation[location["id"]] = location
+    if location["id"] not in _dictLocation:
+            _dictLocation[location["id"]] = location
 
 
 def _parseLocation(nodeLocation):

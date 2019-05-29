@@ -1,12 +1,12 @@
 import requests
 import json
 
-queryBaseString = "https://nominatim.openstreetmap.org/search"
-payload = {"q": "Eden, Loonaverse", "format": "json", "addressdetails": "1", "limit": 1}
+_queryBaseString = "https://nominatim.openstreetmap.org/search"
+_payload = {"q": "Eden, Loonaverse", "format": "json", "addressdetails": "1", "limit": 1}
 
 def getLocation(query):
-    payload["q"] = query
-    r = requests.get(queryBaseString, params=payload)
+    _payload["q"] = query
+    r = requests.get(_queryBaseString, params=_payload)
     print("Geocoder, searching for: " + query)
 
     # pylint: disable=no-member
