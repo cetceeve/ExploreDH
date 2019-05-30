@@ -14,6 +14,7 @@ dirTEI = "../../data/TEI"
 pathListPerson = "../../data/preprocessed/listperson.xml"
 pathListOrga = "../../data/preprocessed/listorg.xml"
 dictArticle = {}
+dictKeyword = {}
 
 def readTEI():
     with os.scandir(dirTEI) as it:
@@ -22,7 +23,8 @@ def readTEI():
                 xmlTree = parserTei.parse(entry.path)
                 if xmlTree is not None:
                     parserTei.getEmails(xmlTree, dictPerson)
-                    parserTei.getArticle(xmlTree, dictArticle)
+                    parserTei.getKeywords(xmlTree, dictKeyword)
+                    parserTei.getArticle(xmlTree, dictArticle, dictKeyword)
 
 
 if __name__ == "__main__":

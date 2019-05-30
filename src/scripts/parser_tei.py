@@ -14,18 +14,7 @@ def parse(path):
         return None
 
     return tree
-                
-    # print(path)
-    # #find categoty/subcategory
-    # nodeProfileDesc = tree.find(".//dhd:profileDesc", _namespace)
-    # for element in nodeProfileDesc.findall(".//dhd:textClass/dhd:keywords", _namespace):
-    #     if (element.attrib["n"]) != "category":
-    #         print(element.attrib["n"] + ": ", end="")
-    #         for term in element.findall("./dhd:term", _namespace):
-    #             print(term.text, end=", ")
-    #         print()
 
-    # print("\n")
 
 def getEmails(tree, dictPerson):
     nodeTitleStmt = tree.find(".//dhd:titleStmt", _namespace)
@@ -39,12 +28,28 @@ def getEmails(tree, dictPerson):
             dictPerson[personId]["email"].append(person.find("./dhd:email", _namespace).text)
 
 
-def getArticle(tree, dictArticle):
-    dictArticle[id] = {
-        "id": str(uuid.uuid4()),
+def getKeywords(tree, dictKeyword):
+    #find keywords/topics
+    nodeProfileDesc = tree.find(".//dhd:profileDesc", _namespace)
+    for element in nodeProfileDesc.findall(".//dhd:textClass/dhd:keywords", _namespace):
+        if element.attrib["n"] == "keywords" or element.attrib["n"] == "topics":
+            for term in element.findall("./dhd:term", _namespace):
+                if _getKeywordIdByName(dictKeyword, term.text) is None:
+                    keywordID = str(uuid.uuid1())
+                    dictKeyword[keywordID] = {
+                        "id": keywordID,
+                        "name": term.text
+                    }
+
+
+def getArticle(tree, dictArticle, dictKeyword):
+    articleID = str(uuid.uuid1())
+
+    dictArticle[articleID] = {
+        "id": articleID,
         "title": _getTitle(tree),
         "abstract": "ASSA!",
-        "keywords": _getKeywords(tree),
+        "keywords": _getKeywords(tree, dictKeyword),
         "authors": _getAuthors(tree)
     }
 
@@ -62,15 +67,14 @@ def _getTitle(tree):
         return tree.find(".//dhd:titleStmt/dhd:title", _namespace).text
 
 
-def _getKeywords(tree):
+def _getKeywords(tree, dictKeyword):
     keywords = []
     #find keywords/topics
     nodeProfileDesc = tree.find(".//dhd:profileDesc", _namespace)
     for element in nodeProfileDesc.findall(".//dhd:textClass/dhd:keywords", _namespace):
         if element.attrib["n"] == "keywords" or element.attrib["n"] == "topics":
             for term in element.findall("./dhd:term", _namespace):
-                keywords.append(term.text)
-
+                keywords.append(_getKeywordIdByName(dictKeyword, term.text))
     return keywords
 
 
@@ -80,8 +84,14 @@ def _getAuthors(tree):
 
     for person in nodeTitleStmt.findall("./dhd:author", _namespace):
         authors.append(_redirectWrongIds(person.get("ref")[1:])) # remove hashtag from ref
-
     return authors
+
+
+def _getKeywordIdByName(dictKeyword, keyword):
+    for element in dictKeyword.values():
+        if element["name"] == keyword:
+            return element["id"]
+    return None
 
 
 def _redirectWrongIds(personId):
@@ -99,5 +109,4 @@ def _redirectWrongIds(personId):
         return "person__frau-uni-koeln-de"
     elif personId == "person__markus-krug-uni-wuerzburg-de":
         return "person__markus-krug-informatik-uni-wuerzburg-de"
-    
     return personId
