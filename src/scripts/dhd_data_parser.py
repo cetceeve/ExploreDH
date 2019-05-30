@@ -47,7 +47,6 @@ if __name__ == "__main__":
 
 
     readTEI()
-    print(dictArticle)
     # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
 
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
