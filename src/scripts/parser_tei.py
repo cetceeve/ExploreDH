@@ -40,13 +40,12 @@ def getEmails(tree, dictPerson):
 
 
 def getArticle(tree, dictArticle):
-    id = str(uuid.uuid4())
-
     dictArticle[id] = {
-        "id": id,
+        "id": str(uuid.uuid4()),
         "title": _getTitle(tree),
         "abstract": "ASSA!",
-        "keywords": _getKeywords(tree)
+        "keywords": _getKeywords(tree),
+        "authors": _getAuthors(tree)
     }
 
 
@@ -62,6 +61,7 @@ def _getTitle(tree):
     else:
         return tree.find(".//dhd:titleStmt/dhd:title", _namespace).text
 
+
 def _getKeywords(tree):
     keywords = []
     #find keywords/topics
@@ -72,6 +72,16 @@ def _getKeywords(tree):
                 keywords.append(term.text)
 
     return keywords
+
+
+def _getAuthors(tree):
+    authors = []
+    nodeTitleStmt = tree.find(".//dhd:titleStmt", _namespace)
+
+    for person in nodeTitleStmt.findall("./dhd:author", _namespace):
+        authors.append(_redirectWrongIds(person.get("ref")[1:])) # remove hashtag from ref
+
+    return authors
 
 
 def _redirectWrongIds(personId):
