@@ -36,6 +36,18 @@ def getEmails(tree, dictPerson):
         elif person.find("./dhd:email", _namespace).text not in dictPerson[personId]["email"]:
             dictPerson[personId]["email"].append(person.find("./dhd:email", _namespace).text)
 
+def getTitle(tree, dictArticle):
+    nodeTitle = tree.find(".//dhd:titleStmt/dhd:title[@type='full']", _namespace)
+
+    if nodeTitle is not None:
+        fullTitle = nodeTitle.find("./dhd:title[@type='main']", _namespace).text
+        subTitle = nodeTitle.find("./dhd:title[@type='sub']", _namespace).text
+        if subTitle is not None:
+            fullTitle += ": " + subTitle
+        return fullTitle
+    else:
+        return tree.find(".//dhd:titleStmt/dhd:title", _namespace).text
+
 
 def _redirectWrongIds(personId):
     if personId == "person__tobias-hodel-hist-uzh-ch":
