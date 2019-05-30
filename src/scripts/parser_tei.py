@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+import uuid
 
 _namespace = {"dhd": "http://www.tei-c.org/ns/1.0", "xml": "http://www.w3.org/XML/1998/namespace"}
 _dictOrg = {}
@@ -36,7 +37,18 @@ def getEmails(tree, dictPerson):
         elif person.find("./dhd:email", _namespace).text not in dictPerson[personId]["email"]:
             dictPerson[personId]["email"].append(person.find("./dhd:email", _namespace).text)
 
-def getTitle(tree, dictArticle):
+
+def getArticle(tree, dictArticle):
+    title = _getTitle(tree)
+    id = str(uuid.uuid4())
+
+    dictArticle[id] = {
+        "id": id,
+        "title": title
+    }
+
+
+def _getTitle(tree):
     nodeTitle = tree.find(".//dhd:titleStmt/dhd:title[@type='full']", _namespace)
 
     if nodeTitle is not None:
