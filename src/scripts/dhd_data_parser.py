@@ -18,7 +18,9 @@ def readTEI():
     with os.scandir(dirTEI) as it:
         for entry in it:
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():
-                parserTei.parse(entry.path)
+                xmlTree = parserTei.parse(entry.path)
+                if xmlTree is not None:
+                    parserTei.getEmails(xmlTree, dictPerson)
 
 
 if __name__ == "__main__":
@@ -34,6 +36,7 @@ if __name__ == "__main__":
         print("fixing entities")
         MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
         MEC.fixTimGeelhaar(dictPerson)
+        MEC.addWalterScholger(dictPerson)
 
         print("writing to cache")
         cache.write(dictPerson, "dictPerson")

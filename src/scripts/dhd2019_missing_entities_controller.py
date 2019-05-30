@@ -25,10 +25,12 @@ def __writeAdditionalEntityJSONFile(dictPerson, dictOrga):
         peopleMissingOrgas = []
         additionalOrgas = []
         orgasMissingLocations = []
+        missingPeople = []
         res = {
             "peopleMissingOrgas": peopleMissingOrgas,
             "additionalOrgas": additionalOrgas,
-            "orgasMissingLocations": orgasMissingLocations
+            "orgasMissingLocations": orgasMissingLocations,
+            "missingPeople": missingPeople
         }
 
         # get people with no associated organisation
@@ -111,9 +113,17 @@ def fixTimGeelhaar(dictPerson):
     dictPerson["person__geelhaar-em-uni-frankfurt-de"]["orga"] = "org__47"
 
     # original:
-    # { "person__geelhaar-em-uni-frankfurt-de": {
-    #     "id": "person__geelhaar-em-uni-frankfurt-de", 
-    #     "firstName": "Tim", 
-    #     "lastName": "Geelhaar", 
-    #     "orga": "org_47"}
-    # }
+    # "person__geelhaar-em-uni-frankfurt-de": {
+    #   "id": "person__geelhaar-em-uni-frankfurt-de", 
+    #   "firstName": "Tim", 
+    #   "lastName": "Geelhaar", 
+    #   "orga": "org_47"}
+    # 
+
+def addWalterScholger(dictPerson):
+    dictPerson["person__walter-scholger-uni-graz-at"] = {
+        "id": "person__walter-scholger-uni-graz-at",
+        "firstName": "Walter",
+        "lastName": "Scholger",
+        "orga": "org__74"
+    }
