@@ -6,7 +6,7 @@ _filename = _directory + "cache_{}.json"
 
 def write(data, title):
     if data is not None:
-        createDirectory()
+        _createDirectory()
         try:
             with open(_filename.format(title), mode="w", encoding="utf-8") as file:
                 file.write(json.dumps(data, ensure_ascii=False))
@@ -33,6 +33,6 @@ def hasFile(title):
     return os.path.isfile(_filename.format(title))
 
 
-def createDirectory():
+def _createDirectory():
     if not os.path.exists(_directory):
        os.makedirs(_directory, exist_ok=True)

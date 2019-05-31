@@ -1,5 +1,6 @@
 import os
 import json
+
 import parser_tei as parserTei
 import parser_listperson as parserListPerson  
 import parser_listorg as parserListOrga
@@ -7,17 +8,19 @@ import dhd2019_missing_entities_controller as MEC
 import novatim_adapter as geocoder
 import spacy_adapter as ner
 import parser_cache as cache
-
 import parser_peopleAtLocation as p_pal
 
-dirTEI = "../../data/TEI"
-pathListPerson = "../../data/preprocessed/listperson.xml"
-pathListOrga = "../../data/preprocessed/listorg.xml"
+from constants import DATA_DIR
+
+dictPerson = {}
+dictOrga = {}
+dictLocation = {}
 dictArticle = {}
 dictKeyword = {}
 
+
 def readTEI():
-    with os.scandir(dirTEI) as it:
+    with os.scandir(DATA_DIR + "TEI/") as it:
         for entry in it:
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():
                 xmlTree = parserTei.parse(entry.path)
@@ -35,8 +38,8 @@ if __name__ == "__main__":
         dictLocation = cache.read("dictLocation")
     else:
         print("parsing xml")
-        dictPerson = parserListPerson.parse(pathListPerson)
-        dictOrga, dictLocation = parserListOrga.parse(pathListOrga)
+        parserListPerson.parse(DATA_DIR + "preprocessed/listperson.xml", dictPerson)
+        parserListOrga.parse(DATA_DIR + "preprocessed/listorg.xml", dictOrga, dictLocation)
         print("fixing entities")
         MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
         MEC.fixTimGeelhaar(dictPerson)

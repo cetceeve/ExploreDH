@@ -1,9 +1,9 @@
 import spacy
 
-nlp = spacy.load("de_core_news_sm")
+_nlp = spacy.load("de_core_news_sm")
 
 def runNER(line):
-    doc = nlp(line)
+    doc = _nlp(line)
     res = []
 
     for element in doc.ents:
