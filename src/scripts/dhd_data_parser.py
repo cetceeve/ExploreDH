@@ -7,7 +7,7 @@ import parser_listorg as parserListOrga
 import dhd2019_missing_entities_controller as MEC
 import novatim_adapter as geocoder
 import spacy_adapter as ner
-import parser_cache as cache
+import parser_io as io
 import parser_peopleAtLocation as p_pal
 
 from constants import DATA_DIR
@@ -31,11 +31,11 @@ def readTEI():
 
 
 if __name__ == "__main__":
-    if cache.hasFile("dictPerson") and cache.hasFile("dictOrga") and cache.hasFile("dictLocation"):
+    if io.hasFile(io.source["cache"], "dictPerson") and io.hasFile(io.source["cache"], "dictOrga") and io.hasFile(io.source["cache"], "dictLocation"):
         print("reading from cache")
-        dictPerson = cache.read("dictPerson")
-        dictOrga = cache.read("dictOrga")
-        dictLocation = cache.read("dictLocation")
+        dictPerson = io.read(io.source["cache"], "dictPerson")
+        dictOrga = io.read(io.source["cache"], "dictOrga")
+        dictLocation = io.read(io.source["cache"], "dictLocation")
     else:
         print("parsing xml")
         parserListPerson.parse(DATA_DIR + "preprocessed/listperson.xml", dictPerson)
@@ -46,9 +46,9 @@ if __name__ == "__main__":
         MEC.addWalterScholger(dictPerson)
 
         print("writing to cache")
-        cache.write(dictPerson, "dictPerson")
-        cache.write(dictOrga, "dictOrga")
-        cache.write(dictLocation, "dictLocation")
+        io.write(io.source["cache"], dictPerson, "dictPerson")
+        io.write(io.source["cache"], dictOrga, "dictOrga")
+        io.write(io.source["cache"], dictLocation, "dictLocation")
 
 
     readTEI()

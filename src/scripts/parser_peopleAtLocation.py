@@ -1,5 +1,5 @@
 import json
-import parser_cache as cache
+import parser_io as io
 
 def printPeopleAtLocation(dictPerson, dictOrga, dictLocation):
     dictRes = {}
@@ -20,4 +20,4 @@ def printPeopleAtLocation(dictPerson, dictOrga, dictLocation):
         # resEntry = dictRes["location"]
         # resEntry["numOfPeople"] += 1
 
-    cache.write(list(dictRes.values()), "peopleAtLocation")
+    io.write(io.source["output"], list(dictRes.values()), "peopleAtLocation")
