@@ -3,12 +3,12 @@ import os
 import json
 
 import parser_tei as parserTei
-import parser_listperson as parserListPerson  
+import parser_listperson as parserListPerson 
 import parser_listorg as parserListOrga
 import dhd2019_missing_entities_controller as MEC
 import novatim_adapter as geocoder
 import spacy_adapter as ner
-import parser_io as io
+import sys_io_json as io
 import parser_peopleAtLocation as p_pal
 
 from constants import DATA_DIR
@@ -42,8 +42,8 @@ if __name__ == "__main__":
         dictKeyword = io.read(io.source["cache"], "dictKeyword")
     else:
         print("parsing xml")
-        parserListPerson.parse(DATA_DIR + "preprocessed/listperson.xml", dictPerson)
-        parserListOrga.parse(DATA_DIR + "preprocessed/listorg.xml", dictOrga, dictLocation)
+        parserListPerson.parse(os.path.abspath(DATA_DIR + "preprocessed/listperson.xml"), dictPerson)
+        parserListOrga.parse(os.path.abspath(DATA_DIR + "preprocessed/listorg.xml"), dictOrga, dictLocation)
         print("fixing entities")
         MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
         MEC.fixTimGeelhaar(dictPerson)

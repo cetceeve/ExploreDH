@@ -4,7 +4,7 @@ import os
 from constants import DATA_DIR
 
 source = {
-    "cache": { "dir": "./__parsercache__/", "path": "./__parsercache__/cache_{}.json" },
+    "cache": { "dir": "./__cache__/", "path": "./__cache__/parser_{}.json" },
     "output": { "dir": DATA_DIR + "./output/", "path": DATA_DIR + "./output/output_{}.json" }
 }
 

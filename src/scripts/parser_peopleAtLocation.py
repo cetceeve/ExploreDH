@@ -1,5 +1,5 @@
 import json
-import parser_io as io
+import sys_io_json as io
 
 def printPeopleAtLocation(dictPerson, dictOrga, dictLocation):
     dictRes = {}
