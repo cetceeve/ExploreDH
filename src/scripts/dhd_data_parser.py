@@ -1,3 +1,4 @@
+import sys
 import os
 import json
 
@@ -27,11 +28,18 @@ def readTEI():
 
 
 if __name__ == "__main__":
-    if io.hasFile(io.source["cache"], "dictPerson") and io.hasFile(io.source["cache"], "dictOrga") and io.hasFile(io.source["cache"], "dictLocation"):
+    reload_cache = False
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "-r" or sys.argv[1] == "-reload-cache":
+            reload_cache = True
+
+    if io.hasFiles(io.source["cache"], ["dictPerson", "dictOrga", "dictLocation", "dictArticle", "dictKeyword"]) and not reload_cache:
         print("reading from cache")
         dictPerson = io.read(io.source["cache"], "dictPerson")
         dictOrga = io.read(io.source["cache"], "dictOrga")
         dictLocation = io.read(io.source["cache"], "dictLocation")
+        dictArticle = io.read(io.source["cache"], "dictArticle")
+        dictKeyword = io.read(io.source["cache"], "dictKeyword")
     else:
         print("parsing xml")
         parserListPerson.parse(DATA_DIR + "preprocessed/listperson.xml", dictPerson)
@@ -40,17 +48,20 @@ if __name__ == "__main__":
         MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
         MEC.fixTimGeelhaar(dictPerson)
         MEC.addWalterScholger(dictPerson)
+        print("parsing TEI")
+        readTEI()
 
         print("writing to cache")
         io.write(io.source["cache"], dictPerson, "dictPerson")
         io.write(io.source["cache"], dictOrga, "dictOrga")
         io.write(io.source["cache"], dictLocation, "dictLocation")
+        io.write(io.source["cache"], dictArticle, "dictArticle")
+        io.write(io.source["cache"], dictKeyword, "dictKeyword")
 
 
-    readTEI()
     # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
 
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
     # geocoder.getLocation("Nürnberg, Deutschland")
 
-    # print(json.dumps(dictKeyword, indent=4, ensure_ascii=False))
+    # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))

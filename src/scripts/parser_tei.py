@@ -8,11 +8,9 @@ def parse(path, dictPerson, dictArticle, dictKeyword):
     tree = ET.parse(path)
 
     # Panels cannot be taken into account
-    if tree.find(".//dhd:profileDesc/dhd:textClass/dhd:keywords[@n='subcategory']/dhd:term", NAMESPACE).text == "Panel":
-        return None
-
-    _getEmails(tree, dictPerson)
-    _getArticle(tree, dictArticle, dictKeyword)
+    if tree.find(".//dhd:profileDesc/dhd:textClass/dhd:keywords[@n='subcategory']/dhd:term", NAMESPACE).text != "Panel":
+        _getEmails(tree, dictPerson)
+        _getArticle(tree, dictArticle, dictKeyword)
 
 
 def _getEmails(tree, dictPerson):

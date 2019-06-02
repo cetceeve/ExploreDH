@@ -37,6 +37,13 @@ def hasFile(source, title):
     return os.path.isfile(source["path"].format(title))
 
 
+def hasFiles(source, titles):
+    for title in titles:
+        if not hasFile(source, title):
+            return False
+    return True
+
+
 def _createDirectory(directory):
     if not os.path.exists(directory):
        os.makedirs(directory, exist_ok=True)
