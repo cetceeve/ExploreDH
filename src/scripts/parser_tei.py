@@ -4,17 +4,18 @@ import uuid
 from constants import NAMESPACE
 _abstract = "Butterfly seems like it is in line with the aesthetics we got in their pre-debut works. It also features a mature sound and stands out for a variety of reasons. The first is the song’s instrumental. The song takes on EDM in a very unique manner. It combines different sounds together to create a very dynamically powerful instrumentation that really allows for the chorus to stand out. I also like how they used a very high pitched ‘Fly Like A Butterfly’ as part of the chorus. It does sound like screeching but you can make out the words and it really adds a depth of colour to the song. The second reason would have to be the vocals. It is that one line again that I think really makes the song stand out, this time slightly lower pitch for the members to be able to sing. The rapping also has to be commended as it isn’t a powerful approach but rather more delicate. But it works well with the rest of the song. I also found it rather interesting that the vocals/raps were minimalistic, as it is usually the instrumental. The third and final reason why the song stands out is the lyrics. They are all about finding oneself and usually, songs of this nature earn applause from me. Overall, Butterfly is uniquely different but so amazing."
 
-def parse(path):
+def parse(path, dictPerson, dictArticle, dictKeyword):
     tree = ET.parse(path)
 
     # Panels cannot be taken into account
     if tree.find(".//dhd:profileDesc/dhd:textClass/dhd:keywords[@n='subcategory']/dhd:term", NAMESPACE).text == "Panel":
         return None
 
-    return tree
+    _getEmails(tree, dictPerson)
+    _getArticle(tree, dictArticle, dictKeyword)
 
 
-def getEmails(tree, dictPerson):
+def _getEmails(tree, dictPerson):
     nodeTitleStmt = tree.find(".//dhd:titleStmt", NAMESPACE)
 
     for person in nodeTitleStmt.findall("./dhd:author", NAMESPACE):
@@ -26,21 +27,7 @@ def getEmails(tree, dictPerson):
             dictPerson[personId]["email"].append(person.find("./dhd:email", NAMESPACE).text)
 
 
-def getKeywords(tree, dictKeyword):
-    #find keywords/topics
-    nodeProfileDesc = tree.find(".//dhd:profileDesc", NAMESPACE)
-    for element in nodeProfileDesc.findall(".//dhd:textClass/dhd:keywords", NAMESPACE):
-        if element.attrib["n"] == "keywords" or element.attrib["n"] == "topics":
-            for term in element.findall("./dhd:term", NAMESPACE):
-                if _getKeywordIdByName(dictKeyword, term.text) is None:
-                    keywordID = str(uuid.uuid1())
-                    dictKeyword[keywordID] = {
-                        "id": keywordID,
-                        "name": term.text
-                    }
-
-
-def getArticle(tree, dictArticle, dictKeyword):
+def _getArticle(tree, dictArticle, dictKeyword):
     articleID = str(uuid.uuid1())
 
     dictArticle[articleID] = {
@@ -85,11 +72,22 @@ def _getAuthors(tree):
     return authors
 
 
-def _getKeywordIdByName(dictKeyword, keyword):
+def _getKeywordIdByName(dictKeyword, keywordText):
+    # search for existing keyword
     for element in dictKeyword.values():
-        if element["name"] == keyword:
+        if element["text"] == keywordText:
+            element["frequency"] += 1
             return element["id"]
-    return None
+
+    # create new keyword
+    keywordID = str(uuid.uuid1())
+    dictKeyword[keywordID] = {
+        "id": keywordID,
+        "text": keywordText,
+        "frequency": 1
+    }
+    return keywordID
+    
 
 
 def _redirectWrongIds(personId):

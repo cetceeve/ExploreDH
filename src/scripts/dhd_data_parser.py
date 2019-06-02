@@ -23,11 +23,7 @@ def readTEI():
     with os.scandir(DATA_DIR + "TEI/") as it:
         for entry in it:
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():
-                xmlTree = parserTei.parse(entry.path)
-                if xmlTree is not None:
-                    parserTei.getEmails(xmlTree, dictPerson)
-                    parserTei.getKeywords(xmlTree, dictKeyword)
-                    parserTei.getArticle(xmlTree, dictArticle, dictKeyword)
+                parserTei.parse(entry.path, dictPerson, dictArticle, dictKeyword)
 
 
 if __name__ == "__main__":
@@ -57,6 +53,4 @@ if __name__ == "__main__":
     # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
     # geocoder.getLocation("Nürnberg, Deutschland")
 
-    # print(json.dumps(dictPerson, indent=4, ensure_ascii=False))
-    # print(json.dumps(dictOrga, indent=4, ensure_ascii=False))
-    # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
+    # print(json.dumps(dictKeyword, indent=4, ensure_ascii=False))
