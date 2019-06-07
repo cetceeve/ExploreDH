@@ -10,16 +10,8 @@ class Map {
     this.tileLayer;
     this.initMap();
 
-    // test data (lon+lat from dhd)
-    this.testList = [
-      { lon: 8.27, lat: 49.98, radius: 1 }, // Mainz
-      { lon: 7.16, lat: 51.27, radius: 2 }, // Wuppertal
-      { lon: 13.41, lat: 52.5, radius: 3 } // Berlin
-    ];
-
-    this.createNewLayer(this.testList, this.map, this.tileLayer);
+    this.visualizePeopleAtLocation();
   }
-
 
   initMap() {
     this.tileLayer = new ol.layer.Tile({
@@ -36,9 +28,13 @@ class Map {
       view: new ol.View({
         // center is set to Berlin [lon, lat]
         center: ol.proj.transform([13.41, 52.52], 'EPSG:4326', 'EPSG:3857'),
-        zoom: 4
+        zoom: 5.5
       })
     });
+  }
+
+  visualizePeopleAtLocation() {
+    this.createNewLayer(peopleAtLocation, this.map, this.tileLayer);
   }
 
   createNewLayer(list, map, tileLayer) {
@@ -77,7 +73,7 @@ class Map {
 
   createCirclesFromData(data) {
     return new ol.Feature({
-      geometry: new ol.geom.Circle([data.lon, data.lat], data.radius)
+      geometry: new ol.geom.Circle([Number(data.lon), Number(data.lat)], Number(0.05 * data.numOfPeople))
     });
   }
 
