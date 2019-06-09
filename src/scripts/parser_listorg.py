@@ -7,16 +7,16 @@ def parse(path, dictOrga, dictLocation):
     tree = ET.parse(path)
 
     nodeListPerson = tree.find(".//dhd:listOrg", NAMESPACE_XML)
-    orgas = nodeListPerson.findall("./dhd:org", NAMESPACE_XML)
+    nodeOrgas = nodeListPerson.findall("./dhd:org", NAMESPACE_XML)
     
-    for nodeOrga in orgas:
+    for nodeOrga in nodeOrgas:
         orga = _parseOrga(nodeOrga, dictLocation)
         dictOrga[orga["id"]] = orga
 
 
 def _parseOrga(nodeOrga, dictLocation):
     orga =  {
-        "id": nodeOrga.attrib["{%s}id" % NAMESPACE_XML["xml"]],
+        "id": nodeOrga.get("{{{}}}id".format(NAMESPACE_XML["xml"])),
         "name": re.sub(r"\n\s*", " " , nodeOrga.find("./dhd:orgName", NAMESPACE_XML).text) # regex for newlines with trailing spaces
     }
 
@@ -37,7 +37,7 @@ def _addToDictLocation(location, dictLocation):
 
 def _parseLocation(nodeLocation):
     location = {
-        "id": nodeLocation.find("./dhd:placeName", NAMESPACE_XML).attrib["key"][21:], # remove link
+        "id": nodeLocation.find("./dhd:placeName", NAMESPACE_XML).get("key")[21:], # remove link
         "name": re.sub(r"\n\s*", " " , nodeLocation.find("./dhd:placeName", NAMESPACE_XML).text), # regex for newlines with trailing spaces
         "lat": nodeLocation.find("./dhd:geo", NAMESPACE_XML).text.split(" ")[1],
         "lon": nodeLocation.find("./dhd:geo", NAMESPACE_XML).text.split(" ")[0]

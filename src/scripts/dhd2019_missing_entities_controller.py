@@ -94,19 +94,17 @@ def _getLocationId(query, geoData, dictLocation):
 
     # check for already existing locations
     for loc in dictLocation.values():
-        if loc["name"] == cityName:
-            if loc["lat"][:2] == geoData["lat"][:2]:
-                if loc["lon"][:2] == geoData["lon"][:2]:
-                    return loc["id"]
+        if loc["name"] == cityName and loc["lat"][:2] == geoData["lat"][:2] and loc["lon"][:2] == geoData["lon"][:2]:
+            return loc["id"]
 
-    id = str(geoData["raw"]["place_id"])
-    dictLocation[id] = {
-        "id": id,
+    locID = str(geoData["raw"]["place_id"])
+    dictLocation[locID] = {
+        "id": locID,
         "name": cityName,
         "lat": geoData["lat"],
         "lon": geoData["lon"]
     }
-    return id
+    return locID
 
 
 def fixTimGeelhaar(dictPerson):
