@@ -28,12 +28,7 @@ def readTEI():
 
 
 if __name__ == "__main__":
-    reload_cache = False
-    if len(sys.argv) > 1:
-        if sys.argv[1] == "-r" or sys.argv[1] == "-reload-cache":
-            reload_cache = True
-
-    if io.hasFiles(io.source["cache"], ["dictPerson", "dictOrga", "dictLocation", "dictArticle", "dictKeyword"]) and not reload_cache:
+    if io.hasFiles(io.source["cache"], ["dictPerson", "dictOrga", "dictLocation", "dictArticle", "dictKeyword"]) and not "-r" in sys.argv:
         print("reading from cache")
         dictPerson = io.read(io.source["cache"], "dictPerson")
         dictOrga = io.read(io.source["cache"], "dictOrga")

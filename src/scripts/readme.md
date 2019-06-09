@@ -7,7 +7,7 @@ I focused on having a little amount of global variables and using constants care
 ## Modules
 
 ### Parser Suite
-- `parser_main`: controller: can be started with parameter "-r"/"-reload-cache" to force parsing
+- `parser_main`: controller: can be started with parameter "-r" to force parsing
 - `parser_listperson`: parses dhd's listperson.xml into a person dictionary
 - `parser_listorg`: parses dhd's listorg.xml into a orga dictionary and location dictionary
 - `dhd2019_missing_entities_controller`: sadly listperson.xml and listorg.xml have zero entitlement on being complete and correct: the controller provides methods for outputting a json file where missing data can be manually added and than read back. For locations city names where manually added and are resolved to coordinates with the help of the novatim-api
@@ -21,7 +21,7 @@ I focused on having a little amount of global variables and using constants care
 - `spacy_adapter`: provides and easy-to-use interface for spaCy NLP (currently not in use)
 
 ### Notes
-- The parser submodules should always be run in the order above and run through completly. Since this operation takes a significant amount of time, expecially since the geocoder needs to be called around 20 times, the dictionaries are stored in a cache folder after parsing (as json files) and retrieved from there if a reload is not issued via the "-r/-reload-cache" parameter on start.
+- The parser submodules should always be run in the order above and run through completly. Since this operation takes a significant amount of time, expecially since the geocoder needs to be called around 20 times, the dictionaries are stored in a cache folder after parsing (as json files) and retrieved from there if a reload is not issued via the "-r" parameter on start.
 
 ## Datastructure
 The parser outputs a directional tree with articleDict as a root. Every node is a dictionary. All nodes are connected by explicit IDs so that the dictionaries/nodes can be stored indipendent from one another in json format.

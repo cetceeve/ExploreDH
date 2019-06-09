@@ -1,7 +1,7 @@
 import xml.etree.ElementTree as ET
 import uuid
 
-from constants import NAMESPACE_XML
+from constants import NAMESPACE_XML, PERSON_ID_LOOKUP_DICT
 _abstract = "Butterfly seems like it is in line with the aesthetics we got in their pre-debut works. It also features a mature sound and stands out for a variety of reasons. The first is the song’s instrumental. The song takes on EDM in a very unique manner. It combines different sounds together to create a very dynamically powerful instrumentation that really allows for the chorus to stand out. I also like how they used a very high pitched ‘Fly Like A Butterfly’ as part of the chorus. It does sound like screeching but you can make out the words and it really adds a depth of colour to the song. The second reason would have to be the vocals. It is that one line again that I think really makes the song stand out, this time slightly lower pitch for the members to be able to sing. The rapping also has to be commended as it isn’t a powerful approach but rather more delicate. But it works well with the rest of the song. I also found it rather interesting that the vocals/raps were minimalistic, as it is usually the instrumental. The third and final reason why the song stands out is the lyrics. They are all about finding oneself and usually, songs of this nature earn applause from me. Overall, Butterfly is uniquely different but so amazing."
 
 def parse(path, dictPerson, dictArticle, dictKeyword):
@@ -19,6 +19,7 @@ def _getEmails(tree, dictPerson):
     for person in nodeTitleStmt.findall("./dhd:author", NAMESPACE_XML):
         personId = _redirectWrongIds(person.get("ref")[1:]) # remove hashtag from ref
         
+        # check if person has an email already, append if necessary
         if "email" not in dictPerson[personId]:
             dictPerson[personId]["email"] = [person.find("./dhd:email", NAMESPACE_XML).text]
         elif person.find("./dhd:email", NAMESPACE_XML).text not in dictPerson[personId]["email"]:
@@ -62,20 +63,16 @@ def _getKeywords(tree, dictKeyword):
 
 
 def _getAuthors(tree):
-    authors = []
     nodeTitleStmt = tree.find(".//dhd:titleStmt", NAMESPACE_XML)
-
-    for person in nodeTitleStmt.findall("./dhd:author", NAMESPACE_XML):
-        authors.append(_redirectWrongIds(person.get("ref")[1:])) # remove hashtag from ref
-    return authors
+    return [_redirectWrongIds(person.get("ref")[1:]) for person in nodeTitleStmt.findall("./dhd:author", NAMESPACE_XML)] #authors ids without hashtag
 
 
 def _getKeywordIdByName(dictKeyword, keywordText):
     # search for existing keyword
-    for element in dictKeyword.values():
-        if element["text"] == keywordText:
-            element["frequency"] += 1
-            return element["id"]
+    for keyword in dictKeyword.values():
+        if keyword["text"] == keywordText:
+            keyword["frequency"] += 1
+            return keyword["id"]
 
     # create new keyword
     keywordID = str(uuid.uuid1())
@@ -88,19 +85,8 @@ def _getKeywordIdByName(dictKeyword, keywordText):
     
 
 
-def _redirectWrongIds(personId):
-    if personId == "person__tobias-hodel-hist-uzh-ch":
-        return "person__tobias-hodel-uzh-ch"
-    elif personId == "person__diem-caa-tuwien-ac-at":
-        return "person__diem-cvl-tuwien-ac-at"
-    elif personId == "person__leonardkonle-gmail-com":
-        return "person__leonard-konle-uni-wuerzburg-de"
-    elif personId == "person__frank-puppe-informatik-uni-wuerzburg-de":
-        return "person__frank-puppe-uni-wuerzburg-de"
-    elif personId == "person__schnoepf-bbaw-de":
-        return "person__schnoepf-i-d-e-de"
-    elif personId == "person__f-rau-uni-koeln-de":
-        return "person__frau-uni-koeln-de"
-    elif personId == "person__markus-krug-uni-wuerzburg-de":
-        return "person__markus-krug-informatik-uni-wuerzburg-de"
-    return personId
+def _redirectWrongIds(personID):
+    if personID in PERSON_ID_LOOKUP_DICT:
+        return PERSON_ID_LOOKUP_DICT[personID]
+    else:
+        return personID
