@@ -61,6 +61,8 @@ if __name__ == "__main__":
     if createDB:
         if not os.path.exists(DATA_DIR + "db"):
             os.mkdir(DATA_DIR + "db")
+        if os.path.exists(DATA_DIR + "db/dhd_data.db"):
+            os.remove(DATA_DIR + "db/dhd_data.db")
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson,
                               dictOrga, dictLocation, dictArticle, dictKeyword)
 
