@@ -39,10 +39,8 @@ if __name__ == "__main__":
         dictKeyword = io.read(io.source["cache"], "dictKeyword")
     else:
         print("parsing xml")
-        parserListPerson.parse(os.path.abspath(
-            DATA_DIR + "preprocessed/listperson.xml"), dictPerson)
-        parserListOrga.parse(os.path.abspath(
-            DATA_DIR + "preprocessed/listorg.xml"), dictOrga, dictLocation)
+        parserListPerson.parse(os.path.abspath(DATA_DIR + "preprocessed/listperson.xml"), dictPerson)
+        parserListOrga.parse(os.path.abspath(DATA_DIR + "preprocessed/listorg.xml"), dictOrga, dictLocation)
         print("fixing entities")
         MEC.getAdditionalEntities(dictPerson, dictOrga, dictLocation)
         MEC.fixTimGeelhaar(dictPerson)
@@ -62,8 +60,7 @@ if __name__ == "__main__":
             os.mkdir(DATA_DIR + "db")
         if os.path.exists(DATA_DIR + "db/dhd_data.db"):
             os.remove(DATA_DIR + "db/dhd_data.db")
-        sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson,
-                              dictOrga, dictLocation, dictArticle, dictKeyword)
+        sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
 
     # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
 
