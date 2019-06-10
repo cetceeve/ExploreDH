@@ -34,6 +34,7 @@ def _createTables(conn, curser):
         "CREATE TABLE person (id TEXT PRIMARY KEY, firstName TEXT, lastName TEXT, orga REFERENCES orga(id))")
     curser.execute(
         "CREATE TABLE email (id TEXT PRIMARY KEY, email TEXT, person REFERENCES author(id))")
+    conn.commit()
 
 
 def _commitKeywords(conn, curser, dictKeyword):

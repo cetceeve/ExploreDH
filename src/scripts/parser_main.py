@@ -10,7 +10,7 @@ import novatim_adapter as geocoder
 import spacy_adapter as ner
 import sys_io_json as io
 import parser_peopleAtLocation as p_pal
-import sql_db_creator as sql_creator
+import parser_sql_db_creator as sql_creator
 
 from constants import DATA_DIR
 
@@ -57,8 +57,7 @@ if __name__ == "__main__":
         io.write(io.source["cache"], dictArticle, "dictArticle")
         io.write(io.source["cache"], dictKeyword, "dictKeyword")
 
-    createDB = True
-    if createDB:
+    if "-d" in sys.argv:
         if not os.path.exists(DATA_DIR + "db"):
             os.mkdir(DATA_DIR + "db")
         if os.path.exists(DATA_DIR + "db/dhd_data.db"):
