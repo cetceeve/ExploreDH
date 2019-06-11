@@ -5,7 +5,6 @@ import sys_io_json as io
 
 
 def create_db(db_file, dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword):
-    # create a database connection to a SQLite database
     try:
         conn = sqlite3.connect(db_file)
         print(sqlite3.version)
@@ -14,11 +13,11 @@ def create_db(db_file, dictPerson, dictOrga, dictLocation, dictArticle, dictKeyw
 
     cursor = conn.cursor()
     _createTables(conn, cursor)
-    _commitKeywords(conn, cursor, dictKeyword)
-    _commitLocations(conn, cursor, dictLocation)
-    _commitOrgas(conn, cursor, dictOrga)
-    _commitPeople(conn, cursor, dictPerson)
-    _commitEmails(conn, cursor, dictPerson)
+    _commitToTable(conn, cursor, "keyword", _getValuesAsTupleList(dictKeyword))
+    _commitToTable(conn, cursor, "location", _getValuesAsTupleList(dictLocation))
+    _commitToTable(conn, cursor, "orga", _getValuesAsTupleList(dictOrga))
+    _commitToTable(conn, cursor, "person", _getPeopleAsTupleList(dictPerson))
+    _commitToTable(conn, cursor, "email", _getEmailsAsTupleList(dictPerson))
     conn.close()
 
 
@@ -27,45 +26,32 @@ def _createTables(conn, curser):
     curser.execute("CREATE TABLE keyword (id TEXT PRIMARY KEY, text TEXT, frequency INTEGER)")
     curser.execute("CREATE TABLE location (id TEXT PRIMARY KEY, name TEXT, lat TEXT, lon TEXT)")
     curser.execute("CREATE TABLE orga (id TEXT PRIMARY KEY, name TEXT, location REFERENCES location(id))")
-    curser.execute("CREATE TABLE person (id TEXT PRIMARY KEY, firstName TEXT, lastName TEXT, orga REFERENCES orga(id))")
+    curser.execute("CREATE TABLE person (id TEXT PRIMARY KEY, firstname TEXT, lastname TEXT, orga REFERENCES orga(id))")
     curser.execute("CREATE TABLE email (id TEXT PRIMARY KEY, email TEXT, person REFERENCES author(id))")
     conn.commit()
 
 
-def _commitKeywords(conn, curser, dictKeyword):
-    print("writing keywords...")
-    keywords = _getValuesAsTuples(dictKeyword)
-    curser.executemany("INSERT INTO keyword VALUES (?,?,?)", keywords)
-    conn.commit()
+def _getPeopleAsTupleList(dictPerson):
+    return [(person["id"], person["firstName"], person["lastName"], person["orga"]) for person in dictPerson.values()]
 
 
-def _commitLocations(conn, cursor, dictLocation):
-    print("writing locations...")
-    locations = _getValuesAsTuples(dictLocation)
-    cursor.executemany("INSERT INTO location VALUES (?,?,?,?)", locations)
-    conn.commit()
+def _getEmailsAsTupleList(dictPerson):
+    return [(str(uuid.uuid1()), email, key) for key, person in dictPerson.items() for email in person["email"]]
 
 
-def _commitOrgas(conn, cursor, dictOrga):
-    print("writing orgas...")
-    orgas = _getValuesAsTuples(dictOrga)
-    cursor.executemany("INSERT INTO orga VALUES (?,?,?)", orgas)
-    conn.commit()
-
-
-def _commitPeople(conn, cursor, dictPerson):
-    print("writing people...")
-    people = [(person["id"], person["firstName"], person["lastName"], person["orga"]) for person in dictPerson.values()]
-    cursor.executemany("INSERT INTO person VALUES (?,?,?,?)", people)
-    conn.commit()
-
-
-def _commitEmails(conn, cursor, dictPerson):
-    print("writing emails...")
-    emails = [(str(uuid.uuid1()), email, key) for key, person in dictPerson.items() for email in person["email"]]
-    cursor.executemany("INSERT INTO email VALUES (?,?,?)", emails)
-    conn.commit()
-
-
-def _getValuesAsTuples(dictonary):
+def _getValuesAsTupleList(dictonary):
     return [tuple(el.values()) for el in dictonary.values()]
+
+
+def _commitToTable(conn, cursor, table, data):
+    print("commiting {}...".format(table))
+    insertString = "INSERT INTO {table} VALUES ({qms})".format(table=table, qms=_qmsBuilder(len(data[0])))
+    cursor.executemany(insertString, data)
+    conn.commit()
+
+
+def _qmsBuilder(quantity):
+    res = ""
+    for i in range(quantity):
+        res += "?,"
+    return res[:-1]
