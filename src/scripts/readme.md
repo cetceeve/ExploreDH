@@ -7,12 +7,13 @@ I focused on having a little amount of global variables and using constants care
 ## Modules
 
 ### Parser Suite
-- `parser_main`: controller: can be started with parameter "-r" to force parsing
+- `parser_main`: controller: can be started with parameter "-r" to force parsing, and/or "-d" to (re)create the sql_database
 - `parser_listperson`: parses dhd's listperson.xml into a person dictionary
 - `parser_listorg`: parses dhd's listorg.xml into a orga dictionary and location dictionary
 - `dhd2019_missing_entities_controller`: sadly listperson.xml and listorg.xml have zero entitlement on being complete and correct: the controller provides methods for outputting a json file where missing data can be manually added and than read back. For locations city names where manually added and are resolved to coordinates with the help of the novatim-api
 - `dhd2019_missing_entities.json`: file containing missing data for dictOrga and dictLocation that can be read by dhd2019_missing_entities_controller
 - `parser_tei`: parses information from tei files into dictPerson, dictArticle and dictKeyword. Please be aware, that the file redirects a bunch of wrong authorIDs while  parsing
+- `parser_sql_db_creator`: creates a level 3 normalized sql database from the parser dictionaries
 
 ### Flexible Scripts
 - `constants`: the good 'ol constants file
