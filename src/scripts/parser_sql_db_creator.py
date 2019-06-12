@@ -19,7 +19,7 @@ def create_db(db_file, dictPerson, dictOrga, dictLocation, dictArticle, dictKeyw
     _commitToTable(conn, cursor, "person", _getPeopleAsTupleList(dictPerson))
     _commitToTable(conn, cursor, "email", _getEmailsAsTupleList(dictPerson))
     _commitToTable(conn, cursor, "article", _getArticlesAsTupleList(dictArticle))
-    _commitToTable(conn, cursor, "article_author_link", _getArticleAuthorLink(dictArticle))
+    _commitToTable(conn, cursor, "article_person_link", _getArticleAuthorLink(dictArticle))
     _commitToTable(conn, cursor, "article_keyword_link", _getArticleKeywordLink(dictArticle))
     conn.close()
 
@@ -30,10 +30,10 @@ def _createTables(conn, curser):
     curser.execute("CREATE TABLE location (id TEXT PRIMARY KEY, name TEXT, lat TEXT, lon TEXT)")
     curser.execute("CREATE TABLE orga (id TEXT PRIMARY KEY, name TEXT, location REFERENCES location(id))")
     curser.execute("CREATE TABLE person (id TEXT PRIMARY KEY, firstname TEXT, lastname TEXT, orga REFERENCES orga(id))")
-    curser.execute("CREATE TABLE email (id TEXT PRIMARY KEY, email TEXT, person REFERENCES author(id))")
+    curser.execute("CREATE TABLE email (id TEXT PRIMARY KEY, email TEXT, person REFERENCES person(id))")
     curser.execute("CREATE TABLE article (id TEXT PRIMARY KEY, title TEXT, abstract TEXT)")
-    curser.execute("CREATE TABLE article_author_link (articleid TEXT , authorid TEXT, PRIMARY KEY (articleid, authorid))")
-    curser.execute("CREATE TABLE article_keyword_link (articleid TEXT , keywordid TEXT, PRIMARY KEY (articleid, keywordid))")
+    curser.execute("CREATE TABLE article_person_link (article_id TEXT , person_id TEXT, PRIMARY KEY (article_id, person_id), FOREIGN KEY(article_id) REFERENCES article(id), FOREIGN KEY(person_id) REFERENCES person(id))")
+    curser.execute("CREATE TABLE article_keyword_link (article_id TEXT , keyword_id TEXT, PRIMARY KEY (article_id, keyword_id), FOREIGN KEY(article_id) REFERENCES article(id), FOREIGN KEY(keyword_id) REFERENCES keyword(id))")
     conn.commit()
 
 
