@@ -35,7 +35,7 @@ I focused on having a little amount of global variables and using constants care
 ### Parser Internal
 
 The parser outputs a directional tree with dictArticle as a root. Every node is a dictionary. All nodes are connected by explicit IDs so that the dictionaries/nodes can be stored independent from one another in json format.
-
+![Parser Internal Data Structure](../../docs/parser_internal_datastructure.PNG)
 
 
 ### SQL Tables
