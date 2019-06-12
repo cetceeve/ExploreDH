@@ -3,13 +3,14 @@ import os
 import json
 
 import parser_tei as parserTei
-import parser_listperson as parserListPerson 
+import parser_listperson as parserListPerson
 import parser_listorg as parserListOrga
 import dhd2019_missing_entities_controller as MEC
 import novatim_adapter as geocoder
 import spacy_adapter as ner
 import sys_io_json as io
 import parser_peopleAtLocation as p_pal
+import parser_sql_db_creator as sql_creator
 
 from constants import DATA_DIR
 
@@ -24,7 +25,8 @@ def readTEI():
     with os.scandir(DATA_DIR + "TEI/") as it:
         for entry in it:
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():
-                parserTei.parse(entry.path, dictPerson, dictArticle, dictKeyword)
+                parserTei.parse(entry.path, dictPerson,
+                                dictArticle, dictKeyword)
 
 
 if __name__ == "__main__":
@@ -53,6 +55,12 @@ if __name__ == "__main__":
         io.write(io.source["cache"], dictArticle, "dictArticle")
         io.write(io.source["cache"], dictKeyword, "dictKeyword")
 
+    if "-d" in sys.argv:
+        if not os.path.exists(DATA_DIR + "db"):
+            os.mkdir(DATA_DIR + "db")
+        if os.path.exists(DATA_DIR + "db/dhd_data.db"):
+            os.remove(DATA_DIR + "db/dhd_data.db")
+        sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
 
     # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
 

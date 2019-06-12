@@ -4,6 +4,7 @@ import uuid
 from constants import NAMESPACE_XML, PERSON_ID_LOOKUP_DICT
 _abstract = "Butterfly seems like it is in line with the aesthetics we got in their pre-debut works. It also features a mature sound and stands out for a variety of reasons. The first is the song’s instrumental. The song takes on EDM in a very unique manner. It combines different sounds together to create a very dynamically powerful instrumentation that really allows for the chorus to stand out. I also like how they used a very high pitched ‘Fly Like A Butterfly’ as part of the chorus. It does sound like screeching but you can make out the words and it really adds a depth of colour to the song. The second reason would have to be the vocals. It is that one line again that I think really makes the song stand out, this time slightly lower pitch for the members to be able to sing. The rapping also has to be commended as it isn’t a powerful approach but rather more delicate. But it works well with the rest of the song. I also found it rather interesting that the vocals/raps were minimalistic, as it is usually the instrumental. The third and final reason why the song stands out is the lyrics. They are all about finding oneself and usually, songs of this nature earn applause from me. Overall, Butterfly is uniquely different but so amazing."
 
+
 def parse(path, dictPerson, dictArticle, dictKeyword):
     tree = ET.parse(path)
 
@@ -17,8 +18,8 @@ def _getEmails(tree, dictPerson):
     nodeTitleStmt = tree.find(".//dhd:titleStmt", NAMESPACE_XML)
 
     for person in nodeTitleStmt.findall("./dhd:author", NAMESPACE_XML):
-        personId = _redirectWrongIds(person.get("ref")[1:]) # remove hashtag from ref
-        
+        personId = _redirectWrongIds(person.get("ref")[1:])  # remove hashtag from ref
+
         # check if person has an email already, append if necessary
         if "email" not in dictPerson[personId]:
             dictPerson[personId]["email"] = [person.find("./dhd:email", NAMESPACE_XML).text]
@@ -53,18 +54,18 @@ def _getTitle(tree):
 
 def _getKeywords(tree, dictKeyword):
     keywords = []
-    #find keywords/topics
+    # find keywords/topics
     nodeProfileDesc = tree.find(".//dhd:profileDesc", NAMESPACE_XML)
     for element in nodeProfileDesc.findall(".//dhd:textClass/dhd:keywords", NAMESPACE_XML):
         if element.attrib["n"] == "keywords" or element.attrib["n"] == "topics":
             for term in element.findall("./dhd:term", NAMESPACE_XML):
                 keywords.append(_getKeywordIdByName(dictKeyword, term.text))
-    return keywords
+    return list(dict.fromkeys(keywords))  # remove duplicate keywords
 
 
 def _getAuthors(tree):
     nodeTitleStmt = tree.find(".//dhd:titleStmt", NAMESPACE_XML)
-    return [_redirectWrongIds(person.get("ref")[1:]) for person in nodeTitleStmt.findall("./dhd:author", NAMESPACE_XML)] #authors ids without hashtag
+    return [_redirectWrongIds(person.get("ref")[1:]) for person in nodeTitleStmt.findall("./dhd:author", NAMESPACE_XML)]  # authors ids without hashtag
 
 
 def _getKeywordIdByName(dictKeyword, keywordText):
@@ -82,7 +83,6 @@ def _getKeywordIdByName(dictKeyword, keywordText):
         "frequency": 1
     }
     return keywordID
-    
 
 
 def _redirectWrongIds(personID):
