@@ -17,7 +17,7 @@ ExploreDH konzentriert sich auf die Geovisualisierung von geeigneten Information
 ## Get Started
 
 To use the parser you need:
-- Python3 (3.7) with `requests`
+- Python3 (3.7) with requests:
 
 To get started on server and client code:
 - navigate to `./src/`
@@ -27,20 +27,16 @@ To get started on server and client code:
 
 ## Navigation
 
-∟ `data` *files from the DHD Data Repository and output directory for the parser*
+```
+∟ data: files from the DHD Data Repo and output directory for the parser
+   ∟ db: sql database(s)
+   ∟ output: [deprecated]: used to output json/other files
+   ∟ preprocessed: [read only] xml files with preprocessed info from DHD Data Repo
+   ∟ TEI: [read only] xml files from DHD Data Repo, not preprossed
 
-   ∟ `db` *sql database(s)*
+∟ docs: documentation and graphics for markdown files
 
-   ∟ `output` *[deprecated]: used to output json/other files*
-
-   ∟ `preprocessed` *[read only] xml files that contain preprocessed information from DHD Data Repo*
-
-   ∟ `TEI` *[read only] xml files from DHD Data Repo, not preprossed*
-
-∟ `docs` *documentation and graphics for markdown files*
-
-∟ `src` *source files, files for the webserver are on this level*
-
-   ∟ `scripts` *[python]: contains the parser, for more information read [scripts/readme](./src/scripts/readme.md)*
-
-   ∟ `www` *[html/css/js]: clientside code for the website*
+∟ src: source files, files for the webserver are on this level
+   ∟ scripts: [python]: contains parser, for more info read scripts/readme.md
+   ∟ www: [html/css/js]: clientside code for the website
+```
