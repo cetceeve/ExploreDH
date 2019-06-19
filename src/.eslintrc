@@ -1,16 +1,16 @@
 {
-    "parserOptions": {
-        "ecmaVersion": 6,
-        "sourceType": "module",
-        "ecmaFeatures": {
-            "jsx": true
-        }
+    "extends": "eslint:recommended",
+    "env": {
+        "node": true,
+        "es6": true
     },
-    "rules":
-    {
+    "rules": {
         "block-scoped-var": "error",
         "camelcase": "warn",
-        "comma-dangle": ["error", "always-multiline"],
+        "comma-dangle": [
+            "error",
+            "always-multiline"
+        ],
         "consistent-return": "error",
         "curly": "error",
         "default-case": "error",
@@ -25,8 +25,23 @@
         "no-extend-native": "warn",
         "no-extra-bind": "error",
         "no-loop-func": "error",
-        "no-magic-numbers": ["warn", {"ignore": [0, 1, -1], "ignoreArrayIndexes": true}],
-        "no-multiple-empty-lines": ["warn", {"max": 1}],
+        "no-magic-numbers": [
+            "warn",
+            {
+                "ignore": [
+                    0,
+                    1,
+                    -1
+                ],
+                "ignoreArrayIndexes": true
+            }
+        ],
+        "no-multiple-empty-lines": [
+            "warn",
+            {
+                "max": 1
+            }
+        ],
         "no-multi-spaces": "warn",
         "no-new": "error",
         "no-new-func": "error",
@@ -40,16 +55,13 @@
         "no-void": "error",
         "no-with": "error",
         "one-var": "error",
-        "quotes": ["warn", "double"],
+        "quotes": [
+            "warn",
+            "double"
+        ],
         "semi": "error",
         "strict": "error",
         "vars-on-top": "error",
         "yoda": "error"
-    },
-    "env":
-    {
-        "es6": true,
-        "browser": true
-    },
-    "extends": "eslint:recommended"
+    }
 }

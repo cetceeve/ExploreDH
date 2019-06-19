@@ -7,7 +7,6 @@ import parser_listperson as parserListPerson
 import parser_listorg as parserListOrga
 import dhd2019_missing_entities_controller as MEC
 import novatim_adapter as geocoder
-import spacy_adapter as ner
 import sys_io_json as io
 import parser_peopleAtLocation as p_pal
 import parser_sql_db_creator as sql_creator
