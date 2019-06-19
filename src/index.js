@@ -20,15 +20,10 @@ console.log("Server runing at http://localhost:" + PORT);
 
 app.get("/:test", function (req, res) {
     console.log(req.params);
-    res.send("zimzalabim");
-    getData();
-});
-
-function getData() {
     db.all("SELECT loc.lat, loc.lon, count(person.id) AS numOfPeople FROM person INNER JOIN orga ON person.orga=orga.id INNER JOIN location as loc ON orga.location=loc.id GROUP BY loc.id", function (err, rows) {
         if (err !== null) {
             console.error(err);
         }
-        console.log(rows);
+        res.json(rows);
     });
-}
+});
