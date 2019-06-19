@@ -27,20 +27,20 @@ To get started on server and client code:
 
 ## Navigation
 
-∟ data			*files from the DHD Data Repository and output directory for the parser*
+∟ `data` *files from the DHD Data Repository and output directory for the parser*
 
-​	∟ db						*sql database(s)*
+   ∟ `db` *sql database(s)*
 
-​	∟ output				*deprecated]: used to output json/other files*
+   ∟ `output` *[deprecated]: used to output json/other files*
 
-​	∟ preprocessed	*[read only] xml files that contain preprocessed information from DHD Data Repo*
+   ∟ `preprocessed` *[read only] xml files that contain preprocessed information from DHD Data Repo*
 
-​	∟ TEI			 		  *[read only] xml files from DHD Data Repo, not preprossed*
+   ∟ `TEI` *[read only] xml files from DHD Data Repo, not preprossed*
 
-∟ docs			*documentation and graphics for markdown files*
+∟ `docs` *documentation and graphics for markdown files*
 
-∟ src			   *source files, files for the webserver are on this level*
+∟ `src` *source files, files for the webserver are on this level*
 
-​	∟ scripts		  	  *[python]: contains the parser, for more information read [scrits/readme](./src/scripts/readme.md)*
+   ∟ `scripts` *[python]: contains the parser, for more information read [scripts/readme](./src/scripts/readme.md)*
 
-​	∟ www				   *[html/css/js]: clientside code for the website*
+   ∟ `www` *[html/css/js]: clientside code for the website*
