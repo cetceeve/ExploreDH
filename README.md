@@ -17,7 +17,9 @@ ExploreDH konzentriert sich auf die Geovisualisierung von geeigneten Information
 ## Get Started
 
 To use the parser you need:
-- Python3 (3.7) with requests:
+- Python3 (3.7) with requests
+- navigate to `./src/scripts`
+- run `python parser_main.py`, you can use flag `-d` to trigger a database rewrite or `-r` to trigger a new parser (as standard data is pulled from cache)
 
 To get started on server and client code:
 - navigate to `./src/`
