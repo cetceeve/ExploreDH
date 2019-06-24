@@ -27,3 +27,10 @@ def findLemma(token):
 #   pages     = {414--418},
 #   url       = {http://www.aclweb.org/anthology/P15-2068}
 # }
+
+
+def showSimilarity(tokens):
+    docs = _nlp(tokens)
+    for tOut in docs:
+        for tIn in docs:
+            print(tOut.text, tIn.text, tOut.similarity(tIn))

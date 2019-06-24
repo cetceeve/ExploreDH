@@ -10,7 +10,6 @@ import novatim_adapter as geocoder
 import sys_io_json as io
 import parser_peopleAtLocation as p_pal
 import parser_sql_db_creator as sql_creator
-import spacy_adapter as nlp
 
 from constants import DATA_DIR
 
@@ -62,11 +61,6 @@ if __name__ == "__main__":
             os.remove(DATA_DIR + "db/dhd_data.db")
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
 
-    # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
-
-    # nlp.runNER("Language Technology Group, Universität Hamburg, Deutschland")
-    for keyword in dictKeyword.values():
-        nlp.findLemma(keyword["text"])
     # geocoder.getLocation("Nürnberg, Deutschland")
 
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
