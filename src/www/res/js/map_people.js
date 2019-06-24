@@ -35,7 +35,7 @@ class Map {
   }
 
   visualizePeopleAtLocation() {
-    fetch(window.location.href + ":peopleAtLocation")
+    fetch(window.location.href + "peopleAtLocation")
       .then(response => {
         if (response.status !== 200) {
           throw new Error("BadResponseCode: " + response.status.toString());
@@ -49,7 +49,6 @@ class Map {
         // eslint-disable-next-line no-console
         console.error(err);
       });
-
   }
 
   createNewLayer(list, map, tileLayer) {
