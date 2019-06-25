@@ -10,6 +10,7 @@ import novatim_adapter as geocoder
 import sys_io_json as io
 import parser_peopleAtLocation as p_pal
 import parser_sql_db_creator as sql_creator
+import word_similarity as cleaner
 
 from constants import DATA_DIR
 
@@ -62,5 +63,5 @@ if __name__ == "__main__":
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
 
     # geocoder.getLocation("Nürnberg, Deutschland")
-
+    print(cleaner.getSimilarityMatrix([keyword["text"] for keyword in dictKeyword.values()]))
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
