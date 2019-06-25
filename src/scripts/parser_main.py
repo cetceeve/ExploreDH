@@ -63,5 +63,6 @@ if __name__ == "__main__":
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
 
     # geocoder.getLocation("Nürnberg, Deutschland")
-    print(cleaner.getSimilarityMatrix([keyword["text"] for keyword in dictKeyword.values()]))
+    # print(cleaner.getSimilarityMatrix([keyword["text"] for keyword in dictKeyword.values()]))
+    print(cleaner.createWordVectors([keyword["text"] for keyword in dictKeyword.values()]))
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
