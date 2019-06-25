@@ -7,8 +7,7 @@ import numpy as np
 def getSimilarityMatrix(tokens):
     # return [nltk.edit_distance("annotieren", token) for token in tokens]
     for token in tokens:
-        if nltk.edit_distance("historische Sprache", token) < 6:
-            print(token)
+        print(nltk.edit_distance("Augmented Reality", token))
 
 
 def createWordMatrix(tokens):
@@ -22,4 +21,10 @@ def createWordMatrix(tokens):
         for char in list(token.lower()):
             vecs[i][dictLetters[char]] += 1
 
-    return vecs
+    return vecs/np.linalg.norm(vecs, ord=2, axis=1, keepdims=True)
+
+
+def computeCosineSimilarity(token, vectors):
+    for vec in vectors:
+        simi = np.dot(token, vec)
+        print(simi)
