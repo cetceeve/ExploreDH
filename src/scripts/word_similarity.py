@@ -4,8 +4,8 @@ from Cistem import stem
 
 
 class KeywordSimilarity:
-    SIMILARITY_THRESHOLD = 0.9
-    LEVENSHTEIN_THRESHOLD = 6
+    SIMILARITY_THRESHOLD = 0.95
+    LEVENSHTEIN_THRESHOLD = 3
 
     def __init__(self, _dictKeywords):
         self.dictKeywords = _dictKeywords
@@ -67,6 +67,6 @@ class KeywordSimilarity:
         return tuple(res)
 
     def _levenshteinDistance(self, tokenID1, tokenID2):
-        token1 = self.dictKeywords[self.keywordLookUpTable[tokenID1]]["text"]
-        token2 = self.dictKeywords[self.keywordLookUpTable[tokenID2]]["text"]
+        token1 = self.dictKeywords[self.keywordLookUpTable[tokenID1]]["_stem"]
+        token2 = self.dictKeywords[self.keywordLookUpTable[tokenID2]]["_stem"]
         return nltk.edit_distance(token1, token2)

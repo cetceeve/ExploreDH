@@ -68,4 +68,5 @@ if __name__ == "__main__":
 
     for t in similarKeywords:
         print([dictKeyword[ID]["text"] for ID in t])
+    print(len(similarKeywords))
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
