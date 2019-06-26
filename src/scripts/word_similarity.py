@@ -43,6 +43,8 @@ class KeywordSimilarity:
         res = np.zeros((len(tokenMatrix), len(tokenMatrix)))
         for i, vecBase in enumerate(tokenMatrix):
             for j, vec in enumerate(tokenMatrix):
+                if (j >= i):
+                    continue
                 res[i][j] = np.dot(vecBase, vec)
         return res
 
