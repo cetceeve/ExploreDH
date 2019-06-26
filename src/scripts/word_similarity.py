@@ -7,14 +7,17 @@ class KeywordSimilarity:
     def __init__(self, dictKeywords):
         self.keywordLookUpTable = {}
 
-        self._addStemToKeyword(dictKeywords.values())
-        self.matrix = self._createTokenMatrix(dictKeywords.values())
+        tokenMatrix = self._createTokenMatrix(dictKeywords.values())
+        similarityMatrix = self._getCosineSimilarityMatrix(tokenMatrix)
+        print(similarityMatrix)
 
     def _addStemToKeyword(self, keywords):
         for keyword in keywords:
             keyword["_stem"] = stem(keyword["text"])
 
     def _createTokenMatrix(self, keywords):
+        self._addStemToKeyword(keywords)
+
         tokens = []
         dictLetters = {}
         for i, keyword in enumerate(keywords):
@@ -36,10 +39,12 @@ class KeywordSimilarity:
         # normalize matrix
         return vecs/np.linalg.norm(vecs, ord=2, axis=1, keepdims=True)
 
-    def getCosineSimilarity(self, tokenID):
-        for vec in self.matrix:
-            simi = np.dot(self.matrix[tokenID], vec)
-            print(simi)
+    def _getCosineSimilarityMatrix(self, tokenMatrix):
+        res = np.zeros((len(tokenMatrix), len(tokenMatrix)))
+        for i, vecBase in enumerate(tokenMatrix):
+            for j, vec in enumerate(tokenMatrix):
+                res[i][j] = np.dot(vecBase, vec)
+        return res
 
     def _levenshteinDistance(self, tokens):
         # return [nltk.edit_distance("annotieren", token) for token in tokens]
