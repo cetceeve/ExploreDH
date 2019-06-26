@@ -1,30 +1,47 @@
 import nltk
 import numpy as np
-
-# this could motherfuking work
-
-
-def getSimilarityMatrix(tokens):
-    # return [nltk.edit_distance("annotieren", token) for token in tokens]
-    for token in tokens:
-        print(nltk.edit_distance("Augmented Reality", token))
+from Cistem import stem
 
 
-def createWordMatrix(tokens):
-    # TODO: generate letters array from dataset
-    letters = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n",
-               "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z", "ä", "ö", "ü", " ", "*", "3", "-", "ß", "/", "4", "(", ")", ".", "1", "9", "5"]
-    dictLetters = {k: v for v, k in enumerate(letters)}
+class KeywordSimilarity:
+    def __init__(self, dictKeywords):
+        self.keywordLookUpTable = {}
 
-    vecs = np.zeros((len(tokens), len(letters)), "int")
-    for i, token in enumerate(tokens):
-        for char in list(token.lower()):
-            vecs[i][dictLetters[char]] += 1
+        self._addStemToKeyword(dictKeywords.values())
+        self.matrix = self._createTokenMatrix(dictKeywords.values())
 
-    return vecs/np.linalg.norm(vecs, ord=2, axis=1, keepdims=True)
+    def _addStemToKeyword(self, keywords):
+        for keyword in keywords:
+            keyword["_stem"] = stem(keyword["text"])
 
+    def _createTokenMatrix(self, keywords):
+        tokens = []
+        dictLetters = {}
+        for i, keyword in enumerate(keywords):
+            # fill tokens and idLoopUpTable
+            tokens.append(keyword["_stem"])
+            self.keywordLookUpTable[i] = keyword["id"]
 
-def computeCosineSimilarity(token, vectors):
-    for vec in vectors:
-        simi = np.dot(token, vec)
-        print(simi)
+            # fill dict of letters
+            for char in list(keyword["_stem"].lower()):
+                if (char not in dictLetters):
+                    dictLetters[char] = len(dictLetters)
+
+        # create matrix
+        vecs = np.zeros((len(tokens), len(dictLetters)), "int")
+        for i, token in enumerate(tokens):
+            for char in token:
+                vecs[i][dictLetters[char]] += 1
+
+        # normalize matrix
+        return vecs/np.linalg.norm(vecs, ord=2, axis=1, keepdims=True)
+
+    def getCosineSimilarity(self, tokenID):
+        for vec in self.matrix:
+            simi = np.dot(self.matrix[tokenID], vec)
+            print(simi)
+
+    def _levenshteinDistance(self, tokens):
+        # return [nltk.edit_distance("annotieren", token) for token in tokens]
+        for token in tokens:
+            print(nltk.edit_distance("Augmented Reality", token))
