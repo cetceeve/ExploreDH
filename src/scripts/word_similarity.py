@@ -4,12 +4,16 @@ from Cistem import stem
 
 
 class KeywordSimilarity:
-    def __init__(self, dictKeywords):
+    SIMILARITY_THRESHOLD = 0.9
+    LEVENSHTEIN_THRESHOLD = 6
+
+    def __init__(self, _dictKeywords):
+        self.dictKeywords = _dictKeywords
         self.keywordLookUpTable = {}
 
-        tokenMatrix = self._createTokenMatrix(dictKeywords.values())
-        similarityMatrix = self._getCosineSimilarityMatrix(tokenMatrix)
-        print(similarityMatrix)
+        tokenMatrix = self._createTokenMatrix(_dictKeywords.values())
+        self.similarityMatrix = self._getCosineSimilarityMatrix(tokenMatrix)
+        print(self.similarityMatrix)
 
     def _addStemToKeyword(self, keywords):
         for keyword in keywords:
@@ -48,7 +52,21 @@ class KeywordSimilarity:
                 res[i][j] = np.dot(vecBase, vec)
         return res
 
-    def _levenshteinDistance(self, tokens):
-        # return [nltk.edit_distance("annotieren", token) for token in tokens]
-        for token in tokens:
-            print(nltk.edit_distance("Augmented Reality", token))
+    def getSimilarTokens(self):
+        res = []
+        for i, row in enumerate(self.similarityMatrix):
+            similarTokens = [self.keywordLookUpTable[i]]
+
+            for j, value in enumerate(row):
+                if value > self.SIMILARITY_THRESHOLD:
+                    if self._levenshteinDistance(i, j) < self.LEVENSHTEIN_THRESHOLD:
+                        similarTokens.append(self.keywordLookUpTable[j])
+
+            if len(similarTokens) > 1:
+                res.append(tuple(similarTokens))
+        return tuple(res)
+
+    def _levenshteinDistance(self, tokenID1, tokenID2):
+        token1 = self.dictKeywords[self.keywordLookUpTable[tokenID1]]["text"]
+        token2 = self.dictKeywords[self.keywordLookUpTable[tokenID2]]["text"]
+        return nltk.edit_distance(token1, token2)

@@ -64,5 +64,8 @@ if __name__ == "__main__":
 
     # geocoder.getLocation("Nürnberg, Deutschland")
     cleaner = KeywordSimilarity(dictKeyword)
-    # cleaner.getCosineSimilarity(2)
+    similarKeywords = cleaner.getSimilarTokens()
+
+    for t in similarKeywords:
+        print([dictKeyword[ID]["text"] for ID in t])
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
