@@ -69,6 +69,8 @@ if __name__ == "__main__":
         similarKeywords = KeywordSimilarity(dictKeyword).getSimilarKeywords()
         for keywordTuple in similarKeywords:
             mergeKeywords(keywordTuple)
+        for keyword in dictKeyword.values():
+            del keyword["_stem"]
 
         print("writing to cache")
         io.write(io.source["cache"], dictPerson, "dictPerson")
