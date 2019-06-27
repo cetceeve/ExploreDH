@@ -10,6 +10,7 @@ import novatim_adapter as geocoder
 import sys_io_json as io
 import parser_peopleAtLocation as p_pal
 import parser_sql_db_creator as sql_creator
+from word_similarity import KeywordSimilarity
 
 from constants import DATA_DIR
 
@@ -26,6 +27,24 @@ def readTEI():
             if not entry.name.startswith('.') and entry.name.endswith('.xml') and entry.is_file():
                 parserTei.parse(entry.path, dictPerson,
                                 dictArticle, dictKeyword)
+
+
+def mergeKeywords(mergeTuple):
+    newKeywordID = mergeTuple[-1]
+    oldKeywordIDs = mergeTuple[:-1]
+    # replace old ids in articles
+    for article in dictArticle.values():
+        for kID in article["keywords"]:
+            if kID in oldKeywordIDs:
+                kID = newKeywordID
+
+    # merge keyword frequency
+    oldKeywords = [dictKeyword[kID] for kID in oldKeywordIDs]
+    dictKeyword[newKeywordID]["frequency"] += sum([keyword["frequency"] for keyword in oldKeywords])
+
+    # clean keyword dictionary
+    for oldId in oldKeywordIDs:
+        del dictKeyword[oldId]
 
 
 if __name__ == "__main__":
@@ -46,6 +65,12 @@ if __name__ == "__main__":
         MEC.addWalterScholger(dictPerson)
         print("parsing TEI")
         readTEI()
+        print("merging similar keywords")
+        similarKeywords = KeywordSimilarity(dictKeyword).getSimilarKeywords()
+        for keywordTuple in similarKeywords:
+            mergeKeywords(keywordTuple)
+        for keyword in dictKeyword.values():
+            del keyword["_stem"]
 
         print("writing to cache")
         io.write(io.source["cache"], dictPerson, "dictPerson")
@@ -60,10 +85,5 @@ if __name__ == "__main__":
         if os.path.exists(DATA_DIR + "db/dhd_data.db"):
             os.remove(DATA_DIR + "db/dhd_data.db")
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
-
-    # p_pal.printPeopleAtLocation(dictPerson, dictOrga, dictLocation)
-
-    # ner.runNER("Language Technology Group, Universität Hamburg, Deutschland")
-    # geocoder.getLocation("Nürnberg, Deutschland")
 
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
