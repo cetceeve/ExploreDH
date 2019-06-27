@@ -1,6 +1,7 @@
 import sys
 import os
 import json
+import re
 
 import parser_tei as parserTei
 import parser_listperson as parserListPerson
@@ -10,6 +11,7 @@ import novatim_adapter as geocoder
 import sys_io_json as io
 import parser_peopleAtLocation as p_pal
 import parser_sql_db_creator as sql_creator
+from spacy_adapter import SpacyNER
 from word_similarity import KeywordSimilarity
 
 from constants import DATA_DIR
@@ -47,6 +49,33 @@ def mergeKeywords(mergeTuple):
         del dictKeyword[oldId]
 
 
+def addCoordinatesToOrgas():
+    print("loading spacy...")
+    ner = SpacyNER()
+    for orga in dictOrga.values():
+        res = geocoder.getLocation(orga["name"])
+        if res is not None:
+            orga["lat"] = res["lat"]
+            orga["lon"] = res["lon"]
+        else:
+            data = _searchOrgaCoordsWithPreprocessedName(ner, orga["name"])
+            if data is not None:
+                orga["lat"] = data["lat"]
+                orga["lon"] = data["lon"]
+            else:
+                orga["lat"] = dictLocation[orga["location"]]["lat"]
+                orga["lon"] = dictLocation[orga["location"]]["lon"]
+
+
+def _searchOrgaCoordsWithPreprocessedName(ner, query):
+    for entity in ner.runNER(query):
+        if entity[0] == "ORG" and re.search(r"\w*(universit|hochschule)\w*", entity[1], flags=re.IGNORECASE):
+            res = geocoder.getLocation(entity[1])
+            if res is not None:
+                return res
+    return None
+
+
 if __name__ == "__main__":
     if io.hasFiles(io.source["cache"], ["dictPerson", "dictOrga", "dictLocation", "dictArticle", "dictKeyword"]) and not "-r" in sys.argv:
         print("reading from cache")
@@ -71,6 +100,8 @@ if __name__ == "__main__":
             mergeKeywords(keywordTuple)
         for keyword in dictKeyword.values():
             del keyword["_stem"]
+        print("adding coordinates to orgas")
+        addCoordinatesToOrgas()
 
         print("writing to cache")
         io.write(io.source["cache"], dictPerson, "dictPerson")
