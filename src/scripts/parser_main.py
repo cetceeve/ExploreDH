@@ -29,6 +29,24 @@ def readTEI():
                                 dictArticle, dictKeyword)
 
 
+def mergeKeywords(mergeTuple):
+    newKeywordID = mergeTuple[-1]
+    oldKeywordIDs = mergeTuple[:-1]
+    # replace old ids in articles
+    for article in dictArticle.values():
+        for kID in article["keywords"]:
+            if kID in oldKeywordIDs:
+                kID = newKeywordID
+
+    # merge keyword frequency
+    oldKeywords = [dictKeyword[kID] for kID in oldKeywordIDs]
+    dictKeyword[newKeywordID]["frequency"] += sum([keyword["frequency"] for keyword in oldKeywords])
+
+    # clean keyword dictionary
+    for oldId in oldKeywordIDs:
+        del dictKeyword[oldId]
+
+
 if __name__ == "__main__":
     if io.hasFiles(io.source["cache"], ["dictPerson", "dictOrga", "dictLocation", "dictArticle", "dictKeyword"]) and not "-r" in sys.argv:
         print("reading from cache")
@@ -63,10 +81,11 @@ if __name__ == "__main__":
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
 
     # geocoder.getLocation("Nürnberg, Deutschland")
-    cleaner = KeywordSimilarity(dictKeyword)
-    similarKeywords = cleaner.getSimilarTokens()
+    similarKeywords = KeywordSimilarity(dictKeyword).getSimilarKeywords()
+    # for t in similarKeywords:
+    #     print([dictKeyword[ID]["text"] for ID in t])
+    for keywordTuple in similarKeywords:
+        mergeKeywords(keywordTuple)
+    # print(len(similarKeywords))
 
-    for t in similarKeywords:
-        print([dictKeyword[ID]["text"] for ID in t])
-    print(len(similarKeywords))
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))

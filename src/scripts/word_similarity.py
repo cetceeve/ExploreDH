@@ -13,7 +13,6 @@ class KeywordSimilarity:
 
         tokenMatrix = self._createTokenMatrix(_dictKeywords.values())
         self.similarityMatrix = self._getCosineSimilarityMatrix(tokenMatrix)
-        print(self.similarityMatrix)
 
     def _addStemToKeyword(self, keywords):
         for keyword in keywords:
@@ -52,7 +51,7 @@ class KeywordSimilarity:
                 res[i][j] = np.dot(vecBase, vec)
         return res
 
-    def getSimilarTokens(self):
+    def getSimilarKeywords(self):
         res = []
         for i, row in enumerate(self.similarityMatrix):
             similarTokens = [self.keywordLookUpTable[i]]
