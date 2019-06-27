@@ -54,13 +54,16 @@ def _getTitle(tree):
 
 def _getKeywords(tree, dictKeyword):
     keywords = []
+    terms = []
     # find keywords/topics
     nodeProfileDesc = tree.find(".//dhd:profileDesc", NAMESPACE_XML)
     for element in nodeProfileDesc.findall(".//dhd:textClass/dhd:keywords", NAMESPACE_XML):
         if element.attrib["n"] == "keywords" or element.attrib["n"] == "topics":
-            for term in element.findall("./dhd:term", NAMESPACE_XML):
-                keywords.append(_getKeywordIdByName(dictKeyword, term.text))
-    return list(dict.fromkeys(keywords))  # remove duplicate keywords
+            terms.extend([term.text for term in element.findall("./dhd:term", NAMESPACE_XML)])
+
+    for term in list(dict.fromkeys(terms)):  # remove duplicates
+        keywords.append(_getKeywordIdByName(dictKeyword, term))
+    return keywords
 
 
 def _getAuthors(tree):
