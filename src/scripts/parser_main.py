@@ -65,6 +65,10 @@ if __name__ == "__main__":
         MEC.addWalterScholger(dictPerson)
         print("parsing TEI")
         readTEI()
+        print("merging similar keywords")
+        similarKeywords = KeywordSimilarity(dictKeyword).getSimilarKeywords()
+        for keywordTuple in similarKeywords:
+            mergeKeywords(keywordTuple)
 
         print("writing to cache")
         io.write(io.source["cache"], dictPerson, "dictPerson")
@@ -79,13 +83,5 @@ if __name__ == "__main__":
         if os.path.exists(DATA_DIR + "db/dhd_data.db"):
             os.remove(DATA_DIR + "db/dhd_data.db")
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
-
-    # geocoder.getLocation("Nürnberg, Deutschland")
-    similarKeywords = KeywordSimilarity(dictKeyword).getSimilarKeywords()
-    # for t in similarKeywords:
-    #     print([dictKeyword[ID]["text"] for ID in t])
-    for keywordTuple in similarKeywords:
-        mergeKeywords(keywordTuple)
-    # print(len(similarKeywords))
 
     # print(json.dumps(dictLocation, indent=4, ensure_ascii=False))
