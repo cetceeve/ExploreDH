@@ -7,7 +7,6 @@ import sys_io_json as io
 def create_db(db_file, dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword):
     try:
         conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
     except Error as e:
         print(e)
 
@@ -28,7 +27,7 @@ def _createTables(conn, curser):
     print("creating tables...")
     curser.execute("CREATE TABLE keyword (id TEXT PRIMARY KEY, text TEXT, frequency INTEGER)")
     curser.execute("CREATE TABLE location (id TEXT PRIMARY KEY, name TEXT, lat TEXT, lon TEXT)")
-    curser.execute("CREATE TABLE orga (id TEXT PRIMARY KEY, name TEXT, location REFERENCES location(id))")
+    curser.execute("CREATE TABLE orga (id TEXT PRIMARY KEY, name TEXT, lat TEXT, lon TEXT, location REFERENCES location(id))")
     curser.execute("CREATE TABLE person (id TEXT PRIMARY KEY, firstname TEXT, lastname TEXT, orga REFERENCES orga(id))")
     curser.execute("CREATE TABLE email (id TEXT PRIMARY KEY, email TEXT, person REFERENCES person(id))")
     curser.execute("CREATE TABLE article (id TEXT PRIMARY KEY, title TEXT, abstract TEXT)")
@@ -42,7 +41,7 @@ def _getPeopleAsTupleList(dictPerson):
 
 
 def _getEmailsAsTupleList(dictPerson):
-    return [(str(uuid.uuid1()), email, key) for key, person in dictPerson.items() for email in person["email"]]
+    return [(hash(email), email, personID) for personID, person in dictPerson.items() for email in person["email"]]
 
 
 def _getArticlesAsTupleList(dictArticle):
@@ -69,7 +68,5 @@ def _commitToTable(conn, cursor, table, data):
 
 
 def _qmsBuilder(quantity):
-    res = ""
-    for i in range(quantity):
-        res += "?,"
+    res = "?," * quantity
     return res[:-1]

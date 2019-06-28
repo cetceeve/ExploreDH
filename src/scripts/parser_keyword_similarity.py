@@ -10,15 +10,13 @@ class KeywordSimilarity:
     def __init__(self, _dictKeywords):
         self.dictKeywords = _dictKeywords
         self.keywordLookUpTable = {}
-
-        tokenMatrix = self._createTokenMatrix(_dictKeywords.values())
-        self.similarityMatrix = self._getCosineSimilarityMatrix(tokenMatrix)
+        self.similarityMatrix = self._getCosineSimilarityMatrix(self._getTokenMatrix(_dictKeywords.values()))
 
     def _addStemToKeyword(self, keywords):
         for keyword in keywords:
             keyword["_stem"] = stem(keyword["text"])
 
-    def _createTokenMatrix(self, keywords):
+    def _getTokenMatrix(self, keywords):
         self._addStemToKeyword(keywords)
 
         tokens = []
@@ -29,7 +27,7 @@ class KeywordSimilarity:
             self.keywordLookUpTable[i] = keyword["id"]
 
             # fill dict of letters
-            for char in list(keyword["_stem"].lower()):
+            for char in keyword["_stem"].lower():
                 if (char not in dictLetters):
                     dictLetters[char] = len(dictLetters)
 
@@ -58,14 +56,14 @@ class KeywordSimilarity:
 
             for j, value in enumerate(row):
                 if value > self.SIMILARITY_THRESHOLD:
-                    if self._levenshteinDistance(i, j) < self.LEVENSHTEIN_THRESHOLD:
+                    if self._getLevenshteinDistance(i, j) < self.LEVENSHTEIN_THRESHOLD:
                         similarTokens.append(self.keywordLookUpTable[j])
 
             if len(similarTokens) > 1:
                 res.append(tuple(similarTokens))
-        return tuple(res)
+        return res
 
-    def _levenshteinDistance(self, tokenID1, tokenID2):
+    def _getLevenshteinDistance(self, tokenID1, tokenID2):
         token1 = self.dictKeywords[self.keywordLookUpTable[tokenID1]]["_stem"]
         token2 = self.dictKeywords[self.keywordLookUpTable[tokenID2]]["_stem"]
         return nltk.edit_distance(token1, token2)
