@@ -27,7 +27,7 @@ def _createTables(conn, curser):
     print("creating tables...")
     curser.execute("CREATE TABLE keyword (id TEXT PRIMARY KEY, text TEXT, frequency INTEGER)")
     curser.execute("CREATE TABLE location (id TEXT PRIMARY KEY, name TEXT, lat TEXT, lon TEXT)")
-    curser.execute("CREATE TABLE orga (id TEXT PRIMARY KEY, name TEXT, lat TEXT, lon TEXT, location REFERENCES location(id))")
+    curser.execute("CREATE TABLE orga (id TEXT PRIMARY KEY, name TEXT, location REFERENCES location(id), lat TEXT, lon TEXT)")
     curser.execute("CREATE TABLE person (id TEXT PRIMARY KEY, firstname TEXT, lastname TEXT, orga REFERENCES orga(id))")
     curser.execute("CREATE TABLE email (id TEXT PRIMARY KEY, email TEXT, person REFERENCES person(id))")
     curser.execute("CREATE TABLE article (id TEXT PRIMARY KEY, title TEXT, abstract TEXT)")
