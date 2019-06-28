@@ -7,7 +7,6 @@ import sys_io_json as io
 def create_db(db_file, dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword):
     try:
         conn = sqlite3.connect(db_file)
-        print(sqlite3.version)
     except Error as e:
         print(e)
 
