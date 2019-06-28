@@ -55,10 +55,10 @@ def _getTitle(tree):
 def _getKeywords(tree, dictKeyword):
     keywords = []
     terms = []
-    # find keywords/topics
+    # find keywords
     nodeProfileDesc = tree.find(".//dhd:profileDesc", NAMESPACE_XML)
     for element in nodeProfileDesc.findall(".//dhd:textClass/dhd:keywords", NAMESPACE_XML):
-        if element.attrib["n"] == "keywords" or element.attrib["n"] == "topics":
+        if element.attrib["n"] == "keywords":
             terms.extend([term.text for term in element.findall("./dhd:term", NAMESPACE_XML)])
 
     for term in list(dict.fromkeys(terms)):  # remove duplicates
