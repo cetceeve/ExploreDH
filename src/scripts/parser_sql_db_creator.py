@@ -42,7 +42,7 @@ def _getPeopleAsTupleList(dictPerson):
 
 
 def _getEmailsAsTupleList(dictPerson):
-    return [(str(uuid.uuid1()), email, key) for key, person in dictPerson.items() for email in person["email"]]
+    return [(hash(email), email, personID) for personID, person in dictPerson.items() for email in person["email"]]
 
 
 def _getArticlesAsTupleList(dictArticle):
@@ -69,7 +69,5 @@ def _commitToTable(conn, cursor, table, data):
 
 
 def _qmsBuilder(quantity):
-    res = ""
-    for i in range(quantity):
-        res += "?,"
+    res = "?," * quantity
     return res[:-1]
