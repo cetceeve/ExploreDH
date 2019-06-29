@@ -21,22 +21,24 @@ console.log("Server runing at http://localhost:" + PORT);
 app.get("/:request", function (req, res) {
     console.log(req.params);
     if (req.params.request === "peopleAtLocation") {
-        db.all("SELECT loc.lat, loc.lon, count(person.id) AS numOfPeople FROM person INNER JOIN orga ON person.orga=orga.id INNER JOIN location AS loc ON orga.location=loc.id GROUP BY loc.id", function (err, rows) {
+        db.all("SELECT city.lat, city.lon, count(person.id) AS numOfPeople FROM person INNER JOIN orga ON person.orga=orga.id INNER JOIN city ON orga.city=city.id GROUP BY city.id", function (err, rows) {
             if (err !== null) {
                 console.error(err);
+            } else {
+                console.log("sending data upstream");
+                res.json(rows);
             }
-            console.log("sending data upstream");
-            res.json(rows);
         });
     }
     if (req.params.request === "keyword") {
-        let query = `SELECT loc.lat, loc.lon, count(keyword.id) AS numOfPeople FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person ON link.person_id=person.id INNER JOIN orga ON person.orga=orga.id INNER JOIN location AS loc ON orga.location=loc.id INNER JOIN article_keyword_link AS link2 ON link2.article_id=article.id INNER JOIN keyword ON keyword.id=link2.keyword_id WHERE keyword.text="${req.query.name}" GROUP BY loc.id`;
+        let query = `SELECT city.lat, city.lon, count(keyword.id) AS numOfPeople FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person ON link.person_id=person.id INNER JOIN orga ON person.orga=orga.id INNER JOIN city ON orga.city=city.id INNER JOIN article_keyword_link AS link2 ON link2.article_id=article.id INNER JOIN keyword ON keyword.id=link2.keyword_id WHERE keyword.text="${req.query.name}" GROUP BY city.id`;
         db.all(query, function (err, rows) {
             if (err !== null) {
                 console.error(err);
+            } else {
+                console.log("sending data upstream");
+                res.json(rows);
             }
-            console.log("sending data upstream");
-            res.json(rows);
         });
     }
 });
