@@ -3,8 +3,9 @@
 
 ## Architecture
 
-The Parser's code strictly follows the procedural programming paradigma. I decided to do it this way, because i expected very little event driven communication between the different parts of the code. I was also interested in how the code would develop without the help of instance or even class variables. Did i regret it? A little. Was it difficult? Somewhat. Would i do it again? Probably not.
+The Parser's code mostly follows the procedural programming paradigma. I decided to do it this way, because i expected very little event driven communication between the different parts of the code. I was also interested in how the code would develop without the help of instance or even class variables. Did i regret it? A little. Was it difficult? Somewhat. Would i do it again? Probably not.
 I focused on having a little amount of global variables and using constants carefully.
+For the `spacy_adapter` and `parser_keyword_similarity` I choose to write classes, because both modules profited heavily from having an internal state.
 
 
 
@@ -25,6 +26,9 @@ I focused on having a little amount of global variables and using constants care
 - `sys_io_json`: provides methods to write/read any python datastructure to/form json files, paths need to be specified in the "source" dictonary
 - `novatim_adapter`: provides a one-function-call-easy-to-use interface for the novatim geocoding API
 - `spacy_adapter`: provides and easy-to-use interface for Named Identity Recognition with the spaCy library
+
+### External Scripts
+- `Cistem` is a stemmer for the german language developed by Leonie Weißweiler from LMU Munich. [citation](../../docs/cistem.bib)
 
 ### Notes
 - The parser submodules should always be run in the order above and run through completely. Since this operation takes a significant amount of time, especially since the geocoder needs to be called around 20 times, the dictionaries are stored in a cache folder after parsing (as json files) and retrieved from there if a reload is not issued via the "-r" parameter on start.
