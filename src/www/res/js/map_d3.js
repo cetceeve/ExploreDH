@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 /** 
  * Model for the map.
  * 
@@ -9,8 +10,8 @@ class Map {
         // The svg
         this.mapSvg = d3.select("svg");
         this.projection = d3.geoMercator()
-            .scale(1250)            // This is like the zoom
-            .center([10, 50]);      // trial-and-error-Result: no idea what this exactly does!
+            .scale(1700)            // This is like the zoom
+            .center([10, 50]);      // trial-and-error-result: no idea what this exactly does!
 
         this.initMap();
     }
@@ -65,7 +66,7 @@ class Map {
             .attr("r", d => d.numOfPeople)
             .attr("stroke", "#c23616")
             .attr("stroke-width", 1)
-            .attr("fill-opacity", .4);
+            .attr("fill-opacity", 0.4);
 
         // visualize marker at location
         this.mapSvg.selectAll("myGs")
@@ -75,8 +76,8 @@ class Map {
             .attr("id", d => d.name) // has actually no name
             .attr("transform", d => "translate(" + this.projection([d.lon, d.lat]) + ")")
             .append("path")
-            .attr("d", 'M 100 100 L 300 100 L 200 300 z')
-            .attr('transform', 'scale(0.04) translate(-150,-130)')
+            .attr("d", "M 100 100 L 300 100 L 200 300 z")
+            .attr("transform", "scale(0.05) translate(-200,-300)") // trial-and-error-result: no idea what this exactly does!
             .style("fill", "#000")
             .on("click", d => console.log("CLICKED"))
             .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
