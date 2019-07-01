@@ -25,7 +25,7 @@ For the `spacy_adapter` and `parser_keyword_similarity` I choose to write classe
 - `constants`: the good 'ol constants file
 - `sys_io_json`: provides methods to write/read any python datastructure to/form json files, paths need to be specified in the "source" dictonary
 - `novatim_adapter`: provides a one-function-call-easy-to-use interface for the novatim geocoding API
-- `spacy_adapter`: provides and easy-to-use interface for Named Identity Recognition with the spaCy library
+- `spacy_adapter`: provides an easy-to-use interface for Named Identity Recognition with the spaCy library
 
 ### External Scripts
 - `Cistem` is a stemmer for the german language developed by Leonie Weißweiler from LMU Munich. [citation](../../docs/cistem.bib)
