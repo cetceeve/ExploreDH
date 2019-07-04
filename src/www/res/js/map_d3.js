@@ -54,7 +54,7 @@ class Map {
     }
 
     drawCircles(data) {
-
+        console.log(data);
         // visualize people at location
         this.mapSvg.selectAll("myCircles")
             .data(data)
@@ -65,7 +65,7 @@ class Map {
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => d.numOfPeople)
             .attr("stroke", "#c23616")
-            .attr("stroke-width", 1)
+            .attr("stroke-width", 2)
             .attr("fill-opacity", 0.4);
 
         // visualize marker at location
@@ -81,6 +81,36 @@ class Map {
             .style("fill", "#000")
             .on("click", d => console.log("CLICKED"))
             .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
+
+        this.visualizeNetwork();
+    }
+
+    visualizeNetwork() {
+        // Create data: coordinates of start and end
+        var link = [
+            { type: "LineString", coordinates: [[12, 54], [-123, 48]] },
+            { type: "LineString", coordinates: [[-123, 48], [9, 52]] },
+            { type: "LineString", coordinates: [[9, 52], [6, 46]] },
+            { type: "LineString", coordinates: [[6, 46], [13, 52]] },
+            { type: "LineString", coordinates: [[13, 52], [7, 46]] },
+            { type: "LineString", coordinates: [[7, 46], [11, 44]] },
+            { type: "LineString", coordinates: [[11, 44], [5, 50]] },
+            { type: "LineString", coordinates: [[5, 50], [8, 49]] }
+        ];
+
+        // A path generator
+        var path = d3.geoPath()
+            .projection(this.projection);
+
+        // Add the path
+        this.mapSvg.selectAll("myPath")
+            .data(link)
+            .enter()
+            .append("path")
+            .attr("d", d => path(d))
+            .style("fill", "none")
+            .style("stroke", "orange")
+            .style("stroke-width", 2);
     }
 
 }
