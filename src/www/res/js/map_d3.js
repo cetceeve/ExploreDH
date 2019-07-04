@@ -45,7 +45,7 @@ class Map {
                 return response.json();
             })
             .then(data => {
-                this.drawCircles(data);
+                this.drawCirclesFromData(data);
             })
             .catch(err => {
                 // eslint-disable-next-line no-console
@@ -53,7 +53,7 @@ class Map {
             });
     }
 
-    drawCircles(data) {
+    drawCirclesFromData(data) {
         console.log(data);
         // visualize people at location
         this.mapSvg.selectAll("myCircles")
@@ -68,6 +68,10 @@ class Map {
             .attr("stroke-width", 2)
             .attr("fill-opacity", 0.4);
 
+        this.drawMarkerFromData(data);
+    }
+
+    drawMarkerFromData(data) {
         // visualize marker at location
         this.mapSvg.selectAll("myGs")
             .data(data)
