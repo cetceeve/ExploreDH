@@ -2,8 +2,6 @@
 
 /** 
  * Model for the map.
- * 
- * At the moment used to create/visualize a basic map and some test data.
  */
 
 import config from "./config.js";
@@ -20,10 +18,8 @@ class Map {
 
     initMap() {
 
-        // Load external data and boot
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
 
-            // Draw the map
             this.mapSvg.append("g")
                 .selectAll("path")
                 .data(data.features)
@@ -65,7 +61,6 @@ class Map {
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => d.numOfPeople)
-            // .attr("stroke", config.PEOPLE_AT_LOCATION)
             .style("fill", config.PEOPLE_AT_LOCATION)
             .attr("fill-opacity", 0.6);
 
@@ -73,19 +68,6 @@ class Map {
     }
 
     drawMarkerFromData(data) {
-        // visualize marker at location
-        // this.mapSvg.selectAll("myGs")
-        //     .data(data)
-        //     .enter()
-        //     .append("g")
-        //     .attr("id", d => d.name) // has actually no name
-        //     .attr("transform", d => "translate(" + this.projection([d.lon, d.lat]) + ")")
-        //     .append("path")
-        //     .attr("d", "M 100 100 L 300 100 L 200 300 z")
-        //     .attr("transform", "scale(0.05) translate(-200,-300)") // trial-and-error-result: no idea what this exactly does!
-        //     .style("fill", "#000")
-        //     .on("click", d => console.log("CLICKED"))
-        //     .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
 
         this.mapSvg.selectAll("myCircles")
             .data(data)
@@ -95,13 +77,15 @@ class Map {
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => 3.5)
-            .style("fill", config.MARKER_LOCATION);
+            .style("fill", config.MARKER_LOCATION)
+            .on("click", d => console.log("CLICKED"))
+            .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
 
-        this.visualizeNetwork();
+        this.drawNetworkPaths();
     }
 
-    visualizeNetwork() {
-        // Create data: coordinates of start and end
+    drawNetworkPaths() {
+        // Create test-data: coordinates of start and end
         var link = [
             { type: "LineString", coordinates: [[12, 54], [-123, 48]] },
             { type: "LineString", coordinates: [[-123, 48], [9, 52]] },
@@ -116,7 +100,6 @@ class Map {
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
 
-        // Add the path
         this.mapSvg.selectAll("myPath")
             .data(link)
             .enter()
@@ -126,7 +109,6 @@ class Map {
             .style("stroke", config.NETWORK_LINES)
             .style("stroke-width", 2);
     }
-
 }
 
 export default new Map();
