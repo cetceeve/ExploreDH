@@ -35,7 +35,7 @@ class Map {
     }
 
     visualizePeopleAtLocation() {
-        fetch(window.location.href + "peopleAtLocation")
+        fetch(window.location.href + "articlesPerOrga")
             .then(response => {
                 if (response.status !== 200) {
                     throw new Error("BadResponseCode: " + response.status.toString());
