@@ -10,8 +10,9 @@ class OrgaNetwork:
     def getConnections(self):
         conns = [self._connsInArticle(article) for article in self.dictArticle.values()]
         flattend = list(chain.from_iterable(conns))
-        # minimized = list(dict.fromkeys(flattend))
-        return tuple(map(self._replaceOrgaIDTupleWithCoordinates, flattend))
+        # remove duplicate connections independent of direction
+        connDict = {hash(conn[0]) + hash(conn[1]): conn for conn in flattend}
+        return tuple(map(self._replaceOrgaIDTupleWithCoordinates, connDict.values()))
 
     def _connsInArticle(self, article):
         # go from person to orga and remove duplicates
