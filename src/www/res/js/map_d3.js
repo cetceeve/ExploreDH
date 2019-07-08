@@ -17,7 +17,6 @@ class Map {
     }
 
     initMap() {
-
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
 
             this.mapSvg.append("g")
@@ -31,12 +30,12 @@ class Map {
                 .style("stroke", config.COUNTRY_BORDERS);
 
             this.visualizePeopleAtLocation();
-            this.visualizeConnections();
+            this.visualizeAllConnections();
         });
     }
 
     visualizePeopleAtLocation() {
-        fetch(window.location.href + "peoplePerOrga")
+        fetch(window.location.href + "connections/peoplePerOrga")
             .then(response => {
                 if (response.status !== 200) {
                     throw new Error("BadResponseCode: " + response.status.toString());
@@ -52,8 +51,25 @@ class Map {
             });
     }
 
-    visualizeConnections() {
-        fetch(window.location.href + "connectionsOnArticle")
+    visualizeAllConnections() {
+        fetch(window.location.href + "connections")
+            .then(response => {
+                if (response.status !== 200) {
+                    throw new Error("BadResponseCode: " + response.status.toString());
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.drawNetworkPaths(data);
+            })
+            .catch(err => {
+                // eslint-disable-next-line no-console
+                console.error(err);
+            });
+    }
+
+    visualizeArticleConnections() {
+        fetch(window.location.href + "connections/connectionsOnArticle")
             .then(response => {
                 if (response.status !== 200) {
                     throw new Error("BadResponseCode: " + response.status.toString());
