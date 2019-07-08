@@ -123,8 +123,6 @@ if __name__ == "__main__":
         io.write(io.source["cache"], dictArticle, "dictArticle")
         io.write(io.source["cache"], dictKeyword, "dictKeyword")
 
-    OrgaNetwork(dictArticle, dictPerson, dictOrga).getConnections()
-
     # sql database
     if "-d" in sys.argv:
         # check for folder
