@@ -12,6 +12,7 @@ import sys_io_json as io
 import parser_sql_db_creator as sql_creator
 from spacy_adapter import SpacyNER
 from parser_keyword_similarity import KeywordSimilarity
+from processing_organetwork import OrgaNetwork
 
 from constants import DATA_DIR
 

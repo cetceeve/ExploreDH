@@ -17,7 +17,6 @@ class Map {
     }
 
     initMap() {
-
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
 
             this.mapSvg.append("g")
@@ -31,11 +30,12 @@ class Map {
                 .style("stroke", config.COUNTRY_BORDERS);
 
             this.visualizePeopleAtLocation();
+            this.visualizeAllConnections();
         });
     }
 
     visualizePeopleAtLocation() {
-        fetch(window.location.href + "peopleAtLocation")
+        fetch(window.location.href + "connections/peoplePerOrga")
             .then(response => {
                 if (response.status !== 200) {
                     throw new Error("BadResponseCode: " + response.status.toString());
@@ -44,6 +44,40 @@ class Map {
             })
             .then(data => {
                 this.drawCirclesFromData(data);
+            })
+            .catch(err => {
+                // eslint-disable-next-line no-console
+                console.error(err);
+            });
+    }
+
+    visualizeAllConnections() {
+        fetch(window.location.href + "connections")
+            .then(response => {
+                if (response.status !== 200) {
+                    throw new Error("BadResponseCode: " + response.status.toString());
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.drawNetworkPaths(data);
+            })
+            .catch(err => {
+                // eslint-disable-next-line no-console
+                console.error(err);
+            });
+    }
+
+    visualizeArticleConnections() {
+        fetch(window.location.href + "connections/connectionsOnArticle")
+            .then(response => {
+                if (response.status !== 200) {
+                    throw new Error("BadResponseCode: " + response.status.toString());
+                }
+                return response.json();
+            })
+            .then(data => {
+                this.drawNetworkPaths(data);
             })
             .catch(err => {
                 // eslint-disable-next-line no-console
@@ -78,24 +112,34 @@ class Map {
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => 3.5)
             .style("fill", config.MARKER_LOCATION)
-            .on("click", d => console.log("CLICKED"))
+            .on("click", d => console.log("CLICKED" + d.id))
             .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
 
-        this.drawNetworkPaths();
+        // this.drawNetworkPaths();
     }
 
-    drawNetworkPaths() {
+    drawNetworkPaths(data) {
         // Create test-data: coordinates of start and end
-        var link = [
-            { type: "LineString", coordinates: [[12, 54], [-123, 48]] },
-            { type: "LineString", coordinates: [[-123, 48], [9, 52]] },
-            { type: "LineString", coordinates: [[9, 52], [6, 46]] },
-            { type: "LineString", coordinates: [[6, 46], [13, 52]] },
-            { type: "LineString", coordinates: [[13, 52], [7, 46]] },
-            { type: "LineString", coordinates: [[7, 46], [11, 44]] },
-            { type: "LineString", coordinates: [[11, 44], [5, 50]] },
-            { type: "LineString", coordinates: [[5, 50], [8, 49]] }
-        ];
+        var link = [];
+        for (let row of data) {
+            link.push({
+                type: "LineString",
+                coordinates: [
+                    [row[0].lon, row[0].lat],
+                    [row[1].lon, row[1].lat],
+                ],
+            });
+        }
+        // var link = [
+        //     { type: "LineString", coordinates: [[12, 54], [-123, 48]] },
+        //     { type: "LineString", coordinates: [[-123, 48], [9, 52]] },
+        //     { type: "LineString", coordinates: [[9, 52], [6, 46]] },
+        //     { type: "LineString", coordinates: [[6, 46], [13, 52]] },
+        //     { type: "LineString", coordinates: [[13, 52], [7, 46]] },
+        //     { type: "LineString", coordinates: [[7, 46], [11, 44]] },
+        //     { type: "LineString", coordinates: [[11, 44], [5, 50]] },
+        //     { type: "LineString", coordinates: [[5, 50], [8, 49]] }
+        // ];
 
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
