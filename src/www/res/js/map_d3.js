@@ -112,14 +112,16 @@ class Map {
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => 3.5)
             .style("fill", config.MARKER_LOCATION)
-            .on("click", d => console.log("CLICKED" + d.id))
+            .on("click", d => {
+                console.log("CLICKED" + d.id);
+                this.highlightConnectionsOfLocation("test");
+            })
             .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
 
-        // this.drawNetworkPaths();
     }
 
     drawNetworkPaths(data) {
-        // Create test-data: coordinates of start and end
+        // process data: coordinates of start and end
         var link = [];
         for (let row of data) {
             link.push({
@@ -128,18 +130,10 @@ class Map {
                     [row[0].lon, row[0].lat],
                     [row[1].lon, row[1].lat],
                 ],
+                // sourceId: ,
+                // targetId: ,
             });
         }
-        // var link = [
-        //     { type: "LineString", coordinates: [[12, 54], [-123, 48]] },
-        //     { type: "LineString", coordinates: [[-123, 48], [9, 52]] },
-        //     { type: "LineString", coordinates: [[9, 52], [6, 46]] },
-        //     { type: "LineString", coordinates: [[6, 46], [13, 52]] },
-        //     { type: "LineString", coordinates: [[13, 52], [7, 46]] },
-        //     { type: "LineString", coordinates: [[7, 46], [11, 44]] },
-        //     { type: "LineString", coordinates: [[11, 44], [5, 50]] },
-        //     { type: "LineString", coordinates: [[5, 50], [8, 49]] }
-        // ];
 
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
@@ -148,10 +142,25 @@ class Map {
             .data(link)
             .enter()
             .append("path")
-            .attr("d", d => pathGenerator(d))
+            .attr("d", (d, i, nodes) => {
+
+                // console.log(nodes[i]); // get current node
+                nodes[i].classList.add("test"); // instead of test: add sourceId and targetId to classList
+
+                return pathGenerator(d);
+            })
+            .attr("stroke-opacity", 0.5)
             .style("fill", "none")
             .style("stroke", config.NETWORK_LINES)
             .style("stroke-width", 2);
+    }
+
+    highlightConnectionsOfLocation(locationId) {
+
+        let selection = d3.selectAll("." + locationId);
+        console.log(selection);
+
+        selection.style("stroke", "#f00");
     }
 }
 
