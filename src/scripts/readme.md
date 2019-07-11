@@ -21,6 +21,9 @@ For the `spacy_adapter` and `parser_keyword_similarity` I choose to write classe
 - `parser_keyword_similarity`: finds words according to their morphological similarity. This is a failed concept. It does not work in the context of this application and could be replaced by a stemmer
 - `parser_sql_db_creator`: creates a level 3 normalized sql database from the parser dictionaries
 
+### Processing Tools
+- `processing_organetwork`: takes data from the parser cache and creates a network of coordinates. datastructure: `[{lat, lon}, {lat, lon}]`. the network is created by looking at authors that worked together on the same article.
+
 ### Flexible Scripts
 - `constants`: the good 'ol constants file
 - `sys_io_json`: provides methods to write/read any python datastructure to/form json files, paths need to be specified in the "source" dictonary
