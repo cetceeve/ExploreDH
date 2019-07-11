@@ -5,7 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js"
+    "start": "node index.js",
+    "start:live": "cd build/src && screen -S ExploreDH -X stuff $'node index.js\n'",
+    "publish": "npm run check",
+    "check": "eslint www/res/js",
+    "postcheck": "npm run build",
+    "build": "node build.js",
+    "postbuild": "cd build/src && npm install"
   },
   "repository": {
     "type": "git",
@@ -34,6 +40,7 @@
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
-    "eslint": "^5.16.0"
+    "eslint": "^5.16.0",
+    "fs-extra": "^8.1.0"
   }
 }
