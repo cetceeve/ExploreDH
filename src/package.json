@@ -12,7 +12,7 @@
     "check": "eslint www/res/js",
     "postcheck": "npm run build",
     "build": "node build.js",
-    "postbuild": "cd build/src && npm install"
+    "postbuild": "cd build/src && npm install --production"
   },
   "repository": {
     "type": "git",
