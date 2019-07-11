@@ -111,12 +111,18 @@ class Map {
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => 3.5)
+            .attr("uk-tooltip", d => "title: " + d.name)
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
                 console.log("CLICKED" + d.id);
-                this.highlightConnectionsOfLocation("test");
             })
-            .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
+            .on("pointerenter", (d, i, nodes) => {
+                console.log("HOVERED");
+                this.highlightConnectionsOfLocation("test", true);
+            })
+            .on("pointerout", (d, i, nodes) => {
+                this.highlightConnectionsOfLocation("test", false);
+            });
 
     }
 
@@ -155,12 +161,17 @@ class Map {
             .style("stroke-width", 2);
     }
 
-    highlightConnectionsOfLocation(locationId) {
+    highlightConnectionsOfLocation(locationId, highlight) {
 
         let selection = d3.selectAll("." + locationId);
-        console.log(selection);
+        // console.log(selection);
 
-        selection.style("stroke", "#f00");
+        if (highlight) {
+            selection.style("stroke", "#f00");
+        } else {
+            selection.style("stroke", config.NETWORK_LINES);
+        }
+
     }
 }
 
