@@ -33,7 +33,7 @@ To start live environment (this requires a linux server with `screen`):
 - run `npm install` (this will install all necessary packages)
 - run `npm run publish` (this will check and build the code into the `/build` folder)
 - run `npm run start:live` (this will start the server in a detached screen-session)
-- use `screen -d` to access the terminal
+- use `screen -r` to access the servers screen-session
 
 ## Navigation
 
