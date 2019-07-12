@@ -117,11 +117,11 @@ class Map {
             })
             .on("pointerenter", (d, i, nodes) => {
                 console.log("HOVERED");
-                this.highlightConnectionsOfLocation(".test", true);
+                this.highlightConnectionsOfLocation("." + d.id, true);
                 this.highlightMarker("#" + d.id, true);
             })
             .on("pointerout", (d, i, nodes) => {
-                this.highlightConnectionsOfLocation(".test", false);
+                this.highlightConnectionsOfLocation("." + d.id, false);
                 this.highlightMarker("#" + d.id, false);
             });
 
@@ -141,7 +141,7 @@ class Map {
                 targetId: row[1].id,
             });
         }
-        console.log(link);
+        // console.log(link);
 
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
@@ -152,8 +152,11 @@ class Map {
             .append("path")
             .attr("d", (d, i, nodes) => {
 
-                // console.log(nodes[i]); // get current node
-                nodes[i].classList.add("test"); // instead of test: add sourceId and targetId to classList
+                //console.log(nodes[i]); // get current node
+                //console.log(d);
+                //nodes[i].classList.add("test"); // instead of test: add sourceId and targetId to classList
+                nodes[i].classList.add(d.sourceId);
+                nodes[i].classList.add(d.targetId);
 
                 return pathGenerator(d);
             })
