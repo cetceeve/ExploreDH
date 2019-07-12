@@ -75,7 +75,7 @@ app.get("/search/:query", function (req, res) {
 });
 
 app.get("/article/:title", function (req, res) {
-    console.log(req.params.query);
+    console.log(req.params);
     db.get("SELECT * FROM article WHERE article.title=$title", { $title: req.params.title }, function (err, rows) {
         if (err !== null) {
             console.error(err);
