@@ -29,7 +29,7 @@ class Map {
                 )
                 .style("stroke", config.COUNTRY_BORDERS);
 
-            this.visualizePeopleAtLocation();
+            // this.visualizePeopleAtLocation();
             this.visualizeAllConnections();
         });
     }
@@ -91,7 +91,7 @@ class Map {
             .data(data)
             .enter()
             .append("circle")
-            .attr("id", d => d.id)
+            // .attr("id", d => d.id)
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => d.numOfPeople)
@@ -103,25 +103,28 @@ class Map {
 
     drawMarkerFromData(data) {
 
+        console.log(data);
         this.mapSvg.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
-            .attr("id", d => d.id)
+            .attr("id", d => d.id) // ================ id is undefined!! ==============================
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => 3.5)
-            .attr("uk-tooltip", d => "title: " + d.name)
+            .attr("uk-tooltip", d => "title: " + d.name + "; pos: right")
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
                 console.log("CLICKED" + d.id);
             })
             .on("pointerenter", (d, i, nodes) => {
                 console.log("HOVERED");
-                this.highlightConnectionsOfLocation("test", true);
+                this.highlightConnectionsOfLocation(".test", true);
+                this.highlightMarker("#" + d.id, true);
             })
             .on("pointerout", (d, i, nodes) => {
-                this.highlightConnectionsOfLocation("test", false);
+                this.highlightConnectionsOfLocation(".test", false);
+                this.highlightMarker("#" + d.id, false);
             });
 
     }
@@ -136,8 +139,8 @@ class Map {
                     [row[0].lon, row[0].lat],
                     [row[1].lon, row[1].lat],
                 ],
-                // sourceId: ,
-                // targetId: ,
+                sourceId: row[0].id,
+                targetId: row[1].id,
             });
         }
 
@@ -159,19 +162,29 @@ class Map {
             .style("fill", "none")
             .style("stroke", config.NETWORK_LINES)
             .style("stroke-width", 2);
+
+        this.visualizePeopleAtLocation();
     }
 
-    highlightConnectionsOfLocation(locationId, highlight) {
-
-        let selection = d3.selectAll("." + locationId);
+    highlightConnectionsOfLocation(selector, highlight) {
+        let selection = d3.selectAll(selector);
         // console.log(selection);
 
         if (highlight) {
-            selection.style("stroke", "#f00");
+            selection.style("stroke", "#00f");
         } else {
             selection.style("stroke", config.NETWORK_LINES);
         }
+    }
 
+    highlightMarker(selector, highlight) {
+        let selection = d3.selectAll(selector);
+
+        if (highlight) {
+            selection.style("fill", "#0f0");
+        } else {
+            selection.style("fill", config.MARKER_LOCATION);
+        }
     }
 }
 

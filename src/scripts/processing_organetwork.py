@@ -29,7 +29,7 @@ class OrgaNetwork:
         return self.dictPerson[personID]["orga"]
 
     def _replaceOrgaIDTupleWithCoordinates(self, orgaIDTuple):
-        return tuple({"lat": self.dictOrga[orgaID]["lat"], "lon": self.dictOrga[orgaID]["lon"]} for orgaID in orgaIDTuple)
+        return tuple({"id": orgaID, "lat": self.dictOrga[orgaID]["lat"], "lon": self.dictOrga[orgaID]["lon"]} for orgaID in orgaIDTuple)
 
 
 if __name__ == "__main__":
