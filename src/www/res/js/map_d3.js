@@ -102,8 +102,6 @@ class Map {
     }
 
     drawMarkerFromData(data) {
-
-        console.log(data);
         this.mapSvg.selectAll("myCircles")
             .data(data)
             .enter()
@@ -143,6 +141,7 @@ class Map {
                 targetId: row[1].id,
             });
         }
+        console.log(link);
 
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
