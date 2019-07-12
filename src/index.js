@@ -50,6 +50,30 @@ app.get("/connections/:request", function (req, res) {
     }
 });
 
+app.get("/search", function (req, res) {
+    console.log(req.url);
+    db.all("SELECT title FROM article", function (err, rows) {
+        if (err !== null) {
+            console.error(err);
+        } else {
+            console.log("sending article names upstream");
+            res.json(rows.map(item => item.title));
+        }
+    });
+});
+
+app.get("/search/:query", function (req, res) {
+    console.log(req.params.query);
+    db.all("SELECT article.title FROM article WHERE article.title LIKE $q", { $q: "%" + req.params.query + "%" }, function (err, rows) {
+        if (err !== null) {
+            console.error(err);
+        } else {
+            console.log("sending article names upstream");
+            res.json(rows.map(item => item.title));
+        }
+    });
+});
+
 app.get("/connections", function (req, res) {
     console.log(req.url);
     readJSON("../data/output/output_orga_network.json")
