@@ -28,8 +28,21 @@ class ArticleSidebar {
                         console.error(err);
                     });
             },
-            onSelect(event, term, item) {
-                // TODO: cklick action
+            onSelect(event, term) {
+                fetch(window.location.href + "article/" + term)
+                    .then(response => {
+                        if (response.status !== 200) {
+                            throw new Error("BadResponseCode: " + response.status.toString());
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log(data);
+                    })
+                    .catch(err => {
+                        // eslint-disable-next-line no-console
+                        console.error(err);
+                    });
             },
         });
     }
