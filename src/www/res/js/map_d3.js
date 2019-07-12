@@ -1,9 +1,5 @@
 /* global d3 */
 
-/** 
- * Model for the map.
- */
-
 import config from "./config.js";
 
 class Map {
@@ -13,6 +9,7 @@ class Map {
             .scale(1700)            // This is like the zoom
             .center([10, 50]);      // trial-and-error-result: no idea what this exactly does!
 
+        this.pointData = null;
         this.initMap();
     }
 
@@ -29,8 +26,7 @@ class Map {
                 )
                 .style("stroke", config.COUNTRY_BORDERS);
 
-            // this.visualizePeopleAtLocation();
-            this.visualizeAllConnections();
+            this.visualizePeopleAtLocation();
         });
     }
 
@@ -86,19 +82,20 @@ class Map {
     }
 
     drawCirclesFromData(data) {
+        this.pointData = data;
+
         // visualize people at location
         this.mapSvg.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
-            // .attr("id", d => d.id)
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => d.numOfPeople)
             .style("fill", config.PEOPLE_AT_LOCATION)
             .attr("fill-opacity", 0.6);
 
-        this.drawMarkerFromData(data);
+        this.visualizeAllConnections();
     }
 
     drawMarkerFromData(data) {
@@ -106,23 +103,23 @@ class Map {
             .data(data)
             .enter()
             .append("circle")
-            .attr("id", d => d.id) // ================ id is undefined!! ==============================
+            .attr("id", d => d.id)
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => 3.5)
-            .attr("uk-tooltip", d => "title: " + d.name + "; pos: right")
+            // .attr("uk-tooltip", d => "title: " + d.name + "; pos: right")
+            .attr("title", d => d.name)
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
                 console.log("CLICKED" + d.id);
+                // TODO: call "fetchArticlesOfOrga"
             })
-            .on("pointerenter", (d, i, nodes) => {
-                console.log("HOVERED");
-                this.highlightConnectionsOfLocation("." + d.id, true);
-                this.highlightMarker("#" + d.id, true);
-            })
-            .on("pointerout", (d, i, nodes) => {
-                this.highlightConnectionsOfLocation("." + d.id, false);
-                this.highlightMarker("#" + d.id, false);
+            .on("pointerenter", d => this.highlightConnectionsOfLocation("." + d.id, true))
+            .on("pointerout", d => this.highlightConnectionsOfLocation("." + d.id, false))
+            // TOOLTIP =======================
+            .append("svg:title")
+            .text(function (d) {
+                return d.name;
             });
 
     }
@@ -141,7 +138,6 @@ class Map {
                 targetId: row[1].id,
             });
         }
-        // console.log(link);
 
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
@@ -151,10 +147,6 @@ class Map {
             .enter()
             .append("path")
             .attr("d", (d, i, nodes) => {
-
-                //console.log(nodes[i]); // get current node
-                //console.log(d);
-                //nodes[i].classList.add("test"); // instead of test: add sourceId and targetId to classList
                 nodes[i].classList.add(d.sourceId);
                 nodes[i].classList.add(d.targetId);
 
@@ -165,17 +157,28 @@ class Map {
             .style("stroke", config.NETWORK_LINES)
             .style("stroke-width", 2);
 
-        this.visualizePeopleAtLocation();
+        this.drawMarkerFromData(this.pointData);
     }
 
     highlightConnectionsOfLocation(selector, highlight) {
         let selection = d3.selectAll(selector);
-        // console.log(selection);
 
         if (highlight) {
-            selection.style("stroke", "#00f");
+            selection
+                .style("stroke", d => {
+                    this.highlightMarker("#" + d.sourceId, true);
+                    this.highlightMarker("#" + d.targetId, true);
+                    return config.ACCENT;
+                })
+                .attr("stroke-opacity", 1);
         } else {
-            selection.style("stroke", config.NETWORK_LINES);
+            selection
+                .style("stroke", d => {
+                    this.highlightMarker("#" + d.sourceId, false);
+                    this.highlightMarker("#" + d.targetId, false);
+                    return config.NETWORK_LINES;
+                })
+                .attr("stroke-opacity", 0.5);
         }
     }
 
@@ -183,9 +186,13 @@ class Map {
         let selection = d3.selectAll(selector);
 
         if (highlight) {
-            selection.style("fill", "#0f0");
+            selection
+                .style("fill", config.ACCENT)
+                .raise();
         } else {
-            selection.style("fill", config.MARKER_LOCATION);
+            selection
+                .style("fill", config.MARKER_LOCATION)
+                .raise();
         }
     }
 }
