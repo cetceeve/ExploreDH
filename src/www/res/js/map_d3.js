@@ -6,8 +6,10 @@ class Map {
     constructor() {
         this.mapSvg = d3.select("svg");
         this.projection = d3.geoMercator()
-            .scale(1700)            // This is like the zoom
-            .center([10, 50]);      // trial-and-error-result: no idea what this exactly does!
+            // This is like the zoom    
+            .scale(config.SCALE)
+            // trial-and-error-result: no idea what this exactly does!
+            .center(config.CENTER);
 
         this.pointData = null;
         this.initMap();
@@ -33,7 +35,7 @@ class Map {
     visualizePeopleAtLocation() {
         fetch(window.location.href + "connections/peoplePerOrga")
             .then(response => {
-                if (response.status !== 200) {
+                if (response.status !== config.RESPONSE_SUCCESS) {
                     throw new Error("BadResponseCode: " + response.status.toString());
                 }
                 return response.json();
@@ -50,7 +52,7 @@ class Map {
     visualizeAllConnections() {
         fetch(window.location.href + "connections")
             .then(response => {
-                if (response.status !== 200) {
+                if (response.status !== config.RESPONSE_SUCCESS) {
                     throw new Error("BadResponseCode: " + response.status.toString());
                 }
                 return response.json();
@@ -67,7 +69,7 @@ class Map {
     visualizeArticleConnections() {
         fetch(window.location.href + "connections/connectionsOnArticle")
             .then(response => {
-                if (response.status !== 200) {
+                if (response.status !== config.RESPONSE_SUCCESS) {
                     throw new Error("BadResponseCode: " + response.status.toString());
                 }
                 return response.json();
@@ -93,7 +95,7 @@ class Map {
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => d.numOfPeople)
             .style("fill", config.PEOPLE_AT_LOCATION)
-            .attr("fill-opacity", 0.6);
+            .attr("fill-opacity", config.PEOPLE_AT_LOCATION_OPACITY);
 
         this.visualizeAllConnections();
     }
@@ -106,21 +108,20 @@ class Map {
             .attr("id", d => d.id)
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
-            .attr("r", d => 3.5)
+            .attr("r", () => config.MARKER_LOCATION_RADIUS)
             // .attr("uk-tooltip", d => "title: " + d.name + "; pos: right")
             .attr("title", d => d.name)
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
+                // eslint-disable-next-line no-console
                 console.log("CLICKED" + d.id);
                 // TODO: call "fetchArticlesOfOrga"
             })
             .on("pointerenter", d => this.highlightConnectionsOfLocation("." + d.id, true))
             .on("pointerout", d => this.highlightConnectionsOfLocation("." + d.id, false))
-            // TOOLTIP =======================
+            // add TOOLTIP
             .append("svg:title")
-            .text(function (d) {
-                return d.name;
-            });
+            .text(d => d.name);
 
     }
 
@@ -152,10 +153,10 @@ class Map {
 
                 return pathGenerator(d);
             })
-            .attr("stroke-opacity", 0.5)
+            .attr("stroke-opacity", config.NETWORK_LINES_OPACITY)
             .style("fill", "none")
             .style("stroke", config.NETWORK_LINES)
-            .style("stroke-width", 2);
+            .style("stroke-width", config.NETWORK_LINES_STROKE_WIDTH);
 
         this.drawMarkerFromData(this.pointData);
     }
@@ -178,7 +179,7 @@ class Map {
                     this.highlightMarker("#" + d.targetId, false);
                     return config.NETWORK_LINES;
                 })
-                .attr("stroke-opacity", 0.5);
+                .attr("stroke-opacity", config.NETWORK_LINES_OPACITY);
         }
     }
 
