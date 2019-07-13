@@ -6,7 +6,8 @@
  */
 const express = require("express"), PORT = 5012,
     sqlite3 = require("sqlite3").verbose(),
-    fs = require("fs");
+    fs = require("fs"),
+    cache = {};
 
 var app = express(),
     db = new sqlite3.Database("../data/db/dhd_data.db", sqlite3.OPEN_READONLY, (err) => {
@@ -88,12 +89,20 @@ app.get("/article/:title", function (req, res) {
 
 app.get("/article/articleByOrga/:orgaID", function (req, res) {
     console.log(req.params);
-    db.get("SELECT * FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id GROUP BY orga.id", { $id: req.params.orgaID }, function (err, rows) {
+    db.all("SELECT article.id FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id GROUP BY orga.id", { $id: req.params.orgaID }, function (err, rows) {
         if (err !== null) {
             console.error(err);
         } else {
-            console.log("sending articleByOrga upstream");
-            res.json(rows);
+            for (let article of rows) {
+                buildArticleForDisplay(article.id)
+                    .then(stuff => {
+                        console.log("sending article upstream");
+                        res.json(stuff);
+                    })
+                    .catch(e => {
+                        console.error(e);
+                    });
+            }
         }
     });
 });
@@ -110,13 +119,88 @@ app.get("/connections", function (req, res) {
         });
 });
 
+function buildArticleForDisplay(articleID) {
+    return new Promise((resolve, reject) => {
+        execOnDictDatabase(db => {
+            if (db instanceof Error) {
+                reject(db);
+            } else {
+                let article = db.articles[articleID];
+                resolve({
+                    id: article.id,
+                    title: article.title,
+                    authors: article.authors.map(authorID => db.people[authorID].name),
+                    keywords: article.keywords.map(keywordID => db.keywords[keywordID].name),
+                });
+            }
+        });
+    });
+}
+
+function execOnDictDatabase(callback) {
+    let dictArticle, dictPerson, dictKeyword;
+
+    readJSON("../data/output/output_dictArticle.json")
+        .then(data => {
+            dictArticle = data;
+            callbackOnReady();
+        })
+        .catch(e => {
+            callback(e);
+        });
+    readJSON("../data/output/output_dictPerson.json")
+        .then(data => {
+            dictPerson = data;
+            callbackOnReady();
+        })
+        .catch(e => {
+            callback(e);
+        });
+    readJSON("../data/output/output_dictOrga.json")
+        .then(data => {
+            dictKeyword = data;
+            callbackOnReady();
+        })
+        .catch(e => {
+            callback(e);
+        });
+
+    function callbackOnReady() {
+        if (dictArticle !== undefined && dictPerson !== undefined && dictKeyword !== undefined) {
+            callback({
+                acticles: dictArticle,
+                people: dictPerson,
+                keywords: dictKeyword,
+            });
+        }
+    }
+}
+
 function readJSON(path) {
     return new Promise((resolve, reject) => {
-        try {
-            let rawdata = fs.readFileSync(path);
-            resolve(JSON.parse(rawdata));
-        } catch (err) {
-            reject(err);
+        let data = readFromCache(path);
+        if (data !== null) {
+            resolve(data);
+        } else {
+            try {
+                let rawdata = fs.readFileSync(path),
+                    data = JSON.parse(rawdata);
+                writeToCache(path, data);
+                resolve(data);
+            } catch (err) {
+                reject(err);
+            }
         }
     });
+}
+
+function writeToCache(path, _data) {
+    cache[path] = _data;
+}
+
+function readFromCache(path) {
+    if (path in cache) {
+        return cache[path];
+    }
+    return null;
 }
