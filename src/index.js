@@ -22,7 +22,7 @@ app.listen(PORT);
 console.log("Server runing at http://localhost:" + PORT);
 
 app.get("/connections/peoplePerOrga", function (req, res) {
-    console.log(req.params);
+    console.log(req.url);
     db.all("SELECT orga.lat, orga.lon, orga.name, count(person.id) AS numOfPeople FROM orga INNER JOIN person ON person.orga=orga.id GROUP BY orga.id ORDER BY numOfPeople", function (err, rows) {
         if (err !== null) {
             console.error(err);
@@ -65,7 +65,7 @@ app.get("/search", function (req, res) {
 });
 
 app.get("/search/:query", function (req, res) {
-    console.log(req.params.query);
+    console.log(req.params);
     db.all("SELECT article.title FROM article WHERE article.title LIKE $q", { $q: "%" + req.params.query + "%" }, function (err, rows) {
         if (err !== null) {
             console.error(err);
@@ -80,116 +80,42 @@ app.get("/article/:title", function (req, res) {
     console.log(req.params);
     db.get("SELECT article.id FROM article WHERE article.title=$title", { $title: req.params.title }, function (err, row) {
         if (err !== null) {
-            console.error(err);
+            console.log(err);
         } else {
-            buildArticleForDisplay(row.id)
-                .then(article => {
-                    console.log("sending article upstream");
-                    res.json(article);
-                })
-                .catch(e => {
-                    console.error(e);
-                });
+            console.log("sending article upstream");
+            res.json(buildArticleForDisplay(row.id));
         }
     });
 });
 
 app.get("/article/articleByOrga/:orgaID", function (req, res) {
     console.log(req.params);
-    let data = [];
     db.all("SELECT DISTINCT article.id FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id", { $id: req.params.orgaID }, function (err, rows) {
         if (err !== null) {
             console.error(err);
         } else {
-            for (let article of rows) {
-                buildArticleForDisplay(article.id)
-                    .then(article => {
-                        data.push(article);
-                        callbackOnReady(rows.length);
-                    })
-                    .catch(e => {
-                        console.error(e);
-                    });
+            let data = [];
+            for (let item of rows) {
+                data.push(buildArticleForDisplay(item.id));
             }
-        }
-    });
-
-    function callbackOnReady(sentinel) {
-        if (data.length === sentinel) {
             console.log("sending article upstream");
             res.json(data);
         }
-    }
+    });
 });
 
 app.get("/connections", function (req, res) {
     console.log(req.url);
+    console.log("sending connections upstream");
     res.json(conns);
-    // readJSON("../data/output/output_orga_network.json")
-    //     .then(data => {
-    //         console.log("sending connections upstream");
-    //         res.json(data);
-    //     })
-    //     .catch(e => {
-    //         console.error(e);
-    //     });
 });
 
 function buildArticleForDisplay(articleID) {
-    return new Promise((resolve, reject) => {
-        let article = jsonDB.articles[articleID], res;
-        try {
-            res = {
-                id: article.id,
-                title: article.title,
-                authors: article.authors.map(authorID => jsonDB.people[authorID].firstName + " " + jsonDB.people[authorID].lastName),
-                keywords: article.keywords.map(keywordID => jsonDB.keywords[keywordID].text),
-            };
-        } catch (e) {
-            reject(e);
-        }
-        resolve(res);
-        // readJSON("../data/output/output_database.json")
-        //     .then(db => {
-        //         let article = db.articles[articleID];
-        //         resolve({
-        //             id: article.id,
-        //             title: article.title,
-        //             authors: article.authors.map(authorID => db.people[authorID].firstName + " " + db.people[authorID].lastName),
-        //             keywords: article.keywords.map(keywordID => db.keywords[keywordID].text),
-        //         });
-        //     })
-        //     .catch(e => {
-        //         reject(e);
-        //     });
-    });
+    let article = jsonDB.articles[articleID];
+    return {
+        id: article.id,
+        title: article.title,
+        authors: article.authors.map(authorID => jsonDB.people[authorID].firstName + " " + jsonDB.people[authorID].lastName),
+        keywords: article.keywords.map(keywordID => jsonDB.keywords[keywordID].text),
+    };
 }
-
-// function readJSON(path) {
-//     return new Promise((resolve, reject) => {
-//         let data = readFromCache(path);
-//         if (data !== undefined) {
-//             resolve(data);
-//         } else {
-//             try {
-//                 let rawdata = fs.readFileSync(path),
-//                     data = JSON.parse(rawdata);
-//                 writeToCache(path, data);
-//                 resolve(data);
-//             } catch (err) {
-//                 reject(err);
-//             }
-//         }
-//     });
-// }
-
-// function writeToCache(path, _data) {
-//     cache[path] = _data;
-// }
-
-// function readFromCache(path) {
-//     if (path in cache) {
-//         return cache[path];
-//     }
-//     return undefined;
-// }
