@@ -123,10 +123,6 @@ if __name__ == "__main__":
         io.write(io.source["cache"], dictLocation, "dictLocation")
         io.write(io.source["cache"], dictArticle, "dictArticle")
         io.write(io.source["cache"], dictKeyword, "dictKeyword")
-        print("writing to output")
-        io.write(io.source["output"], dictPerson, "dictPerson")
-        io.write(io.source["output"], dictArticle, "dictArticle")
-        io.write(io.source["output"], dictKeyword, "dictKeyword")
 
     # sql database
     if "-d" in sys.argv:
