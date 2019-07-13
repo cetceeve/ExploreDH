@@ -89,19 +89,23 @@ app.get("/article/:title", function (req, res) {
 
 app.get("/article/articleByOrga/:orgaID", function (req, res) {
     console.log(req.params);
-    db.all("SELECT article.id FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id GROUP BY orga.id", { $id: req.params.orgaID }, function (err, rows) {
+    db.all("SELECT DISTINCT article.id FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id", { $id: req.params.orgaID }, function (err, rows) {
         if (err !== null) {
             console.error(err);
         } else {
             for (let article of rows) {
+                let data = [];
                 buildArticleForDisplay(article.id)
-                    .then(stuff => {
-                        console.log("sending article upstream");
-                        res.json(stuff);
+                    .then(article => {
+                        data.push(article);
                     })
                     .catch(e => {
                         console.error(e);
                     });
+                if (data.length === rows.length) {
+                    console.log("sending article upstream");
+                    res.json(data);
+                }
             }
         }
     });
@@ -129,8 +133,8 @@ function buildArticleForDisplay(articleID) {
                 resolve({
                     id: article.id,
                     title: article.title,
-                    authors: article.authors.map(authorID => db.people[authorID].name),
-                    keywords: article.keywords.map(keywordID => db.keywords[keywordID].name),
+                    authors: article.authors.map(authorID => db.people[authorID].firstName + " " + db.people[authorID].lastName),
+                    keywords: article.keywords.map(keywordID => db.keywords[keywordID].text),
                 });
             }
         });
@@ -156,7 +160,7 @@ function execOnDictDatabase(callback) {
         .catch(e => {
             callback(e);
         });
-    readJSON("../data/output/output_dictOrga.json")
+    readJSON("../data/output/output_dictKeyword.json")
         .then(data => {
             dictKeyword = data;
             callbackOnReady();
@@ -168,7 +172,7 @@ function execOnDictDatabase(callback) {
     function callbackOnReady() {
         if (dictArticle !== undefined && dictPerson !== undefined && dictKeyword !== undefined) {
             callback({
-                acticles: dictArticle,
+                articles: dictArticle,
                 people: dictPerson,
                 keywords: dictKeyword,
             });
