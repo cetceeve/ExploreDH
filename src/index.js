@@ -7,7 +7,8 @@
 const express = require("express"), PORT = 5012,
     sqlite3 = require("sqlite3").verbose(),
     fs = require("fs"),
-    cache = {};
+    conns = JSON.parse(fs.readFileSync("../data/output/output_orga_network.json")),
+    jsonDB = JSON.parse(fs.readFileSync("../data/output/output_database.json"));
 
 var app = express(),
     db = new sqlite3.Database("../data/db/dhd_data.db", sqlite3.OPEN_READONLY, (err) => {
@@ -123,59 +124,72 @@ app.get("/article/articleByOrga/:orgaID", function (req, res) {
 
 app.get("/connections", function (req, res) {
     console.log(req.url);
-    readJSON("../data/output/output_orga_network.json")
-        .then(data => {
-            console.log("sending connections upstream");
-            res.json(data);
-        })
-        .catch(e => {
-            console.error(e);
-        });
+    res.json(conns);
+    // readJSON("../data/output/output_orga_network.json")
+    //     .then(data => {
+    //         console.log("sending connections upstream");
+    //         res.json(data);
+    //     })
+    //     .catch(e => {
+    //         console.error(e);
+    //     });
 });
 
 function buildArticleForDisplay(articleID) {
     return new Promise((resolve, reject) => {
-        readJSON("../data/output/output_database.json")
-            .then(db => {
-                let article = db.articles[articleID];
-                resolve({
-                    id: article.id,
-                    title: article.title,
-                    authors: article.authors.map(authorID => db.people[authorID].firstName + " " + db.people[authorID].lastName),
-                    keywords: article.keywords.map(keywordID => db.keywords[keywordID].text),
-                });
-            })
-            .catch(e => {
-                reject(e);
-            });
-    });
-}
-
-function readJSON(path) {
-    return new Promise((resolve, reject) => {
-        let data = readFromCache(path);
-        if (data !== undefined) {
-            resolve(data);
-        } else {
-            try {
-                let rawdata = fs.readFileSync(path),
-                    data = JSON.parse(rawdata);
-                writeToCache(path, data);
-                resolve(data);
-            } catch (err) {
-                reject(err);
-            }
+        let article = jsonDB.articles[articleID], res;
+        try {
+            res = {
+                id: article.id,
+                title: article.title,
+                authors: article.authors.map(authorID => jsonDB.people[authorID].firstName + " " + jsonDB.people[authorID].lastName),
+                keywords: article.keywords.map(keywordID => jsonDB.keywords[keywordID].text),
+            };
+        } catch (e) {
+            reject(e);
         }
+        resolve(res);
+        // readJSON("../data/output/output_database.json")
+        //     .then(db => {
+        //         let article = db.articles[articleID];
+        //         resolve({
+        //             id: article.id,
+        //             title: article.title,
+        //             authors: article.authors.map(authorID => db.people[authorID].firstName + " " + db.people[authorID].lastName),
+        //             keywords: article.keywords.map(keywordID => db.keywords[keywordID].text),
+        //         });
+        //     })
+        //     .catch(e => {
+        //         reject(e);
+        //     });
     });
 }
 
-function writeToCache(path, _data) {
-    cache[path] = _data;
-}
+// function readJSON(path) {
+//     return new Promise((resolve, reject) => {
+//         let data = readFromCache(path);
+//         if (data !== undefined) {
+//             resolve(data);
+//         } else {
+//             try {
+//                 let rawdata = fs.readFileSync(path),
+//                     data = JSON.parse(rawdata);
+//                 writeToCache(path, data);
+//                 resolve(data);
+//             } catch (err) {
+//                 reject(err);
+//             }
+//         }
+//     });
+// }
 
-function readFromCache(path) {
-    if (path in cache) {
-        return cache[path];
-    }
-    return undefined;
-}
+// function writeToCache(path, _data) {
+//     cache[path] = _data;
+// }
+
+// function readFromCache(path) {
+//     if (path in cache) {
+//         return cache[path];
+//     }
+//     return undefined;
+// }
