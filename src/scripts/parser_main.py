@@ -53,7 +53,8 @@ def _mergeKeywordTuple(keywordTuple):
     for article in dictArticle.values():
         for kID in article["keywords"]:
             if kID in oldKeywordIDs:
-                kID = newKeywordID
+                article["keywords"].remove(kID)
+                article["keywords"].append(newKeywordID)
 
     # merge keyword frequency
     oldKeywords = [dictKeyword[kID] for kID in oldKeywordIDs]
@@ -122,6 +123,10 @@ if __name__ == "__main__":
         io.write(io.source["cache"], dictLocation, "dictLocation")
         io.write(io.source["cache"], dictArticle, "dictArticle")
         io.write(io.source["cache"], dictKeyword, "dictKeyword")
+        print("writing to output")
+        io.write(io.source["output"], dictPerson, "dictPerson")
+        io.write(io.source["output"], dictArticle, "dictArticle")
+        io.write(io.source["output"], dictKeyword, "dictKeyword")
 
     # sql database
     if "-d" in sys.argv:
