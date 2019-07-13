@@ -4,17 +4,17 @@ class ArticleSidebar extends EventTarget {
     constructor() {
         super();
         // initial state
-        this.allArticleTitles = [];
+        this.allArticles = [];
         this.searchChoices = [];
         this._initSearchAutocomplete(this);
 
-        // set all articles as seatch choices
-        this._fetchArticleTitles();
+        // set all articles as search choices
+        this._fetchArticles();
     }
 
     setSearchChoices(_choices) {
         if (!(_choices !== undefined && _choices !== null && _choices.length !== 0)) {
-            this.searchChoices = this.allArticleTitles;
+            this.searchChoices = this.allArticles;
         } else {
             this.searchChoices = _choices;
         }
@@ -43,10 +43,10 @@ class ArticleSidebar extends EventTarget {
             minChars: 2,
             source: function (term, suggest) {
                 let re = RegExp(term.toLowerCase(), "gi");
-                suggest(that.searchChoices.filter(item => re.test(item.toLowerCase())));
+                suggest(that.searchChoices.filter(item => re.test(item.title.toLowerCase())));
             },
-            onSelect(event, term) {
-                fetch(window.location.href + "article/" + term)
+            onSelect(event, term, item) {
+                fetch(window.location.href + "article/" + item.dataset.id)
                     .then(response => {
                         if (response.status !== 200) {
                             throw new Error("BadResponseCode: " + response.status.toString());
@@ -61,10 +61,15 @@ class ArticleSidebar extends EventTarget {
                         console.error(err);
                     });
             },
+            renderItem: function (item, search) {
+                let s = search.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"),
+                    re = new RegExp("(" + s.split(" ").join("|") + ")", "gi");
+                return "<div class=\"autocomplete-suggestion\" data-id=\"" + item.id + "\" data-val=\"" + item.title + "\">" + item.title.replace(re, "<b>$1</b>") + "</div>";
+            },
         });
     }
 
-    _fetchArticleTitles() {
+    _fetchArticles() {
         fetch(window.location.href + "search")
             .then(response => {
                 if (response.status !== 200) {
@@ -73,7 +78,7 @@ class ArticleSidebar extends EventTarget {
                 return response.json();
             })
             .then(data => {
-                this.allArticleTitles = data;
+                this.allArticles = data;
                 this.searchChoices = data;
             })
             .catch(err => {

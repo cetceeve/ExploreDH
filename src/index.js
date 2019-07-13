@@ -54,38 +54,20 @@ app.get("/connections/connectionsOnArticle/:articleID", function (req, res) {
 
 app.get("/search", function (req, res) {
     console.log(req.url);
-    db.all("SELECT title FROM article", function (err, rows) {
+    db.all("SELECT id, title FROM article", function (err, rows) {
         if (err !== null) {
             console.error(err);
         } else {
-            console.log("sending article names upstream");
-            res.json(rows.map(item => item.title));
+            console.log("sending search options upstream");
+            res.json(rows);
         }
     });
 });
 
-app.get("/search/:query", function (req, res) {
+app.get("/article/:id", function (req, res) {
     console.log(req.params);
-    db.all("SELECT article.title FROM article WHERE article.title LIKE $q", { $q: "%" + req.params.query + "%" }, function (err, rows) {
-        if (err !== null) {
-            console.error(err);
-        } else {
-            console.log("sending article names upstream");
-            res.json(rows.map(item => item.title));
-        }
-    });
-});
-
-app.get("/article/:title", function (req, res) {
-    console.log(req.params);
-    db.get("SELECT article.id FROM article WHERE article.title=$title", { $title: req.params.title }, function (err, row) {
-        if (err !== null) {
-            console.log(err);
-        } else {
-            console.log("sending article upstream");
-            res.json(buildArticleForDisplay(row.id));
-        }
-    });
+    console.log("sending article upstream");
+    res.json(buildArticleForDisplay(req.params.id));
 });
 
 app.get("/article/articleByOrga/:orgaID", function (req, res) {
