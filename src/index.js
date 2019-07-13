@@ -89,26 +89,30 @@ app.get("/article/:title", function (req, res) {
 
 app.get("/article/articleByOrga/:orgaID", function (req, res) {
     console.log(req.params);
+    let data = [];
     db.all("SELECT DISTINCT article.id FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id", { $id: req.params.orgaID }, function (err, rows) {
         if (err !== null) {
             console.error(err);
         } else {
             for (let article of rows) {
-                let data = [];
                 buildArticleForDisplay(article.id)
                     .then(article => {
                         data.push(article);
+                        callbackOnReady(rows.length);
                     })
                     .catch(e => {
                         console.error(e);
                     });
-                if (data.length === rows.length) {
-                    console.log("sending article upstream");
-                    res.json(data);
-                }
             }
         }
     });
+
+    function callbackOnReady(sentinel) {
+        if (data.length === sentinel) {
+            console.log("sending article upstream");
+            res.json(data);
+        }
+    }
 });
 
 app.get("/connections", function (req, res) {
@@ -183,7 +187,7 @@ function execOnDictDatabase(callback) {
 function readJSON(path) {
     return new Promise((resolve, reject) => {
         let data = readFromCache(path);
-        if (data !== null) {
+        if (data !== undefined) {
             resolve(data);
         } else {
             try {
@@ -206,5 +210,5 @@ function readFromCache(path) {
     if (path in cache) {
         return cache[path];
     }
-    return null;
+    return undefined;
 }

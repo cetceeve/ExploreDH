@@ -10,7 +10,6 @@ class ArticleSidebar extends EventTarget {
 
         // set all articles as seatch choices
         this._fetchArticleTitles();
-        this.setArticlesByOrga("org__128");
     }
 
     setSearchChoices(_choices) {
