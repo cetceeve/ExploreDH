@@ -1,10 +1,11 @@
 /* global autoComplete */
 
-class ArticleSidebar {
+class ArticleSidebar extends EventTarget {
     constructor() {
+        super();
         // initial state
         this.allArticleTitles = [];
-        this.setSearchChoices();
+        this.searchChoices = [];
         this.initSearchAutocomplete(this);
 
         // set all articles as seatch choices
@@ -56,7 +57,7 @@ class ArticleSidebar {
             })
             .then(data => {
                 this.allArticleTitles = data;
-                this.setSearchChoices();
+                this.searchChoices = data;
             })
             .catch(err => {
                 // eslint-disable-next-line no-console
