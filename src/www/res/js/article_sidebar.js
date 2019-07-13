@@ -6,10 +6,11 @@ class ArticleSidebar extends EventTarget {
         // initial state
         this.allArticleTitles = [];
         this.searchChoices = [];
-        this.initSearchAutocomplete(this);
+        this._initSearchAutocomplete(this);
 
         // set all articles as seatch choices
-        this.fetchArticleTitles();
+        this._fetchArticleTitles();
+        this.setArticlesByOrga("org__128");
     }
 
     setSearchChoices(_choices) {
@@ -20,7 +21,24 @@ class ArticleSidebar extends EventTarget {
         }
     }
 
-    initSearchAutocomplete(that) {
+    setArticlesByOrga(orgaID) {
+        fetch(window.location.href + "article/articleByOrga/" + orgaID)
+            .then(response => {
+                if (response.status !== 200) {
+                    throw new Error("BadResponseCode: " + response.status.toString());
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log(data);
+            })
+            .catch(err => {
+                // eslint-disable-next-line no-console
+                console.error(err);
+            });
+    }
+
+    _initSearchAutocomplete(that) {
         return new autoComplete({
             selector: "#search",
             minChars: 2,
@@ -47,7 +65,7 @@ class ArticleSidebar extends EventTarget {
         });
     }
 
-    fetchArticleTitles() {
+    _fetchArticleTitles() {
         fetch(window.location.href + "search")
             .then(response => {
                 if (response.status !== 200) {
