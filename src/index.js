@@ -135,10 +135,8 @@ app.get("/connections", function (req, res) {
 
 function buildArticleForDisplay(articleID) {
     return new Promise((resolve, reject) => {
-        execOnDictDatabase(db => {
-            if (db instanceof Error) {
-                reject(db);
-            } else {
+        readJSON("../data/output/output_database.json")
+            .then(db => {
                 let article = db.articles[articleID];
                 resolve({
                     id: article.id,
@@ -146,48 +144,11 @@ function buildArticleForDisplay(articleID) {
                     authors: article.authors.map(authorID => db.people[authorID].firstName + " " + db.people[authorID].lastName),
                     keywords: article.keywords.map(keywordID => db.keywords[keywordID].text),
                 });
-            }
-        });
-    });
-}
-
-function execOnDictDatabase(callback) {
-    let dictArticle, dictPerson, dictKeyword;
-
-    readJSON("../data/output/output_dictArticle.json")
-        .then(data => {
-            dictArticle = data;
-            callbackOnReady();
-        })
-        .catch(e => {
-            callback(e);
-        });
-    readJSON("../data/output/output_dictPerson.json")
-        .then(data => {
-            dictPerson = data;
-            callbackOnReady();
-        })
-        .catch(e => {
-            callback(e);
-        });
-    readJSON("../data/output/output_dictKeyword.json")
-        .then(data => {
-            dictKeyword = data;
-            callbackOnReady();
-        })
-        .catch(e => {
-            callback(e);
-        });
-
-    function callbackOnReady() {
-        if (dictArticle !== undefined && dictPerson !== undefined && dictKeyword !== undefined) {
-            callback({
-                articles: dictArticle,
-                people: dictPerson,
-                keywords: dictKeyword,
+            })
+            .catch(e => {
+                reject(e);
             });
-        }
-    }
+    });
 }
 
 function readJSON(path) {
