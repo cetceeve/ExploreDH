@@ -18,6 +18,7 @@ class Config {
         this.RESPONSE_SUCCESS = 200;
 
         /* VISUALIZATION */
+        this.NOT_PARTICIPATING_OPACITY = 0.5;
         this.PEOPLE_AT_LOCATION_OPACITY = 0.6;
         this.MARKER_LOCATION_RADIUS = 3.5;
         this.NETWORK_LINES_OPACITY = 0.5;

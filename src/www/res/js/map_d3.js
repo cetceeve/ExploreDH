@@ -16,6 +16,8 @@ class Map {
     }
 
     initMap() {
+        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg"];
+
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
 
             this.mapSvg.append("g")
@@ -23,6 +25,12 @@ class Map {
                 .data(data.features)
                 .enter().append("path")
                 .attr("fill", config.COUNTRIES)
+                .attr("opacity", d => {
+                    if (participatingCountries.includes(d.properties.name)) {
+                        return 1;
+                    }
+                    return config.NOT_PARTICIPATING_OPACITY;
+                })
                 .attr("d", d3.geoPath()
                     .projection(this.projection)
                 )
