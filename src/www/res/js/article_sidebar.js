@@ -10,6 +10,7 @@ class ArticleSidebar extends EventTarget {
 
         // set all articles as search choices
         this._fetchArticles();
+        this.setArticlesByOrga("org__121");
     }
 
     setSearchChoices(_choices) {
@@ -21,20 +22,10 @@ class ArticleSidebar extends EventTarget {
     }
 
     setArticlesByOrga(orgaID) {
-        fetch(window.location.href + "article/articleByOrga/" + orgaID)
-            .then(response => {
-                if (response.status !== 200) {
-                    throw new Error("BadResponseCode: " + response.status.toString());
-                }
-                return response.json();
-            })
-            .then(data => {
-                console.log(data);
-            })
-            .catch(err => {
-                // eslint-disable-next-line no-console
-                console.error(err);
-            });
+        this._getData("article/articleByOrga/" + orgaID)
+            .then(data => console.log(data))
+            // eslint-disable-next-line no-console
+            .catch(err => console.error(err));
     }
 
     _initSearchAutocomplete(that) {
@@ -46,20 +37,10 @@ class ArticleSidebar extends EventTarget {
                 suggest(that.searchChoices.filter(item => re.test(item.title.toLowerCase())));
             },
             onSelect(event, term, item) {
-                fetch(window.location.href + "article/" + item.dataset.id)
-                    .then(response => {
-                        if (response.status !== 200) {
-                            throw new Error("BadResponseCode: " + response.status.toString());
-                        }
-                        return response.json();
-                    })
-                    .then(data => {
-                        console.log(data);
-                    })
-                    .catch(err => {
-                        // eslint-disable-next-line no-console
-                        console.error(err);
-                    });
+                that._getData("article/" + item.dataset.id)
+                    .then(data => console.log(data))
+                    // eslint-disable-next-line no-console
+                    .catch(err => console.error(err));
             },
             renderItem: function (item, search) {
                 let s = search.replace(/[-/\\^$*+?.()|[\]{}]/g, "\\$&"),
@@ -70,21 +51,21 @@ class ArticleSidebar extends EventTarget {
     }
 
     _fetchArticles() {
-        fetch(window.location.href + "search")
-            .then(response => {
-                if (response.status !== 200) {
-                    throw new Error("BadResponseCode: " + response.status.toString());
-                }
-                return response.json();
-            })
+        this._getData("search")
             .then(data => {
                 this.allArticles = data;
                 this.searchChoices = data;
             })
-            .catch(err => {
-                // eslint-disable-next-line no-console
-                console.error(err);
-            });
+            // eslint-disable-next-line no-console
+            .catch(err => console.error(err));
+    }
+
+    async _getData(url = "") {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("BadResponseCode: " + response.status.toString());
+        }
+        return await response.json();
     }
 }
 
