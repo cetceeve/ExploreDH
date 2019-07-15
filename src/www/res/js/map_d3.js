@@ -36,11 +36,11 @@ class Map {
                 )
                 .style("stroke", config.COUNTRY_BORDERS);
 
-            this.visualizePeopleAtLocation();
+            this.fetchPeopleAtLocation();
         });
     }
 
-    visualizePeopleAtLocation() {
+    fetchPeopleAtLocation() {
         fetch(window.location.href + "connections/peoplePerOrga")
             .then(response => {
                 if (response.status !== config.RESPONSE_SUCCESS) {
@@ -57,7 +57,7 @@ class Map {
             });
     }
 
-    visualizeAllConnections() {
+    fetchAllConnections() {
         fetch(window.location.href + "connections")
             .then(response => {
                 if (response.status !== config.RESPONSE_SUCCESS) {
@@ -74,7 +74,7 @@ class Map {
             });
     }
 
-    visualizeArticleConnections() {
+    fetchArticleConnections() {
         fetch(window.location.href + "connections/connectionsOnArticle")
             .then(response => {
                 if (response.status !== config.RESPONSE_SUCCESS) {
@@ -105,7 +105,7 @@ class Map {
             .style("fill", config.PEOPLE_AT_LOCATION)
             .attr("fill-opacity", config.PEOPLE_AT_LOCATION_OPACITY);
 
-        this.visualizeAllConnections();
+        this.fetchAllConnections();
     }
 
     drawMarkerFromData(data) {
@@ -117,7 +117,6 @@ class Map {
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", () => config.MARKER_LOCATION_RADIUS)
-            // .attr("uk-tooltip", d => "title: " + d.name + "; pos: right")
             .attr("title", d => d.name)
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
@@ -125,9 +124,14 @@ class Map {
                 console.log("CLICKED" + d.id);
                 // TODO: call "fetchArticlesOfOrga"
             })
-            .on("pointerenter", d => this.highlightConnectionsOfLocation("." + d.id, true))
-            .on("pointerout", d => this.highlightConnectionsOfLocation("." + d.id, false))
-            // add TOOLTIP
+            .on("pointerenter", d => {
+                this.highlightConnectionsOfLocation("." + d.id, true);
+                this.highlightMarker("#" + d.id, true);
+            })
+            .on("pointerout", d => {
+                this.highlightConnectionsOfLocation("." + d.id, false);
+                this.highlightMarker("#" + d.id, false);
+            })
             .append("svg:title")
             .text(d => d.name);
 
