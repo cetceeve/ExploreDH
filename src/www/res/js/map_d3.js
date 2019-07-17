@@ -41,54 +41,30 @@ class Map {
     }
 
     fetchPeopleAtLocation() {
-        fetch(window.location.href + "connections/peoplePerOrga")
-            .then(response => {
-                if (response.status !== config.RESPONSE_SUCCESS) {
-                    throw new Error("BadResponseCode: " + response.status.toString());
-                }
-                return response.json();
-            })
+        this._getData("connections/peoplePerOrga")
             .then(data => {
                 this.drawCirclesFromData(data);
             })
-            .catch(err => {
-                // eslint-disable-next-line no-console
-                console.error(err);
-            });
+            // eslint-disable-next-line no-console
+            .catch(err => console.error(err));
     }
 
     fetchAllConnections() {
-        fetch(window.location.href + "connections")
-            .then(response => {
-                if (response.status !== config.RESPONSE_SUCCESS) {
-                    throw new Error("BadResponseCode: " + response.status.toString());
-                }
-                return response.json();
-            })
+        this._getData("connections")
             .then(data => {
                 this.drawNetworkPaths(data);
             })
-            .catch(err => {
-                // eslint-disable-next-line no-console
-                console.error(err);
-            });
+            // eslint-disable-next-line no-console
+            .catch(err => console.error(err));
     }
 
     fetchArticleConnections() {
-        fetch(window.location.href + "connections/connectionsOnArticle")
-            .then(response => {
-                if (response.status !== config.RESPONSE_SUCCESS) {
-                    throw new Error("BadResponseCode: " + response.status.toString());
-                }
-                return response.json();
-            })
+        this._getData("connections/connectionsOnArticle")
             .then(data => {
                 this.drawNetworkPaths(data);
             })
-            .catch(err => {
-                // eslint-disable-next-line no-console
-                console.error(err);
-            });
+            // eslint-disable-next-line no-console
+            .catch(err => console.error(err));
     }
 
     drawCirclesFromData(data) {
@@ -207,6 +183,14 @@ class Map {
                 .style("fill", config.MARKER_LOCATION)
                 .raise();
         }
+    }
+
+    async _getData(url = "") {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("BadResponseCode: " + response.status.toString());
+        }
+        return await response.json();
     }
 }
 
