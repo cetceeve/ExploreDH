@@ -1,22 +1,23 @@
 /* global d3 */
 
-/** 
- * Model for the map.
- */
-
 import config from "./config.js";
 
 class Map {
     constructor() {
         this.mapSvg = d3.select("svg");
         this.projection = d3.geoMercator()
-            .scale(1700)            // This is like the zoom
-            .center([10, 50]);      // trial-and-error-result: no idea what this exactly does!
+            // This is like the zoom    
+            .scale(config.SCALE)
+            // trial-and-error-result: no idea what this exactly does!
+            .center(config.CENTER);
 
+        this.pointData = null;
         this.initMap();
     }
 
     initMap() {
+        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg"];
+
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
 
             this.mapSvg.append("g")
@@ -24,20 +25,25 @@ class Map {
                 .data(data.features)
                 .enter().append("path")
                 .attr("fill", config.COUNTRIES)
+                .attr("opacity", d => {
+                    if (participatingCountries.includes(d.properties.name)) {
+                        return 1;
+                    }
+                    return config.NOT_PARTICIPATING_OPACITY;
+                })
                 .attr("d", d3.geoPath()
                     .projection(this.projection)
                 )
                 .style("stroke", config.COUNTRY_BORDERS);
 
-            this.visualizePeopleAtLocation();
-            this.visualizeAllConnections();
+            this.fetchPeopleAtLocation();
         });
     }
 
-    visualizePeopleAtLocation() {
+    fetchPeopleAtLocation() {
         fetch(window.location.href + "connections/peoplePerOrga")
             .then(response => {
-                if (response.status !== 200) {
+                if (response.status !== config.RESPONSE_SUCCESS) {
                     throw new Error("BadResponseCode: " + response.status.toString());
                 }
                 return response.json();
@@ -51,10 +57,10 @@ class Map {
             });
     }
 
-    visualizeAllConnections() {
+    fetchAllConnections() {
         fetch(window.location.href + "connections")
             .then(response => {
-                if (response.status !== 200) {
+                if (response.status !== config.RESPONSE_SUCCESS) {
                     throw new Error("BadResponseCode: " + response.status.toString());
                 }
                 return response.json();
@@ -68,10 +74,10 @@ class Map {
             });
     }
 
-    visualizeArticleConnections() {
+    fetchArticleConnections() {
         fetch(window.location.href + "connections/connectionsOnArticle")
             .then(response => {
-                if (response.status !== 200) {
+                if (response.status !== config.RESPONSE_SUCCESS) {
                     throw new Error("BadResponseCode: " + response.status.toString());
                 }
                 return response.json();
@@ -86,23 +92,23 @@ class Map {
     }
 
     drawCirclesFromData(data) {
+        this.pointData = data;
+
         // visualize people at location
         this.mapSvg.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
-            .attr("id", d => d.id)
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", d => d.numOfPeople)
             .style("fill", config.PEOPLE_AT_LOCATION)
-            .attr("fill-opacity", 0.6);
+            .attr("fill-opacity", config.PEOPLE_AT_LOCATION_OPACITY);
 
-        this.drawMarkerFromData(data);
+        this.fetchAllConnections();
     }
 
     drawMarkerFromData(data) {
-
         this.mapSvg.selectAll("myCircles")
             .data(data)
             .enter()
@@ -110,16 +116,29 @@ class Map {
             .attr("id", d => d.id)
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
-            .attr("r", d => 3.5)
+            .attr("r", () => config.MARKER_LOCATION_RADIUS)
+            .attr("title", d => d.name)
             .style("fill", config.MARKER_LOCATION)
-            .on("click", d => console.log("CLICKED" + d.id))
-            .on("pointerenter", (d, i, nodes) => console.log("HOVERED"));
+            .on("click", d => {
+                // eslint-disable-next-line no-console
+                console.log("CLICKED" + d.id);
+                // TODO: call "fetchArticlesOfOrga"
+            })
+            .on("pointerenter", d => {
+                this.highlightConnectionsOfLocation("." + d.id, true);
+                this.highlightMarker("#" + d.id, true);
+            })
+            .on("pointerout", d => {
+                this.highlightConnectionsOfLocation("." + d.id, false);
+                this.highlightMarker("#" + d.id, false);
+            })
+            .append("svg:title")
+            .text(d => d.name);
 
-        // this.drawNetworkPaths();
     }
 
     drawNetworkPaths(data) {
-        // Create test-data: coordinates of start and end
+        // process data: coordinates of start and end
         var link = [];
         for (let row of data) {
             link.push({
@@ -128,18 +147,10 @@ class Map {
                     [row[0].lon, row[0].lat],
                     [row[1].lon, row[1].lat],
                 ],
+                sourceId: row[0].id,
+                targetId: row[1].id,
             });
         }
-        // var link = [
-        //     { type: "LineString", coordinates: [[12, 54], [-123, 48]] },
-        //     { type: "LineString", coordinates: [[-123, 48], [9, 52]] },
-        //     { type: "LineString", coordinates: [[9, 52], [6, 46]] },
-        //     { type: "LineString", coordinates: [[6, 46], [13, 52]] },
-        //     { type: "LineString", coordinates: [[13, 52], [7, 46]] },
-        //     { type: "LineString", coordinates: [[7, 46], [11, 44]] },
-        //     { type: "LineString", coordinates: [[11, 44], [5, 50]] },
-        //     { type: "LineString", coordinates: [[5, 50], [8, 49]] }
-        // ];
 
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
@@ -148,10 +159,54 @@ class Map {
             .data(link)
             .enter()
             .append("path")
-            .attr("d", d => pathGenerator(d))
+            .attr("d", (d, i, nodes) => {
+                nodes[i].classList.add(d.sourceId);
+                nodes[i].classList.add(d.targetId);
+
+                return pathGenerator(d);
+            })
+            .attr("stroke-opacity", config.NETWORK_LINES_OPACITY)
             .style("fill", "none")
             .style("stroke", config.NETWORK_LINES)
-            .style("stroke-width", 2);
+            .style("stroke-width", config.NETWORK_LINES_STROKE_WIDTH);
+
+        this.drawMarkerFromData(this.pointData);
+    }
+
+    highlightConnectionsOfLocation(selector, highlight) {
+        let selection = d3.selectAll(selector);
+
+        if (highlight) {
+            selection
+                .style("stroke", d => {
+                    this.highlightMarker("#" + d.sourceId, true);
+                    this.highlightMarker("#" + d.targetId, true);
+                    return config.ACCENT;
+                })
+                .attr("stroke-opacity", 1);
+        } else {
+            selection
+                .style("stroke", d => {
+                    this.highlightMarker("#" + d.sourceId, false);
+                    this.highlightMarker("#" + d.targetId, false);
+                    return config.NETWORK_LINES;
+                })
+                .attr("stroke-opacity", config.NETWORK_LINES_OPACITY);
+        }
+    }
+
+    highlightMarker(selector, highlight) {
+        let selection = d3.selectAll(selector);
+
+        if (highlight) {
+            selection
+                .style("fill", config.ACCENT)
+                .raise();
+        } else {
+            selection
+                .style("fill", config.MARKER_LOCATION)
+                .raise();
+        }
     }
 }
 
