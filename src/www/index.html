@@ -2,36 +2,57 @@
 <html>
 
 <head>
-    <title>ExploreDH</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ExploreDH</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <link rel="stylesheet" href="./res/css/style.css" />
+  <link rel="stylesheet" href="./res/css/style.css" />
 
-    <!-- UIkit -->
-    <link rel="stylesheet" href="vendors/uikit/css/uikit.min.css" />
-    <script src="vendors/uikit/js/uikit.min.js"></script>
-    <script src="vendors/uikit/js/uikit-icons.min.js"></script>
+  <!-- UIkit -->
+  <link rel="stylesheet" href="vendors/uikit/css/uikit.min.css" />
+  <script src="vendors/uikit/js/uikit.min.js"></script>
+  <script src="vendors/uikit/js/uikit-icons.min.js"></script>
+  
+  <!-- Pixabay Autocomplete -->
+  <link rel="stylesheet" href="vendors/autocomplete/css/auto-complete.css" />
+  <script src="vendors/autocomplete/js/auto-complete.min.js"></script>
 
-    <!-- Pixabay Autocomplete -->
-    <link rel="stylesheet" href="vendors/autocomplete/css/auto-complete.css" />
-    <script src="vendors/autocomplete/js/auto-complete.min.js"></script>
-
-    <!-- D3 -->
-    <script src="https://d3js.org/d3.v4.js"></script>
+  <!-- D3 -->
+  <script src="https://d3js.org/d3.v4.js"></script>
 
 </head>
 
-<body>
-
-    <div class="uk-margin" style="width: 90vw">
-        <form class="uk-search uk-search-default" style="width: 100%" onsubmit="return false;">
-            <span uk-search-icon></span>
-            <input id="search" class=" uk-search-input" type="search" placeholder="Search..." style="width: 100%">
-        </form>
+<body uk-grid>
+  <div class="uk-width-2-3">
+    <svg id="map"></svg>
+  </div>
+  <div class="uk-width-1-3 ">
+    <div class="headSidebar">
+      <h2 class="uk-heading-line uk-text-center headline"><span>Articel</span></h2>
+      <form class="uk-search uk-search-default inputField">
+        <span uk-search-icon></span>
+        <input id="" class="uk-search-input searchBox" type="search" placeholder="Search...">
+      </form>
     </div>
-
-    <script type="module" src="./res/js/controller.js"></script>
+    <ul id="" class="uk-list scrollbar list" uk-scrollspy="cls: uk-animation-slide-right; target: .uk-card; delay: 150;" id="scrollbar">
+      <li>
+        <div class="uk-card uk-card-default uk-card-body uk-card-hover">
+          <h3 class="uk-card-title cardHead">Besucherexperimente im Science Center: Welche Einsichten in die Herstellung von Wissen in Interaktion werden erst durch die Zusammenschau von Audio-, Video- und
+            Eye-Tracking-Daten möglich?</h3>
+          <p>Andorfer Peter, Cremer Fabian, Steyer Timo, Andorfer Peter, Cremer Fabian, Steyer Tim</p>
+          <div class="uk-card-footer keywords">
+            <span class="uk-badge">Digitales Publizieren</span>
+            <span class="uk-badge">Publikationsprozess</span>
+            <span class="uk-badge">Transformation</span>
+            <span class="uk-badge">Abstracts</span>
+            <span class="uk-badge">TEI</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  
+  <script type="module" src="./res/js/controller.js"></script>
 </body>
 
 </html>
