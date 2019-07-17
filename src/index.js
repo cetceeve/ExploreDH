@@ -22,7 +22,7 @@ console.log("Server runing at http://localhost:" + PORT);
 app.get("/connections/:request", function (req, res) {
     console.log(req.params);
     if (req.params.request === "peoplePerOrga") {
-        db.all("SELECT orga.lat, orga.lon, orga.name, count(person.id) AS numOfPeople FROM orga INNER JOIN person ON person.orga=orga.id GROUP BY orga.id ORDER BY numOfPeople", function (err, rows) {
+        db.all("SELECT orga.id, orga.lat, orga.lon, orga.name, count(person.id) AS numOfPeople FROM orga INNER JOIN person ON person.orga=orga.id GROUP BY orga.id ORDER BY numOfPeople", function (err, rows) {
             if (err !== null) {
                 console.error(err);
             } else {
