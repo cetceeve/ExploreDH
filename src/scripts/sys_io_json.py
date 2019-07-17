@@ -4,9 +4,10 @@ import os
 from constants import DATA_DIR
 
 source = {
-    "cache": { "dir": "./__cache__/", "path": "./__cache__/parser_{}.json" },
-    "output": { "dir": DATA_DIR + "./output/", "path": DATA_DIR + "./output/output_{}.json" }
+    "cache": {"dir": "./__cache__/", "path": "./__cache__/parser_{}.json"},
+    "output": {"dir": DATA_DIR + "output/", "path": DATA_DIR + "output/output_{}.json"}
 }
+
 
 def write(source, data, title):
     if data is not None:
@@ -46,4 +47,4 @@ def hasFiles(source, titles):
 
 def _createDirectory(directory):
     if not os.path.exists(directory):
-       os.makedirs(directory, exist_ok=True)
+        os.makedirs(directory, exist_ok=True)

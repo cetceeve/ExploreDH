@@ -1,7 +1,7 @@
 {
     "extends": "eslint:recommended",
     "parserOptions": {
-        "ecmaVersion": 6,
+        "ecmaVersion": 2017,
         "sourceType": "module",
         "ecmaFeatures": {
             "jsx": true
@@ -56,7 +56,7 @@
         "no-unused-expressions": "error",
         "no-useless-concat": "error",
         "no-undef-init": "error",
-        "no-underscore-dangle": "error",
+        "no-underscore-dangle": "off",
         "no-param-reassign": "error",
         "no-self-compare": "error",
         "no-void": "error",

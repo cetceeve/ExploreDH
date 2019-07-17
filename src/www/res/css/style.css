@@ -60,3 +60,8 @@ html, body {
   border-radius: 10px;
   background-color: #cdcdcd;
 }
+
+#map {
+    height: 100%;
+    width: 100%;
+}
