@@ -18,13 +18,13 @@ app.use(express.static("www"));
 app.listen(PORT);
 console.log("Server runing at http://localhost:" + PORT);
 
-app.get("/connections", function(req, res) {
+app.get("/connections", function (req, res) {
   console.log("sending connections upstream");
   res.json(conns);
 });
 
-app.get("/connections/peoplePerOrga", function(req, res) {
-  db.all("SELECT orga.lat, orga.lon, orga.name, count(person.id) AS numOfPeople FROM orga INNER JOIN person ON person.orga=orga.id GROUP BY orga.id ORDER BY numOfPeople", function(err, rows) {
+app.get("/connections/peoplePerOrga", function (req, res) {
+  db.all("SELECT orga.id, orga.lat, orga.lon, orga.name, count(person.id) AS numOfPeople FROM orga INNER JOIN person ON person.orga=orga.id GROUP BY orga.id ORDER BY numOfPeople", function (err, rows) {
     if (err) { console.error(err); } else {
       console.log("sending peoplePerOrga upstream");
       res.json(rows);
@@ -32,9 +32,9 @@ app.get("/connections/peoplePerOrga", function(req, res) {
   });
 });
 
-app.get("/connections/connectionsOnArticle/:articleID", function(req, res) {
+app.get("/connections/connectionsOnArticle/:articleID", function (req, res) {
   console.log(req.url + req.params);
-  db.all("SELECT DISTINCT orga.id, orga.lat, orga.lon FROM orga INNER JOIN person ON person.orga=orga.id INNER JOIN article_person_link AS link ON person.id=link.person_id INNER JOIN article on link.article_id=article.id WHERE article.id=$id", { $id: req.params.arcticleID }, function(err, rows) {
+  db.all("SELECT DISTINCT orga.id, orga.lat, orga.lon FROM orga INNER JOIN person ON person.orga=orga.id INNER JOIN article_person_link AS link ON person.id=link.person_id INNER JOIN article on link.article_id=article.id WHERE article.id=$id", { $id: req.params.arcticleID }, function (err, rows) {
     if (err) { console.error(err); } else {
       // create connections
       let data = [];
@@ -49,8 +49,8 @@ app.get("/connections/connectionsOnArticle/:articleID", function(req, res) {
   });
 });
 
-app.get("/search", function(req, res) {
-  db.all("SELECT id, title FROM article", function(err, rows) {
+app.get("/search", function (req, res) {
+  db.all("SELECT id, title FROM article", function (err, rows) {
     if (err) { console.error(err); } else {
       console.log("sending search options upstream");
       res.json(rows);
@@ -58,15 +58,15 @@ app.get("/search", function(req, res) {
   });
 });
 
-app.get("/article/:id", function(req, res) {
+app.get("/article/:id", function (req, res) {
   console.log(req.url + req.params);
   console.log("sending article upstream");
   res.json(buildArticleForDisplay(req.params.id));
 });
 
-app.get("/article/articleByOrga/:orgaID", function(req, res) {
+app.get("/article/articleByOrga/:orgaID", function (req, res) {
   console.log(req.url + req.params);
-  db.all("SELECT DISTINCT article.id FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id", { $id: req.params.orgaID }, function(err, rows) {
+  db.all("SELECT DISTINCT article.id FROM article INNER JOIN article_person_link AS link ON article.id=link.article_id INNER JOIN person on link.person_id=person.id INNER JOIN orga ON person.orga=orga.id WHERE orga.id=$id", { $id: req.params.orgaID }, function (err, rows) {
     if (err) { console.error(err); } else {
       let data = [];
       for (let item of rows) {

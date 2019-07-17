@@ -85,6 +85,7 @@ class Map {
     }
 
     drawMarkerFromData(data) {
+        console.log(data);
         this.mapSvg.selectAll("myCircles")
             .data(data)
             .enter()
@@ -101,6 +102,7 @@ class Map {
                 // TODO: call "fetchArticlesOfOrga"
             })
             .on("pointerenter", d => {
+                console.log(d);
                 this.highlightConnectionsOfLocation("." + d.id, true);
                 this.highlightMarker("#" + d.id, true);
             })
