@@ -53,7 +53,8 @@ def _mergeKeywordTuple(keywordTuple):
     for article in dictArticle.values():
         for kID in article["keywords"]:
             if kID in oldKeywordIDs:
-                kID = newKeywordID
+                article["keywords"].remove(kID)
+                article["keywords"].append(newKeywordID)
 
     # merge keyword frequency
     oldKeywords = [dictKeyword[kID] for kID in oldKeywordIDs]

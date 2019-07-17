@@ -13,6 +13,10 @@
     <script src="vendors/uikit/js/uikit.min.js"></script>
     <script src="vendors/uikit/js/uikit-icons.min.js"></script>
 
+    <!-- Pixabay Autocomplete -->
+    <link rel="stylesheet" href="vendors/autocomplete/css/auto-complete.css" />
+    <script src="vendors/autocomplete/js/auto-complete.min.js"></script>
+
     <!-- D3 -->
     <script src="https://d3js.org/d3.v4.js"></script>
 
@@ -20,9 +24,14 @@
 
 <body>
 
-    <svg id="map"></svg>
+    <div class="uk-margin" style="width: 90vw">
+        <form class="uk-search uk-search-default" style="width: 100%" onsubmit="return false;">
+            <span uk-search-icon></span>
+            <input id="search" class=" uk-search-input" type="search" placeholder="Search..." style="width: 100%">
+        </form>
+    </div>
 
-    <script type="module" src="./res/js/map_d3.js"></script>
+    <script type="module" src="./res/js/controller.js"></script>
 </body>
 
 </html>
