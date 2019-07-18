@@ -2,8 +2,9 @@
 
 import config from "./config.js";
 
-class Map {
+class Map extends EventTarget {
     constructor() {
+        super();
         this.mapSvg = d3.select("svg");
         this.projection = d3.geoMercator()
             // This is like the zoom    
@@ -85,7 +86,7 @@ class Map {
     }
 
     drawMarkerFromData(data) {
-        console.log(data);
+
         this.mapSvg.selectAll("myCircles")
             .data(data)
             .enter()
@@ -97,12 +98,9 @@ class Map {
             .attr("title", d => d.name)
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
-                // eslint-disable-next-line no-console
-                console.log("CLICKED" + d.id);
-                // TODO: call "fetchArticlesOfOrga"
+                super.dispatchEvent(this.createEvent("onMarkerClicked", d.id));
             })
             .on("pointerenter", d => {
-                console.log(d);
                 this.highlightConnectionsOfLocation("." + d.id, true);
                 this.highlightMarker("#" + d.id, true);
             })
@@ -185,6 +183,17 @@ class Map {
                 .style("fill", config.MARKER_LOCATION)
                 .raise();
         }
+    }
+
+    createEvent(type, data, msg) {
+        let event = new Event(type);
+        if (data !== null && data !== undefined) {
+            event.data = data;
+        }
+        if (msg !== null && msg !== undefined) {
+            event.msg = msg;
+        }
+        return event;
     }
 
     async _getData(url = "") {
