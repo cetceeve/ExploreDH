@@ -20,6 +20,9 @@
   <!-- D3 -->
   <script src="https://d3js.org/d3.v4.js"></script>
 
+  <!-- Underscore -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.9.1/underscore-min.js"></script>
+
 </head>
 
 <body uk-grid>
@@ -28,14 +31,15 @@
   </div>
   <div class="uk-width-1-3 ">
     <div class="headSidebar">
-      <h2 class="uk-heading-line uk-text-center headline"><span>Articel</span></h2>
-      <form class="uk-search uk-search-default inputField">
+      <h2 class="uk-heading-line uk-text-center headline"><span>Artikel</span></h2>
+      <form class="uk-search uk-search-default inputField" onsubmit="return false;">
         <span uk-search-icon></span>
-        <input id="search" class="uk-search-input searchBox" type="search" placeholder="Search...">
+        <input id="search" class="uk-search-input searchBox" type="search" placeholder="Suche...">
       </form>
     </div>
-    <ul id="" class="uk-list scrollbar list" uk-scrollspy="cls: uk-animation-slide-right; target: .uk-card; delay: 150;"
-      id="scrollbar">
+    <ul id="articleList" class="uk-list scrollbar list"
+      uk-scrollspy="cls: uk-animation-slide-right; target: .uk-card; delay: 150;">
+      <!--
       <li>
         <div class="uk-card uk-card-default uk-card-body uk-card-hover">
           <h3 class="uk-card-title cardHead">Besucherexperimente im Science Center: Welche Einsichten in die Herstellung
@@ -51,6 +55,7 @@
           </div>
         </div>
       </li>
+      -->
     </ul>
   </div>
 

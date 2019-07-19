@@ -1,4 +1,4 @@
-/* global autoComplete */
+/* global autoComplete _ */
 
 class ArticleSidebar extends EventTarget {
     constructor() {
@@ -10,7 +10,21 @@ class ArticleSidebar extends EventTarget {
 
         // set all articles as search choices
         this._fetchArticles();
-        this.setArticlesByOrga("org__121");
+        //  this.setArticlesByOrga("org__121");
+
+        this.articleTemplate = _.template(
+            "<li>" +
+            "<div class='uk-card uk-card-default uk-card-body uk-card-hover'>" +
+            "<h3 class='uk-card-title cardHead'><%=title%></h3>" +
+            "<p><%=authors.join(', ')%></p>" +
+            "<div class='uk-card-footer keywords'>" +
+            "<% for (let keyword in keywords) { %>" +
+            "<span class='uk-badge'><%=keywords[keyword]%></span>" +
+            "<% } %>" +
+            "</div>" +
+            "</div>" +
+            "</li>"
+        );
     }
 
     setSearchChoices(_choices) {
@@ -23,22 +37,43 @@ class ArticleSidebar extends EventTarget {
 
     setArticlesByOrga(orgaID) {
         this._getData("article/articleByOrga/" + orgaID)
-            .then(data => console.log(data))
+            .then(data => {
+                this.showArticleList(data);
+                this.setSearchChoices(data);
+            })
             // eslint-disable-next-line no-console
             .catch(err => console.error(err));
+    }
+
+    showArticleList(articleList) {
+        let articleListEl = document.querySelector("#articleList");
+        while (articleListEl.firstChild) {
+            articleListEl.removeChild(articleListEl.firstChild);
+        }
+        this.setSearchChoices(undefined);
+
+        for (let entry of articleList) {
+            let container = document.createElement("div"),
+                articleHTML = this.articleTemplate(entry);
+
+            container.innerHTML = articleHTML;
+            container.id = entry.id;
+            articleListEl.appendChild(container);
+        }
     }
 
     _initSearchAutocomplete(that) {
         return new autoComplete({
             selector: "#search",
             minChars: 2,
+            cache: false,
             source: function (term, suggest) {
                 let re = RegExp(term.toLowerCase(), "gi");
                 suggest(that.searchChoices.filter(item => re.test(item.title.toLowerCase())));
             },
             onSelect(event, term, item) {
                 that._getData("article/" + item.dataset.id)
-                    .then(data => console.log(data))
+                    .then(data => that.showArticleList(data))
                     // eslint-disable-next-line no-console
                     .catch(err => console.error(err));
             },

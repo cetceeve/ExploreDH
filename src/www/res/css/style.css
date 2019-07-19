@@ -35,9 +35,9 @@ html, body {
 }
 
 .keywords {
-  padding-left: 0px;
-  padding-right: 0px;
-  padding-bottom: 0px;
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
 }
 
 .scrollbar {
@@ -59,9 +59,4 @@ html, body {
 #scrollbar::-webkit-scrollbar-thumb {
   border-radius: 10px;
   background-color: #cdcdcd;
-}
-
-#map {
-    height: 100%;
-    width: 100%;
 }
