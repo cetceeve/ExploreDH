@@ -159,7 +159,8 @@ class Map extends EventTarget {
                     this.highlightMarker("#" + d.targetId, true);
                     return config.ACCENT;
                 })
-                .attr("stroke-opacity", 1);
+                .attr("stroke-opacity", 1)
+                .raise(); // TODO: raise marker afterwards!
         } else {
             selection
                 .style("stroke", d => {

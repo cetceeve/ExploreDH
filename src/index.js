@@ -61,7 +61,7 @@ app.get("/search", function (req, res) {
 app.get("/article/:id", function (req, res) {
   console.log(req.url + req.params);
   console.log("sending article upstream");
-  res.json(buildArticleForDisplay(req.params.id));
+  res.json([buildArticleForDisplay(req.params.id)]);
 });
 
 app.get("/article/articleByOrga/:orgaID", function (req, res) {

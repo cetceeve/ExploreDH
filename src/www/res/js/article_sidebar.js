@@ -37,47 +37,43 @@ class ArticleSidebar extends EventTarget {
 
     setArticlesByOrga(orgaID) {
         this._getData("article/articleByOrga/" + orgaID)
-            .then(data => this.showArticles(data))
+            .then(data => {
+                this.showArticleList(data);
+                this.setSearchChoices(data);
+            })
             // eslint-disable-next-line no-console
             .catch(err => console.error(err));
     }
 
-    showArticles(articleList) {
+    showArticleList(articleList) {
         let articleListEl = document.querySelector("#articleList");
         while (articleListEl.firstChild) {
             articleListEl.removeChild(articleListEl.firstChild);
         }
+        this.setSearchChoices(undefined);
 
         for (let entry of articleList) {
-            this.showArticle(articleListEl, entry);
+            let container = document.createElement("div"),
+                articleHTML = this.articleTemplate(entry);
+
+            container.innerHTML = articleHTML;
+            container.id = entry.id;
+            articleListEl.appendChild(container);
         }
-    }
-
-    showArticle(articleListEl, article) {
-        if (articleListEl === null) {
-            // eslint-disable-next-line no-param-reassign
-            articleListEl = document.querySelector("#articleList");
-        }
-
-        let container = document.createElement("div"),
-            articleHTML = this.articleTemplate(article);
-
-        container.innerHTML = articleHTML;
-        container.id = article.id;
-        articleListEl.appendChild(container);
     }
 
     _initSearchAutocomplete(that) {
         return new autoComplete({
             selector: "#search",
             minChars: 2,
+            cache: false,
             source: function (term, suggest) {
                 let re = RegExp(term.toLowerCase(), "gi");
                 suggest(that.searchChoices.filter(item => re.test(item.title.toLowerCase())));
             },
             onSelect(event, term, item) {
                 that._getData("article/" + item.dataset.id)
-                    .then(data => that.showArticle(null, data))
+                    .then(data => that.showArticleList(data))
                     // eslint-disable-next-line no-console
                     .catch(err => console.error(err));
             },

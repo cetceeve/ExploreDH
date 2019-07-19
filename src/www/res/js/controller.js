@@ -14,6 +14,7 @@ class Controller {
     addMapEventListeners() {
         map.addEventListener("onMarkerClicked", event => {
             sidebar.setArticlesByOrga(event.data);
+            // sidebar.setSearchChoices(event.data);
         });
         return;
     }
