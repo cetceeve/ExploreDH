@@ -96,6 +96,7 @@ class Map extends EventTarget {
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", () => config.MARKER_LOCATION_RADIUS)
             .attr("title", d => d.name)
+            .attr("class", "marker")
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
                 super.dispatchEvent(this.createEvent("onMarkerClicked", d.id));
@@ -160,7 +161,7 @@ class Map extends EventTarget {
                     return config.ACCENT;
                 })
                 .attr("stroke-opacity", 1)
-                .raise(); // TODO: raise marker afterwards!
+                .raise();
         } else {
             selection
                 .style("stroke", d => {
@@ -169,6 +170,7 @@ class Map extends EventTarget {
                     return config.NETWORK_LINES;
                 })
                 .attr("stroke-opacity", config.NETWORK_LINES_OPACITY);
+            d3.selectAll(".marker").raise();
         }
     }
 
