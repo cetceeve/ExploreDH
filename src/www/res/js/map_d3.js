@@ -13,6 +13,7 @@ class Map extends EventTarget {
             .center(config.CENTER);
 
         this.pointData = null;
+        this.clicked = false;
         this.initMap();
     }
 
@@ -99,15 +100,16 @@ class Map extends EventTarget {
             .attr("class", "marker")
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
-                super.dispatchEvent(this.createEvent("onMarkerClicked", d.id));
+                this.clicked = true;
+                super.dispatchEvent(this.createEvent("onMarkerClicked", { id: d.id, name: d.name }));
             })
             .on("pointerenter", d => {
                 this.highlightConnectionsOfLocation("." + d.id, true);
-                this.highlightMarker("#" + d.id, true);
             })
             .on("pointerout", d => {
-                this.highlightConnectionsOfLocation("." + d.id, false);
-                this.highlightMarker("#" + d.id, false);
+                if (!this.clicked) {
+                    this.highlightConnectionsOfLocation("." + d.id, false);
+                }
             })
             .append("svg:title")
             .text(d => d.name);
@@ -186,6 +188,11 @@ class Map extends EventTarget {
                 .style("fill", config.MARKER_LOCATION)
                 .raise();
         }
+    }
+
+    resetLocation(orgaId) {
+        this.clicked = false;
+        this.highlightConnectionsOfLocation("." + orgaId, false);
     }
 
     createEvent(type, data, msg) {

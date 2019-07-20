@@ -8,15 +8,16 @@ class Controller {
     }
 
     addSidebarEventListeners() {
-        return;
+        sidebar.addEventListener("onLocationReset", event => {
+            map.resetLocation(event.data);
+        });
     }
 
     addMapEventListeners() {
         map.addEventListener("onMarkerClicked", event => {
-            sidebar.setArticlesByOrga(event.data);
-            // sidebar.setSearchChoices(event.data);
+            sidebar.setArticlesByOrga(event.data.id);
+            sidebar.setLocationName(event.data.name);
         });
-        return;
     }
 
 }

@@ -6,12 +6,15 @@ class ArticleSidebar extends EventTarget {
         // initial state
         this.allArticles = [];
         this.searchChoices = [];
+        this.currentOrgaId = "";
         this._initSearchAutocomplete(this);
 
         // set all articles as search choices
         this._fetchArticles();
-        //  this.setArticlesByOrga("org__121");
 
+        this.articleListEl = document.querySelector("#articleList");
+        this.locationContainerEl = document.querySelector("#locationContainer");
+        this.clearLocationButton = document.querySelector("#buttonClose");
         this.articleTemplate = _.template(
             "<li>" +
             "<div class='uk-card uk-card-default uk-card-body uk-card-hover'>" +
@@ -36,6 +39,7 @@ class ArticleSidebar extends EventTarget {
     }
 
     setArticlesByOrga(orgaID) {
+        this.currentOrgaId = orgaID;
         this._getData("article/articleByOrga/" + orgaID)
             .then(data => {
                 this.showArticleList(data);
@@ -46,11 +50,7 @@ class ArticleSidebar extends EventTarget {
     }
 
     showArticleList(articleList) {
-        let articleListEl = document.querySelector("#articleList");
-        while (articleListEl.firstChild) {
-            articleListEl.removeChild(articleListEl.firstChild);
-        }
-        this.setSearchChoices(undefined);
+        this.clearArticleListAndSearchChoices();
 
         for (let entry of articleList) {
             let container = document.createElement("div"),
@@ -58,8 +58,44 @@ class ArticleSidebar extends EventTarget {
 
             container.innerHTML = articleHTML;
             container.id = entry.id;
-            articleListEl.appendChild(container);
+            this.articleListEl.appendChild(container);
         }
+    }
+
+    clearArticleListAndSearchChoices() {
+        while (this.articleListEl.firstChild) {
+            this.articleListEl.removeChild(this.articleListEl.firstChild);
+        }
+
+        this.setSearchChoices(null);
+    }
+
+    setLocationName(name) {
+        let locationNameEl = document.querySelector("#locationName");
+
+        // this.locationContainerEl.style.display = "block";
+        this.locationContainerEl.style.visibility = "visible";
+        locationNameEl.innerHTML = name;
+        this.clearLocationButton.addEventListener("click", event => this.clearLocationName(event));
+    }
+
+    clearLocationName(event) {
+        console.log(event); // seems bugy?! fires multiple times (1-n)
+
+        this.locationContainerEl.style.visibility = "hidden";
+        this.clearArticleListAndSearchChoices();
+        super.dispatchEvent(this.createEvent("onLocationReset", this.currentOrgaId));
+    }
+
+    createEvent(type, data, msg) {
+        let event = new Event(type);
+        if (data !== null && data !== undefined) {
+            event.data = data;
+        }
+        if (msg !== null && msg !== undefined) {
+            event.msg = msg;
+        }
+        return event;
     }
 
     _initSearchAutocomplete(that) {
