@@ -80,7 +80,7 @@ class Map extends EventTarget {
             .append("circle")
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
-            .attr("r", d => d.numOfPeople)
+            .attr("r", d => config.MARKER_LOCATION_RADIUS + d.numOfPeople)
             .style("fill", config.PEOPLE_AT_LOCATION)
             .attr("fill-opacity", config.PEOPLE_AT_LOCATION_OPACITY);
 
@@ -101,22 +101,12 @@ class Map extends EventTarget {
             .attr("class", "marker")
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
-
                 if (this.clicked) {
                     this.resetLocation(this.clickedId);
                 }
-
                 this.clicked = true;
                 this.clickedId = d.id;
-                // make other markers opac
-                // d3.selectAll(".marker")
-                //     .attr("fill-opacity", data => {
-                //         if (data.id === d.id) {
-                //             return;
-                //         }
-                //         return 0.3;
-                //     });
-
+                this.highlightMarker("#" + d.id, true, config.ACTIVE);
                 super.dispatchEvent(this.createEvent("onMarkerClicked", { id: d.id, name: d.name }));
             })
             .on("pointerenter", d => {
@@ -127,6 +117,9 @@ class Map extends EventTarget {
                 if (!this.clicked || this.clickedId !== d.id) {
                     this.highlightConnectionsOfLocation("." + d.id, false);
                     this.highlightMarker("#" + d.id, false);
+                }
+                if (this.clickedId === d.id) {
+                    this.highlightMarker("#" + d.id, true, config.ACTIVE);
                 }
             })
             .append("svg:title")
@@ -178,7 +171,7 @@ class Map extends EventTarget {
                 .style("stroke", d => {
                     this.highlightMarker("#" + d.sourceId, true);
                     this.highlightMarker("#" + d.targetId, true);
-                    return config.ACCENT;
+                    return config.HIGHLIGHT;
                 })
                 .attr("stroke-opacity", 1)
                 .raise();
@@ -194,12 +187,12 @@ class Map extends EventTarget {
         }
     }
 
-    highlightMarker(selector, highlight) {
+    highlightMarker(selector, highlight, color) {
         let selection = d3.selectAll(selector);
 
         if (highlight) {
             selection
-                .style("fill", config.ACCENT)
+                .style("fill", color || config.HIGHLIGHT)
                 .raise();
         } else {
             selection

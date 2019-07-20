@@ -76,12 +76,10 @@ class ArticleSidebar extends EventTarget {
         // this.locationContainerEl.style.display = "block";
         this.locationContainerEl.style.visibility = "visible";
         locationNameEl.innerHTML = name;
-        this.clearLocationButton.addEventListener("click", event => this.clearLocationName(event));
+        this.clearLocationButton.addEventListener("click", () => this.clearLocationName());
     }
 
-    clearLocationName(event) {
-        console.log(event); // seems bugy?! fires multiple times (1-n)
-
+    clearLocationName() {
         this.locationContainerEl.style.visibility = "hidden";
         this.clearArticleListAndSearchChoices();
         super.dispatchEvent(this.createEvent("onLocationReset", this.currentOrgaId));
