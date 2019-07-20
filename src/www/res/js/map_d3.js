@@ -105,10 +105,12 @@ class Map extends EventTarget {
             })
             .on("pointerenter", d => {
                 this.highlightConnectionsOfLocation("." + d.id, true);
+                this.highlightMarker("#" + d.id, true);
             })
             .on("pointerout", d => {
                 if (!this.clicked) {
                     this.highlightConnectionsOfLocation("." + d.id, false);
+                    this.highlightMarker("#" + d.id, false);
                 }
             })
             .append("svg:title")
@@ -193,6 +195,7 @@ class Map extends EventTarget {
     resetLocation(orgaId) {
         this.clicked = false;
         this.highlightConnectionsOfLocation("." + orgaId, false);
+        this.highlightMarker("#" + orgaId, false);
     }
 
     createEvent(type, data, msg) {
