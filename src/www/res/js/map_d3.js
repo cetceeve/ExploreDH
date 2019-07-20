@@ -14,6 +14,7 @@ class Map extends EventTarget {
 
         this.pointData = null;
         this.clicked = false;
+        this.clickedId = "";
         this.initMap();
     }
 
@@ -100,7 +101,22 @@ class Map extends EventTarget {
             .attr("class", "marker")
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
+
+                if (this.clicked) {
+                    this.resetLocation(this.clickedId);
+                }
+
                 this.clicked = true;
+                this.clickedId = d.id;
+                // make other markers opac
+                // d3.selectAll(".marker")
+                //     .attr("fill-opacity", data => {
+                //         if (data.id === d.id) {
+                //             return;
+                //         }
+                //         return 0.3;
+                //     });
+
                 super.dispatchEvent(this.createEvent("onMarkerClicked", { id: d.id, name: d.name }));
             })
             .on("pointerenter", d => {
@@ -108,7 +124,7 @@ class Map extends EventTarget {
                 this.highlightMarker("#" + d.id, true);
             })
             .on("pointerout", d => {
-                if (!this.clicked) {
+                if (!this.clicked || this.clickedId !== d.id) {
                     this.highlightConnectionsOfLocation("." + d.id, false);
                     this.highlightMarker("#" + d.id, false);
                 }
@@ -194,6 +210,7 @@ class Map extends EventTarget {
 
     resetLocation(orgaId) {
         this.clicked = false;
+        this.clickedId = "";
         this.highlightConnectionsOfLocation("." + orgaId, false);
         this.highlightMarker("#" + orgaId, false);
     }
