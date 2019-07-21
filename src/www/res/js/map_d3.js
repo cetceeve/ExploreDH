@@ -13,6 +13,8 @@ class Map extends EventTarget {
             .center(config.CENTER);
 
         this.pointData = null;
+        this.clicked = false;
+        this.clickedId = "";
         this.initMap();
     }
 
@@ -78,7 +80,7 @@ class Map extends EventTarget {
             .append("circle")
             .attr("cx", d => this.projection([d.lon, d.lat])[0])
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
-            .attr("r", d => d.numOfPeople)
+            .attr("r", d => config.MARKER_LOCATION_RADIUS + d.numOfPeople)
             .style("fill", config.PEOPLE_AT_LOCATION)
             .attr("fill-opacity", config.PEOPLE_AT_LOCATION_OPACITY);
 
@@ -96,17 +98,29 @@ class Map extends EventTarget {
             .attr("cy", d => this.projection([d.lon, d.lat])[1])
             .attr("r", () => config.MARKER_LOCATION_RADIUS)
             .attr("title", d => d.name)
+            .attr("class", "marker")
             .style("fill", config.MARKER_LOCATION)
             .on("click", d => {
-                super.dispatchEvent(this.createEvent("onMarkerClicked", d.id));
+                if (this.clicked) {
+                    this.resetLocation(this.clickedId);
+                }
+                this.clicked = true;
+                this.clickedId = d.id;
+                this.highlightMarker("#" + d.id, true, config.ACTIVE);
+                super.dispatchEvent(this.createEvent("onMarkerClicked", { id: d.id, name: d.name }));
             })
             .on("pointerenter", d => {
                 this.highlightConnectionsOfLocation("." + d.id, true);
                 this.highlightMarker("#" + d.id, true);
             })
             .on("pointerout", d => {
-                this.highlightConnectionsOfLocation("." + d.id, false);
-                this.highlightMarker("#" + d.id, false);
+                if (!this.clicked || this.clickedId !== d.id) {
+                    this.highlightConnectionsOfLocation("." + d.id, false);
+                    this.highlightMarker("#" + d.id, false);
+                }
+                if (this.clickedId === d.id) {
+                    this.highlightMarker("#" + d.id, true, config.ACTIVE);
+                }
             })
             .append("svg:title")
             .text(d => d.name);
@@ -157,10 +171,10 @@ class Map extends EventTarget {
                 .style("stroke", d => {
                     this.highlightMarker("#" + d.sourceId, true);
                     this.highlightMarker("#" + d.targetId, true);
-                    return config.ACCENT;
+                    return config.HIGHLIGHT;
                 })
                 .attr("stroke-opacity", 1)
-                .raise(); // TODO: raise marker afterwards!
+                .raise();
         } else {
             selection
                 .style("stroke", d => {
@@ -169,21 +183,29 @@ class Map extends EventTarget {
                     return config.NETWORK_LINES;
                 })
                 .attr("stroke-opacity", config.NETWORK_LINES_OPACITY);
+            d3.selectAll(".marker").raise();
         }
     }
 
-    highlightMarker(selector, highlight) {
+    highlightMarker(selector, highlight, color) {
         let selection = d3.selectAll(selector);
 
         if (highlight) {
             selection
-                .style("fill", config.ACCENT)
+                .style("fill", color || config.HIGHLIGHT)
                 .raise();
         } else {
             selection
                 .style("fill", config.MARKER_LOCATION)
                 .raise();
         }
+    }
+
+    resetLocation(orgaId) {
+        this.clicked = false;
+        this.clickedId = "";
+        this.highlightConnectionsOfLocation("." + orgaId, false);
+        this.highlightMarker("#" + orgaId, false);
     }
 
     createEvent(type, data, msg) {

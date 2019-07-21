@@ -8,7 +8,8 @@ class Config {
         this.MARKER_LOCATION = "#BC5B65";
         this.PEOPLE_AT_LOCATION = "#4D5555";
         this.NETWORK_LINES = "#1D3641";
-        this.ACCENT = "#ffba49";
+        this.HIGHLIGHT = "#ffba49";
+        this.ACTIVE = "#ba1b1d";
 
         /* MAP */
         this.SCALE = 1600;
