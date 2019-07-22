@@ -5,11 +5,18 @@ import config from "./config.js";
 class Map extends EventTarget {
     constructor() {
         super();
-        this.mapSvg = d3.select("svg");
+        this.mapContainerEl = document.getElementById("mapContainer");
+        this.mapWidth = this.mapContainerEl.offsetWidth;
+        this.mapHeight = this.mapContainerEl.offsetHeight;
+
+        this.mapSvg = d3.select("svg")
+            .attr("width", this.mapWidth)
+            .attr("height", this.mapHeight);
+
         this.projection = d3.geoMercator()
             // This is like the zoom    
             .scale(config.SCALE)
-            // trial-and-error-result: no idea what this exactly does!
+            .translate([this.mapWidth / config.TRANSLATION_FACTOR, this.mapHeight / config.TRANSLATION_FACTOR])
             .center(config.CENTER);
 
         this.pointData = null;
