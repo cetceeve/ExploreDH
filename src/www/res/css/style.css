@@ -35,7 +35,6 @@ html, body {
 .close {
   margin: auto !important;
   padding-left: 0px;
-  cursor: pointer;
 }
 
 .list {
