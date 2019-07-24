@@ -22,6 +22,7 @@ class Map extends EventTarget {
         this.pointData = null;
         this.clicked = false;
         this.clickedId = "";
+        this.activeIds = new Set();
         this.initMap();
     }
 
@@ -110,8 +111,17 @@ class Map extends EventTarget {
             .on("click", d => {
                 if (this.clicked) {
                     this.resetLocation(this.clickedId);
+                    this.activeIds.clear();
                 }
                 this.clicked = true;
+
+                let selection = d3.selectAll("." + d.id);
+                selection.attr(d, d => {
+                    this.activeIds.add(d.sourceId);
+                    this.activeIds.add(d.targetId);
+                });
+                console.log(this.activeIds);
+
                 this.clickedId = d.id;
                 this.highlightMarker("#" + d.id, true, config.ACTIVE);
                 super.dispatchEvent(this.createEvent("onMarkerClicked", { id: d.id, name: d.name }));
