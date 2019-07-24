@@ -134,3 +134,23 @@ if __name__ == "__main__":
             os.remove(DATA_DIR + "db/dhd_data.db")
         # create new database
         sql_creator.create_db(os.path.abspath(DATA_DIR + "db/dhd_data.db"), dictPerson, dictOrga, dictLocation, dictArticle, dictKeyword)
+
+    # json database
+    if "-j" in sys.argv:
+        print("creating database")
+        db = {
+            "people": dictPerson,
+            "orgas": dictOrga,
+            "locations": dictLocation,
+            "articles": dictArticle,
+            "keywords": dictKeyword
+        }
+        print("writing to \"{}\"".format(io.source["output"]["path"].format("database")))
+        io.write(io.source["output"], db, "database")
+
+    # orga connections
+    if "-c" in sys.argv:
+        print("creating orga connections")
+        connections = OrgaNetwork(dictArticle, dictPerson, dictOrga).getConnections()
+        print("writing to \"{}\"".format(io.source["output"]["path"].format("orga_network")))
+        io.write(io.source["output"], connections, "orga_network")

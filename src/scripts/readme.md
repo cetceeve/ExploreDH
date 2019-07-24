@@ -11,8 +11,14 @@ For the `spacy_adapter` and `parser_keyword_similarity` I choose to write classe
 
 ## Modules
 
+### MAIN
+- `parser_main`: Use any or all of the following arguments
+  - `-r`: force a (re-)parse of all data (resets cache)
+  - `-d`: output SQLite Database to db directory
+  - `-j`: combines all internal dictionaries into one JSON File and outputs it to the output directory
+  - `-c`: creates a network of coordinates. Datastructure: `[{lat, lon}, {lat, lon}]`. The network is created by looking at authors that worked together on the same article. A JSON File is outputed to the output directory
+
 ### Parser Suite
-- `parser_main`: controller: can be started with parameter "-r" to force parsing, and/or "-d" to (re)create the sql_database
 - `parser_listperson`: parses dhd's listperson.xml into a person dictionary
 - `parser_listorg`: parses dhd's listorg.xml into a orga dictionary and location dictionary
 - `dhd2019_missing_entities_controller`: sadly listperson.xml and listorg.xml have zero entitlement on being complete and correct: the controller provides methods for outputting a json file where missing data can be manually added and than read back. For locations city names where manually added and are resolved to coordinates with the help of the novatim-api
@@ -20,10 +26,6 @@ For the `spacy_adapter` and `parser_keyword_similarity` I choose to write classe
 - `parser_tei`: parses information from tei files into dictPerson, dictArticle and dictKeyword. Please be aware, that the file redirects a bunch of wrong authorIDs while  parsing
 - `parser_keyword_similarity`: finds words according to their morphological similarity. This is a failed concept. It does not work in the context of this application and could be replaced by a stemmer
 - `parser_sql_db_creator`: creates a level 3 normalized sql database from the parser dictionaries
-
-### Processing Tools (these work of the parser cache)
-- `processing_organetwork`:  creates a network of coordinates. datastructure: `[{lat, lon}, {lat, lon}]`. the network is created by looking at authors that worked together on the same article.
-- `processing_json_db`: copies all dictionaries from the cache to the output folder
 
 ### Flexible Scripts
 - `constants`: the good 'ol constants file
