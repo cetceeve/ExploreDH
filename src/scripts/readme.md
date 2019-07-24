@@ -13,7 +13,7 @@ For the `spacy_adapter` and `parser_keyword_similarity` I choose to write classe
 
 ### MAIN
 - `parser_main`: Use any or all of the following arguments
-  - `-r`: forse a (re-)parse of all data (resets cache)
+  - `-r`: force a (re-)parse of all data (resets cache)
   - `-d`: output SQLite Database to db directory
   - `-j`: combines all internal dictionaries into one JSON File and outputs it to the output directory
   - `-c`: creates a network of coordinates. Datastructure: `[{lat, lon}, {lat, lon}]`. The network is created by looking at authors that worked together on the same article. A JSON File is outputed to the output directory
