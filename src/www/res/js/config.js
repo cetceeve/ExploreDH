@@ -13,7 +13,8 @@ class Config {
 
         /* MAP */
         this.SCALE = 1600;
-        this.CENTER = [10, 50];
+        this.CENTER = [9, 49]; // Würzburg
+        this.TRANSLATION_FACTOR = 2;
 
         /* FETCHING */
         this.RESPONSE_SUCCESS = 200;
