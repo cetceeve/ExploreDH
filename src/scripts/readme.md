@@ -26,6 +26,7 @@ For the `spacy_adapter` and `parser_keyword_similarity` I choose to write classe
 - `parser_tei`: parses information from tei files into dictPerson, dictArticle and dictKeyword. Please be aware, that the file redirects a bunch of wrong authorIDs while  parsing
 - `parser_keyword_similarity`: finds words according to their morphological similarity. This is a failed concept. It does not work in the context of this application and could be replaced by a stemmer
 - `parser_sql_db_creator`: creates a level 3 normalized sql database from the parser dictionaries
+- `processing_organetword`: creates a network of coordinates. For more information see `parser_main` argument `-c`
 
 ### Flexible Scripts
 - `constants`: the good 'ol constants file
