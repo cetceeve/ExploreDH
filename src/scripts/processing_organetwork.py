@@ -30,20 +30,3 @@ class OrgaNetwork:
 
     def _replaceOrgaIDTupleWithCoordinates(self, orgaIDTuple):
         return tuple({"id": orgaID, "lat": self.dictOrga[orgaID]["lat"], "lon": self.dictOrga[orgaID]["lon"]} for orgaID in orgaIDTuple)
-
-
-if __name__ == "__main__":
-    # read from cache if files are present and no reparse was forced by user
-    if io.hasFiles(io.source["cache"], ["dictPerson", "dictOrga", "dictArticle"]):
-        print("reading data from cache")
-        dictPerson = io.read(io.source["cache"], "dictPerson")
-        dictOrga = io.read(io.source["cache"], "dictOrga")
-        dictArticle = io.read(io.source["cache"], "dictArticle")
-
-        print("creating network")
-        connections = OrgaNetwork(dictArticle, dictPerson, dictOrga).getConnections()
-
-        print("writing to \"{}\"".format(io.source["output"]["path"].format("orga_network")))
-        io.write(io.source["output"], connections, "orga_network")
-    else:
-        print("Error: required data not in \"{}\"!".format(io.source["cache"]["dir"]))

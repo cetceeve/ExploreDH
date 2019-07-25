@@ -11,9 +11,10 @@ class Config {
     this.HIGHLIGHT = "#FFBA49";
     this.ACTIVE = "#FF3314";
 
-    /* MAP */
-    this.SCALE = 1600;
-    this.CENTER = [10, 50];
+        /* MAP */
+        this.SCALE = 1600;
+        this.CENTER = [9, 49]; // Würzburg
+        this.TRANSLATION_FACTOR = 2;
 
     /* FETCHING */
     this.RESPONSE_SUCCESS = 200;
