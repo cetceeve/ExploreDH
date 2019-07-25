@@ -8,6 +8,7 @@ class Map extends EventTarget {
         this.mapContainerEl = document.getElementById("mapContainer");
         this.mapWidth = this.mapContainerEl.offsetWidth;
         this.mapHeight = this.mapContainerEl.offsetHeight;
+        this.rotate = [0, 0];
 
         this.mapSvg = d3.select("svg")
             .attr("width", this.mapWidth)
@@ -17,12 +18,24 @@ class Map extends EventTarget {
             // This is like the zoom    
             .scale(config.SCALE)
             .translate([this.mapWidth / config.TRANSLATION_FACTOR, this.mapHeight / config.TRANSLATION_FACTOR])
-            .center(config.CENTER);
+            .center(config.CENTER)
+            .rotate(this.rotate);
+
+        // this.drag = d3.behavior.drag()
+        //     .origin(() => {
+        //         return { x: this.rotate[0], y: -this.rotate[1] };
+        //     })
+        //     .on("drag", () => {
+        //         this.rotate[0] = d3.event.x;
+        //         this.rotate[1] = -d3.event.y;
+        //         this.projection.rotate(this.rotate);
+        //     });
 
         this.pointData = null;
         this.clicked = false;
         this.clickedId = "";
         this.initMap();
+
     }
 
     initMap() {
@@ -44,7 +57,13 @@ class Map extends EventTarget {
                 .attr("d", d3.geoPath()
                     .projection(this.projection)
                 )
-                .style("stroke", config.COUNTRY_BORDERS);
+                .style("stroke", config.COUNTRY_BORDERS)
+                .call(d3.drag().on("drag", () => {
+                    console.log("Hallo");
+                    this.rotate[0] = d3.event.x;
+                    this.rotate[1] = -d3.event.y;
+                    this.projection.rotate(this.rotate);
+                }));
 
             this.fetchPeopleAtLocation();
         });
@@ -131,7 +150,6 @@ class Map extends EventTarget {
             })
             .append("svg:title")
             .text(d => d.name);
-
     }
 
     drawNetworkPaths(data) {
