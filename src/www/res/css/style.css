@@ -1,6 +1,7 @@
 html, body {
   height: 100%;
   margin: 0;
+  background-color: #fbfbfb
 }
 
 #map {
@@ -15,6 +16,7 @@ html, body {
 
 .headline {
   margin-bottom: 0px;
+  color: #284a59;
 }
 
 .inputField {
@@ -27,9 +29,14 @@ html, body {
 }
 
 #locationContainer {
-  visibility: hidden;
+  display: none;
   margin-top: 1em;
-  margin-bottom: 1em;
+  padding-left: 0.9em;
+  padding-right: 1.6em;
+}
+
+#locationName {
+  color: #75ACAE;
 }
 
 .close {
@@ -45,29 +52,38 @@ html, body {
   font-size: 1.15em !important;
 }
 
+#buttonClose {
+  padding-top: 8px;
+}
+
 .keywords {
   padding-left: 0px !important;
   padding-right: 0px !important;
   padding-bottom: 0px !important;
 }
 
+.badge {
+  margin-right: 4px;
+}
+
 .scrollbar {
   overflow-y: auto;
-  height: 84vh;
-  scrollbar-color: #cdcdcd #fff;
+  overflow-x: hidden;
+  height: 76vh;
+  scrollbar-color: #cdcdcd #fbfbfb;
 }
 
-#scrollbar::-webkit-scrollbar-track {
+#articleList::-webkit-scrollbar-track {
   border-radius: 10px;
-  background-color: #fff;
+  background-color: #e8e8e8;
 }
 
-#scrollbar::-webkit-scrollbar {
+#articleList::-webkit-scrollbar {
   width: 11px;
-  background-color: #fff;
+  background-color: #fbfbfb;
 }
 
-#scrollbar::-webkit-scrollbar-thumb {
+#articleList::-webkit-scrollbar-thumb {
   border-radius: 10px;
-  background-color: #cdcdcd;
+  background-color: #bbb;
 }
