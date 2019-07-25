@@ -131,11 +131,13 @@ class Map extends EventTarget {
                 this.highlightMarker("#" + d.id, true);
             })
             .on("pointerout", d => {
-                if (!this.clicked || this.clickedId !== d.id) {
+                if (!this.clicked || this.clickedId !== d.id) { // nichts geklickt oder anderer Marker
                     this.highlightConnectionsOfLocation("." + d.id, false);
                     this.highlightMarker("#" + d.id, false);
                 }
-                if (this.clickedId === d.id) {
+                // geklickt und anderer Marker und sourceId+targetId sind nicht im Set ??
+
+                if (this.clickedId === d.id) { // geklickten Marker bunt behalten
                     this.highlightMarker("#" + d.id, true, config.ACTIVE);
                 }
             })
