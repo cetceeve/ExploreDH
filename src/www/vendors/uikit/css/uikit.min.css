@@ -4448,9 +4448,10 @@ ul.uk-nav-sub {
   animation-fill-mode: both
 }
 
+/*before 0.8s*/
 .uk-animation-fade {
   animation-name: uk-fade;
-  animation-duration: .8s;
+  animation-duration: .1s;
   animation-timing-function: linear
 }
 
