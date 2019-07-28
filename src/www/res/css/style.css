@@ -68,14 +68,9 @@ html, body {
 
 .scrollbar {
   overflow-y: auto;
-<<<<<<< HEAD
-  height: 84vh; /* look here again! */
-  scrollbar-color: #cdcdcd #fff;
-=======
   overflow-x: hidden;
   height: 76vh;
   scrollbar-color: #cdcdcd #fbfbfb;
->>>>>>> dev
 }
 
 #articleList::-webkit-scrollbar-track {
