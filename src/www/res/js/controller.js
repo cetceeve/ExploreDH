@@ -19,7 +19,6 @@ class Controller {
             sidebar.setLocationName(event.data.name);
         });
     }
-
 }
 
 export default new Controller();

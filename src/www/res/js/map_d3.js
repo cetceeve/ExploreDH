@@ -13,8 +13,7 @@ class Map extends EventTarget {
             .append("svg")
             .attr("id", "map")
             .attr("width", this.mapWidth)
-            .attr("height", this.mapHeight)
-            .attr("overflow", "hidden");
+            .attr("height", this.mapHeight);
 
         this.mapLayer = this.mapSvg.append("g");
 
@@ -32,33 +31,12 @@ class Map extends EventTarget {
         this.pointData = null;
         this.clicked = false;
         this.clickedId = "";
-        this.initMap();
+        this.drawMap();
 
     }
 
-    initMap() {
-        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg", "Russia", "Norway", "Canada"];
-
-        d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
-
-            this.mapLayer.selectAll("path")
-                .data(data.features)
-                .enter().append("path")
-                .attr("fill", config.COUNTRIES)
-                .attr("opacity", d => {
-                    if (participatingCountries.includes(d.properties.name)) {
-                        return 1;
-                    }
-                    return config.NOT_PARTICIPATING_OPACITY;
-                })
-                .attr("d", d3.geoPath()
-                    .projection(this.projection)
-                )
-                .style("stroke", config.COUNTRY_BORDERS);
-
-            this.fetchPeopleAtLocation();
-        });
-    }
+    //////////////////////////////////////////////////////
+    // functions to fetch data from db
 
     fetchPeopleAtLocation() {
         this._getData("connections/peoplePerOrga")
@@ -87,10 +65,37 @@ class Map extends EventTarget {
             .catch(err => console.error(err));
     }
 
+    //////////////////////////////////////////////////////
+    // functions to draw map elements
+
+    drawMap() {
+        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg", "Russia", "Norway", "Canada"];
+
+        d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
+
+            this.mapLayer.selectAll("path")
+                .data(data.features)
+                .enter().append("path")
+                .attr("fill", config.COUNTRIES)
+                .attr("opacity", d => {
+                    if (participatingCountries.includes(d.properties.name)) {
+                        return 1;
+                    }
+                    return config.NOT_PARTICIPATING_OPACITY;
+                })
+                .attr("d", d3.geoPath()
+                    .projection(this.projection)
+                )
+                .style("stroke", config.COUNTRY_BORDERS);
+
+            this.fetchPeopleAtLocation();
+        });
+    }
+
+    // visualize people at location
     drawCirclesFromData(data) {
         this.pointData = data;
 
-        // visualize people at location
         this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
@@ -105,7 +110,6 @@ class Map extends EventTarget {
     }
 
     drawMarkerFromData(data) {
-
         this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
@@ -157,7 +161,6 @@ class Map extends EventTarget {
                 targetId: row[1].id,
             });
         }
-
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
 
@@ -168,7 +171,6 @@ class Map extends EventTarget {
             .attr("d", (d, i, nodes) => {
                 nodes[i].classList.add(d.sourceId);
                 nodes[i].classList.add(d.targetId);
-
                 return pathGenerator(d);
             })
             .attr("stroke-opacity", config.NETWORK_LINES_OPACITY)
@@ -178,6 +180,9 @@ class Map extends EventTarget {
 
         this.drawMarkerFromData(this.pointData);
     }
+
+    //////////////////////////////////////////////////////
+    // functions to highlight map elements on user actions
 
     highlightConnectionsOfLocation(selector, highlight) {
         let selection = d3.selectAll(selector);
@@ -216,12 +221,18 @@ class Map extends EventTarget {
         }
     }
 
+    //////////////////////////////////////////////////////
+    // functions for controller
+
     resetLocation(orgaId) {
         this.clicked = false;
         this.clickedId = "";
         this.highlightConnectionsOfLocation("." + orgaId, false);
         this.highlightMarker("#" + orgaId, false);
     }
+
+    //////////////////////////////////////////////////////
+    // helper functions
 
     createEvent(type, data, msg) {
         let event = new Event(type);

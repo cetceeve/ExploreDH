@@ -15,6 +15,7 @@ class ArticleSidebar extends EventTarget {
         this.articleListEl = document.querySelector("#articleList");
         this.locationContainerEl = document.querySelector("#locationContainer");
         this.clearLocationButton = document.querySelector("#buttonClose");
+
         this.articleTemplate = _.template(
             "<li>" +
             "<div class='uk-card uk-card-default uk-card-body uk-card-hover'>" +
@@ -30,13 +31,8 @@ class ArticleSidebar extends EventTarget {
         );
     }
 
-    setSearchChoices(_choices) {
-        if (!(_choices !== undefined && _choices !== null && _choices.length !== 0)) {
-            this.searchChoices = this.allArticles;
-        } else {
-            this.searchChoices = _choices;
-        }
-    }
+    //////////////////////////////////////////////////////
+    // functions for controller
 
     setArticlesByOrga(orgaID) {
         this.currentOrgaId = orgaID;
@@ -48,6 +44,16 @@ class ArticleSidebar extends EventTarget {
             // eslint-disable-next-line no-console
             .catch(err => console.error(err));
     }
+
+    setLocationName(name) {
+        let locationNameEl = document.querySelector("#locationName");
+
+        this.locationContainerEl.style.visibility = "visible";
+        locationNameEl.innerHTML = name;
+        this.clearLocationButton.addEventListener("click", () => this.clearLocationName());
+    }
+
+    //////////////////////////////////////////////////////
 
     showArticleList(articleList) {
         this.clearArticleListAndSearchChoices();
@@ -62,38 +68,25 @@ class ArticleSidebar extends EventTarget {
         }
     }
 
+    setSearchChoices(_choices) {
+        if (!(_choices !== undefined && _choices !== null && _choices.length !== 0)) {
+            this.searchChoices = this.allArticles;
+        } else {
+            this.searchChoices = _choices;
+        }
+    }
+
     clearArticleListAndSearchChoices() {
         while (this.articleListEl.firstChild) {
             this.articleListEl.removeChild(this.articleListEl.firstChild);
         }
-
         this.setSearchChoices(null);
-    }
-
-    setLocationName(name) {
-        let locationNameEl = document.querySelector("#locationName");
-
-        // this.locationContainerEl.style.display = "block";
-        this.locationContainerEl.style.visibility = "visible";
-        locationNameEl.innerHTML = name;
-        this.clearLocationButton.addEventListener("click", () => this.clearLocationName());
     }
 
     clearLocationName() {
         this.locationContainerEl.style.visibility = "hidden";
         this.clearArticleListAndSearchChoices();
         super.dispatchEvent(this.createEvent("onLocationReset", this.currentOrgaId));
-    }
-
-    createEvent(type, data, msg) {
-        let event = new Event(type);
-        if (data !== null && data !== undefined) {
-            event.data = data;
-        }
-        if (msg !== null && msg !== undefined) {
-            event.msg = msg;
-        }
-        return event;
     }
 
     _initSearchAutocomplete(that) {
@@ -118,6 +111,20 @@ class ArticleSidebar extends EventTarget {
             },
         });
     }
+
+    createEvent(type, data, msg) {
+        let event = new Event(type);
+        if (data !== null && data !== undefined) {
+            event.data = data;
+        }
+        if (msg !== null && msg !== undefined) {
+            event.msg = msg;
+        }
+        return event;
+    }
+
+    //////////////////////////////////////////////////////
+    // functions to fetch data from db
 
     _fetchArticles() {
         this._getData("search")
