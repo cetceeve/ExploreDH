@@ -32,9 +32,9 @@
     <div class="headSidebar">
       <h2 class="uk-heading-line uk-text-center headline"><span>Artikel</span></h2>
 
-      <div id="locationContainer" uk-grid>
-        <p id="locationName" class="uk-width-2-3"></p>
-        <a id="buttonClose" uk-icon="close" href="#" class="close" uk-tooltip="title: Auswahl löschen; delay: 200;"></a>
+      <div id="locationContainer" class="uk-panel  uk-animation-fade">
+        <button id="buttonClose" class="uk-align-left uk-margin-remove-adjacent" type="button" uk-tooltip="title: Auswahl aufheben; pos: bottom" uk-close></button>
+        <p id="locationName"></p>
       </div>
 
       <form class="uk-search uk-search-default inputField" onsubmit="return false;">
@@ -42,8 +42,10 @@
         <input id="search" class="uk-search-input searchBox" type="search" placeholder="Artikel suchen...">
       </form>
     </div>
+
     <ul id="articleList" class="uk-list scrollbar list"
       uk-scrollspy="cls: uk-animation-slide-right; target: .uk-card; delay: 150;">
+
     </ul>
   </div>
 

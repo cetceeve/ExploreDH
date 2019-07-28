@@ -33,8 +33,11 @@ Start live environment (this requires a linux server with `screen`):
 Use the parser:
 - install Python3 (3.7) with requests
 - navigate to `./src/scripts`
-- run `python parser_main.py`, you can use flag `-d` to trigger a database rewrite or `-r` to trigger a new parser (as standard, data is pulled from cache)
-- afterwards you can use all files with `processing_` prefix, py using `python [filename]`
+- run `python parser_main.py`, you can use flag
+  - `-r` to trigger a (re-)parse
+  - `-d` to (re-)write the SQL database
+  - `-j` to (re-)write the JSON database
+  - `-c` to (re-)write the JSON of connections between organisations
 
 ## Navigation
 
