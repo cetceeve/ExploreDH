@@ -8,28 +8,26 @@ class Map extends EventTarget {
         this.mapContainerEl = document.getElementById("mapContainer");
         this.mapWidth = this.mapContainerEl.offsetWidth;
         this.mapHeight = this.mapContainerEl.offsetHeight;
-        this.rotate = [0, 0];
 
-        this.mapSvg = d3.select("svg")
+        this.mapSvg = d3.select("#mapContainer")
+            .append("svg")
+            .attr("id", "map")
             .attr("width", this.mapWidth)
-            .attr("height", this.mapHeight);
+            .attr("height", this.mapHeight)
+            .attr("overflow", "hidden");
+
+        this.mapLayer = this.mapSvg.append("g");
+
+        this.mapSvg.call(d3.zoom()
+            .scaleExtent(config.SCALE_EXTEND)
+            .on("zoom", () => {
+                this.mapLayer.attr("transform", d3.event.transform);
+            }));
 
         this.projection = d3.geoMercator()
-            // This is like the zoom    
             .scale(config.SCALE)
             .translate([this.mapWidth / config.TRANSLATION_FACTOR, this.mapHeight / config.TRANSLATION_FACTOR])
-            .center(config.CENTER)
-            .rotate(this.rotate);
-
-        // this.drag = d3.behavior.drag()
-        //     .origin(() => {
-        //         return { x: this.rotate[0], y: -this.rotate[1] };
-        //     })
-        //     .on("drag", () => {
-        //         this.rotate[0] = d3.event.x;
-        //         this.rotate[1] = -d3.event.y;
-        //         this.projection.rotate(this.rotate);
-        //     });
+            .center(config.CENTER);
 
         this.pointData = null;
         this.clicked = false;
@@ -39,12 +37,11 @@ class Map extends EventTarget {
     }
 
     initMap() {
-        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg"];
+        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg", "Russia", "Norway", "Canada"];
 
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
 
-            this.mapSvg.append("g")
-                .selectAll("path")
+            this.mapLayer.selectAll("path")
                 .data(data.features)
                 .enter().append("path")
                 .attr("fill", config.COUNTRIES)
@@ -57,13 +54,7 @@ class Map extends EventTarget {
                 .attr("d", d3.geoPath()
                     .projection(this.projection)
                 )
-                .style("stroke", config.COUNTRY_BORDERS)
-                .call(d3.drag().on("drag", () => {
-                    console.log("Hallo");
-                    this.rotate[0] = d3.event.x;
-                    this.rotate[1] = -d3.event.y;
-                    this.projection.rotate(this.rotate);
-                }));
+                .style("stroke", config.COUNTRY_BORDERS);
 
             this.fetchPeopleAtLocation();
         });
@@ -100,7 +91,7 @@ class Map extends EventTarget {
         this.pointData = data;
 
         // visualize people at location
-        this.mapSvg.selectAll("myCircles")
+        this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
@@ -115,7 +106,7 @@ class Map extends EventTarget {
 
     drawMarkerFromData(data) {
 
-        this.mapSvg.selectAll("myCircles")
+        this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
@@ -170,7 +161,7 @@ class Map extends EventTarget {
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
 
-        this.mapSvg.selectAll("myPath")
+        this.mapLayer.selectAll("myPath")
             .data(link)
             .enter()
             .append("path")
@@ -221,8 +212,7 @@ class Map extends EventTarget {
                 .raise();
         } else {
             selection
-                .style("fill", config.MARKER_LOCATION)
-                .raise();
+                .style("fill", config.MARKER_LOCATION);
         }
     }
 

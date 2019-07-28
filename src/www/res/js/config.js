@@ -15,6 +15,7 @@ class Config {
         this.SCALE = 1600;
         this.CENTER = [9, 49]; // Würzburg
         this.TRANSLATION_FACTOR = 2;
+        this.SCALE_EXTEND = [1 / 3, 5];
 
         /* FETCHING */
         this.RESPONSE_SUCCESS = 200;

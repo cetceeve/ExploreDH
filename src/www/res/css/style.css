@@ -4,8 +4,6 @@ html, body {
 }
 
 #map {
-  height: 100%;
-  width: 100%;
   display: block;
   margin: auto;
 }
@@ -55,7 +53,7 @@ html, body {
 
 .scrollbar {
   overflow-y: auto;
-  height: 84vh;
+  height: 84vh; /* look here again! */
   scrollbar-color: #cdcdcd #fff;
 }
 
