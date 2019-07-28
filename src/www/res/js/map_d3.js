@@ -13,6 +13,14 @@ class Map extends EventTarget {
             .attr("width", this.mapWidth)
             .attr("height", this.mapHeight);
 
+        this.mapLayer = this.mapSvg.append("g");
+
+        this.mapSvg.call(d3.zoom()
+            .scaleExtent(config.SCALE_EXTENT)
+            .on("zoom", () => {
+                this.mapLayer.attr("transform", d3.event.transform);
+            }));
+
         this.projection = d3.geoMercator()
             // This is like the zoom    
             .scale(config.SCALE)
@@ -26,12 +34,11 @@ class Map extends EventTarget {
     }
 
     initMap() {
-        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg"];
+        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg", "Russia", "Norway", "Canada"];
 
         d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
 
-            this.mapSvg.append("g")
-                .selectAll("path")
+            this.mapLayer.selectAll("path")
                 .data(data.features)
                 .enter().append("path")
                 .attr("fill", config.COUNTRIES)
@@ -81,7 +88,7 @@ class Map extends EventTarget {
         this.pointData = data;
 
         // visualize people at location
-        this.mapSvg.selectAll("myCircles")
+        this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
@@ -96,7 +103,7 @@ class Map extends EventTarget {
 
     drawMarkerFromData(data) {
 
-        this.mapSvg.selectAll("myCircles")
+        this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
@@ -152,7 +159,7 @@ class Map extends EventTarget {
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
 
-        this.mapSvg.selectAll("myPath")
+        this.mapLayer.selectAll("myPath")
             .data(link)
             .enter()
             .append("path")
