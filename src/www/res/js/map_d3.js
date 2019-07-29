@@ -13,8 +13,15 @@ class Map extends EventTarget {
             .attr("width", this.mapWidth)
             .attr("height", this.mapHeight);
 
+        this.mapLayer = this.mapSvg.append("g");
+
+        this.mapSvg.call(d3.zoom()
+            .scaleExtent(config.SCALE_EXTENT)
+            .on("zoom", () => {
+                this.mapLayer.attr("transform", d3.event.transform);
+            }));
+
         this.projection = d3.geoMercator()
-            // This is like the zoom    
             .scale(config.SCALE)
             .translate([this.mapWidth / config.TRANSLATION_FACTOR, this.mapHeight / config.TRANSLATION_FACTOR])
             .center(config.CENTER);
@@ -22,33 +29,11 @@ class Map extends EventTarget {
         this.pointData = null;
         this.clicked = false;
         this.clickedId = "";
-        this.initMap();
+        this.drawMap();
     }
 
-    initMap() {
-        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg"];
-
-        d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
-
-            this.mapSvg.append("g")
-                .selectAll("path")
-                .data(data.features)
-                .enter().append("path")
-                .attr("fill", config.COUNTRIES)
-                .attr("opacity", d => {
-                    if (participatingCountries.includes(d.properties.name)) {
-                        return 1;
-                    }
-                    return config.NOT_PARTICIPATING_OPACITY;
-                })
-                .attr("d", d3.geoPath()
-                    .projection(this.projection)
-                )
-                .style("stroke", config.COUNTRY_BORDERS);
-
-            this.fetchPeopleAtLocation();
-        });
-    }
+    ///////////////////////////////////////////////////////////
+    // functions to fetch data from db
 
     fetchPeopleAtLocation() {
         this._getData("connections/peoplePerOrga")
@@ -77,11 +62,45 @@ class Map extends EventTarget {
             .catch(err => console.error(err));
     }
 
+    async _getData(url = "") {
+        const response = await fetch(url);
+        if (!response.ok) {
+            throw new Error("BadResponseCode: " + response.status.toString());
+        }
+        return await response.json();
+    }
+
+    ///////////////////////////////////////////////////////////
+    // functions to draw map and map elements
+
+    drawMap() {
+        let participatingCountries = ["Germany", "France", "Italy", "Switzerland", "Austria", "Luxembourg", "Russia", "Norway", "Canada"];
+
+        d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson", data => {
+            this.mapLayer.selectAll("path")
+                .data(data.features)
+                .enter().append("path")
+                .attr("fill", config.COUNTRIES)
+                .attr("opacity", d => {
+                    if (participatingCountries.includes(d.properties.name)) {
+                        return 1;
+                    }
+                    return config.NOT_PARTICIPATING_OPACITY;
+                })
+                .attr("d", d3.geoPath()
+                    .projection(this.projection)
+                )
+                .style("stroke", config.COUNTRY_BORDERS);
+
+            this.fetchPeopleAtLocation();
+        });
+    }
+
+    // visualize people at location
     drawCirclesFromData(data) {
         this.pointData = data;
 
-        // visualize people at location
-        this.mapSvg.selectAll("myCircles")
+        this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
@@ -95,8 +114,7 @@ class Map extends EventTarget {
     }
 
     drawMarkerFromData(data) {
-
-        this.mapSvg.selectAll("myCircles")
+        this.mapLayer.selectAll("myCircles")
             .data(data)
             .enter()
             .append("circle")
@@ -152,14 +170,13 @@ class Map extends EventTarget {
         let pathGenerator = d3.geoPath()
             .projection(this.projection);
 
-        this.mapSvg.selectAll("myPath")
+        this.mapLayer.selectAll("myPath")
             .data(link)
             .enter()
             .append("path")
             .attr("d", (d, i, nodes) => {
                 nodes[i].classList.add(d.sourceId);
                 nodes[i].classList.add(d.targetId);
-
                 return pathGenerator(d);
             })
             .attr("stroke-opacity", config.NETWORK_LINES_OPACITY)
@@ -169,6 +186,9 @@ class Map extends EventTarget {
 
         this.drawMarkerFromData(this.pointData);
     }
+
+    ///////////////////////////////////////////////////////////
+    // functions to highlight map elements on user actions
 
     highlightConnectionsOfLocation(selector, highlight) {
         let selection = d3.selectAll(selector);
@@ -208,12 +228,18 @@ class Map extends EventTarget {
         }
     }
 
+    ///////////////////////////////////////////////////////////
+    // functions used in controller
+
     resetLocation(orgaId) {
         this.clicked = false;
         this.clickedId = "";
         this.highlightConnectionsOfLocation("." + orgaId, false);
         this.highlightMarker("#" + orgaId, false);
     }
+
+    ///////////////////////////////////////////////////////////
+    // helper functions
 
     createEvent(type, data, msg) {
         let event = new Event(type);
@@ -224,14 +250,6 @@ class Map extends EventTarget {
             event.msg = msg;
         }
         return event;
-    }
-
-    async _getData(url = "") {
-        const response = await fetch(url);
-        if (!response.ok) {
-            throw new Error("BadResponseCode: " + response.status.toString());
-        }
-        return await response.json();
     }
 }
 
