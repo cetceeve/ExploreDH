@@ -1,0 +1,112 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  background-color: #fbfbfb
+}
+
+#map {
+  height: 100%;
+  width: 100%;
+  display: block;
+  margin: auto;
+}
+
+.legend {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(37, 68, 82, 0.7);
+}
+
+fieldset p {
+  margin: 0;
+}
+
+fieldset line {
+  stroke: #284a59;
+  stroke-width: 2;
+}
+
+.legendHeadline {
+  font-weight: 600;
+}
+
+.headSidebar {
+  padding-right: 1.1em;
+  border: none;
+}
+
+.headline {
+  margin-bottom: 0px;
+  color: #284a59;
+}
+
+.inputField {
+  width: 100% !important;
+  padding-top: 0px;
+}
+
+.searchBox {
+  border: none !important;
+}
+
+#locationContainer {
+  display: none;
+  margin-top: 1em;
+  padding-left: 0.9em;
+  padding-right: 1.6em;
+}
+
+#locationName {
+  color: #75ACAE;
+}
+
+.close {
+  margin: auto !important;
+  padding-left: 0px;
+}
+
+.list {
+  padding-right: 1em !important;
+}
+
+.cardHead {
+  font-size: 1.15em !important;
+}
+
+#buttonClose {
+  padding-top: 8px;
+}
+
+.keywords {
+  padding-left: 0px !important;
+  padding-right: 0px !important;
+  padding-bottom: 0px !important;
+}
+
+.badge {
+  margin-right: 4px;
+}
+
+.scrollbar {
+  overflow-y: auto;
+  overflow-x: hidden;
+  height: 76vh;
+  scrollbar-color: #cdcdcd #fbfbfb;
+}
+
+#articleList::-webkit-scrollbar-track {
+  border-radius: 10px;
+  background-color: #e8e8e8;
+}
+
+#articleList::-webkit-scrollbar {
+  width: 11px;
+  background-color: #fbfbfb;
+}
+
+#articleList::-webkit-scrollbar-thumb {
+  border-radius: 10px;
+  background-color: #bbb;
+}

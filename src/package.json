@@ -1,0 +1,47 @@
+{
+  "name": "exploredh",
+  "version": "1.0.0",
+  "description": "DH is the Study of dead Dudes - Mark Hall",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js",
+    "start:live": "cd build/src && screen -dmS ExploreDH",
+    "poststart:live": "screen -S ExploreDH -X stuff 'node index.js\n'",
+    "publish": "npm run check",
+    "check": "eslint www/res/js",
+    "postcheck": "npm run build",
+    "build": "node build.js",
+    "postbuild": "cd build/src && npm install --production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cetceeve/ExploreDH.git"
+  },
+  "keywords": [
+    "Digital Humanities",
+    "Data Visualisation",
+    "Geovisualization",
+    "SQLite",
+    "JS",
+    "Python",
+    "Express",
+    "Open",
+    "Layers",
+    "D3"
+  ],
+  "author": "kindOfCurly, olska, cetceeve",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/cetceeve/ExploreDH/issues"
+  },
+  "homepage": "https://github.com/cetceeve/ExploreDH#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "sqlite3": "^4.0.9"
+  },
+  "devDependencies": {
+    "eslint": "^5.16.0",
+    "fs-extra": "^8.1.0"
+  }
+}
