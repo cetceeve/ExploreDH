@@ -11,6 +11,27 @@ html, body {
   margin: auto;
 }
 
+.legend {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: rgba(255, 255, 255, 0.85);
+  border-color: rgba(37, 68, 82, 0.7);
+}
+
+fieldset p {
+  margin: 0;
+}
+
+fieldset line {
+  stroke: #284a59;
+  stroke-width: 2;
+}
+
+.legendHeadline {
+  font-weight: 600;
+}
+
 .headSidebar {
   padding-right: 1.1em;
   border: none;
