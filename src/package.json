@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/cetceeve/ExploreDH#readme",
   "dependencies": {
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "sqlite3": "^4.0.9"
   },
   "devDependencies": {
